@@ -4,11 +4,9 @@
  */
 package com.mycompany.utils;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
+import java.awt.*;
 
 /**
- *
  * @author user
  */
 public class ParticleEffect {
@@ -65,6 +63,7 @@ public class ParticleEffect {
             //}
         }
     }
+
     private Line[] particles = new Line[PARTICLES];
 
     public ParticleEffect(int vx, int vy) {

@@ -5,10 +5,10 @@
 package com.mycompany.utils;
 
 import com.mycompany.stage.TetrisStage;
+
 import java.util.Random;
 
 /**
- *
  * @author user
  */
 public class TemplateOfFigure {
