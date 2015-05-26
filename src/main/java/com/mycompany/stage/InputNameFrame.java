@@ -24,7 +24,7 @@ import javax.swing.JTextField;
 public class InputNameFrame {
 
     private static JFrame frame = new JFrame("Hello");
-    private static Panel panel;
+    private static JPanel panel;
     int widthPanel = 300, heightPanel = 100;
     private JTextField inputName;
     private NameVerifier nv;
@@ -33,36 +33,16 @@ public class InputNameFrame {
         setUpGui();
     }
 
-    private static String convertStreamToString(java.io.InputStreamReader is) {
-        java.util.Scanner s = new java.util.Scanner(is);
-        String str = "";
-        while (s.hasNext()) {
-            str += s.next();
-        }
-        return str;
-    }
-
     private void setUpGui() {
         nv = new NameVerifier();
 
-        panel = new Panel();
+        panel = new JPanel();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(panel);
 
         JLabel label = new JLabel("Input Name:");
         inputName = new JTextField(20);
-//
-//        String url = "http://localhost:8888/myfirstservlet";
-//        InputStreamReader isr = null;
-//        try {
-//            isr = new InputStreamReader(new URL(url).openStream(), "UTF-8");
-//        } catch (IOException ex) {
-//            Logger.getLogger(InputNameFrame.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        if (isr != null) {
-//            inputName.setText(convertStreamToString(isr));
-//        }
-//        inputName.setInputVerifier(new NameVerifier());
+
         panel.add(label);
         panel.add(inputName);
 
@@ -89,12 +69,5 @@ public class InputNameFrame {
         int width = gd.getDisplayMode().getWidth();
         int height = gd.getDisplayMode().getHeight();
         frame.setLocation(width / 2 - widthPanel / 2, height / 2 - heightPanel / 2);
-    }
-
-    class Panel extends JPanel {
-
-        @Override
-        protected void paintComponent(Graphics g) {
-        }
     }
 }

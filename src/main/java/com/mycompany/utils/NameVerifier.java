@@ -4,13 +4,10 @@
  */
 package com.mycompany.utils;
 
-import java.awt.Color;
-import javax.swing.InputVerifier;
-import javax.swing.JComponent;
-import javax.swing.JTextField;
+import javax.swing.*;
+import java.awt.*;
 
 /**
- *
  * @author user
  */
 public class NameVerifier extends InputVerifier {

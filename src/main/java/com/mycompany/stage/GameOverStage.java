@@ -12,6 +12,8 @@ import com.mycompany.tetris.Main;
 import com.mycompany.tetris.ScreenClickEvent;
 import com.mycompany.tetris.StageEvent;
 import com.mycompany.tetris.StageInterface;
+import com.mycompany.utils.Constants;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -23,9 +25,7 @@ import java.awt.image.BufferedImage;
 public class GameOverStage implements StageInterface, GComponentClickAction {
 
     private RootComponent root;
-    private Color alphaBlack = new Color(0, 0, 0, 0x80);
-    private Color alphaBlack2 = new Color(0, 0, 0, 0x99);
-    private ImageButton ok;
+    private ImageButton okButton;
     int roundRadius = 20;
     int widthBorder = 10;
     int w = 600;
@@ -40,10 +40,10 @@ public class GameOverStage implements StageInterface, GComponentClickAction {
         root.setWidth(Main.getInstance().getWidth());
         root.setHeight(Main.getInstance().getHeight());
 
-        ok = new ImageButton("OK", "green_button.png", "OK");
-        ok.setAction((GComponentClickAction) this);
-        ok.setComponentPosY((sh + h) / 2 - 10 - ok.getHeight());
-        ok.setComponentPosX(sw / 2 - ok.getWidth() / 2);
+        okButton = new ImageButton("OK", "green_button.png", "OK");
+        okButton.setAction((GComponentClickAction) this);
+        okButton.setComponentPosY((sh + h) / 2 - 10 - okButton.getHeight());
+        okButton.setComponentPosX(sw / 2 - okButton.getWidth() / 2);
     }
 
     public void setReturnStage(StageInterface returnStage) {
@@ -55,24 +55,24 @@ public class GameOverStage implements StageInterface, GComponentClickAction {
         if (returnStage != null) {
             returnStage.render((Graphics2D) preImage.getGraphics());
             gr2d.drawImage(preImage, null, 0, 0);
-            gr2d.setColor(alphaBlack);
+            gr2d.setColor(Constants.alphaBlack);
             gr2d.fillRect(0, 0, Main.getInstance().getWidth(), Main.getInstance().getHeight());
         } else {
             gr2d.setColor(Color.red);
             gr2d.fillRect(0, 0, Main.getInstance().getWidth(), Main.getInstance().getHeight());
         }
 
-        gr2d.setColor(alphaBlack2);
+        gr2d.setColor(Constants.alphaBlack2);
         gr2d.fillRoundRect((sw - w) / 2 - widthBorder, (sh - h) / 2, w + 2 * widthBorder, h + 2 * widthBorder, roundRadius, roundRadius);
         gr2d.setColor(Color.WHITE);
         gr2d.fillRoundRect((sw - w) / 2, (sh - h) / 2 + widthBorder, w, h, roundRadius, roundRadius);
 
-        ok.render(gr2d);
+        okButton.render(gr2d);
     }
 
     @Override
     public void processEvent(StageEvent evt) {
-        ok.processClickAction((ScreenClickEvent) evt);
+        okButton.processClickAction((ScreenClickEvent) evt);
     }
 
     @Override

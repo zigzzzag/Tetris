@@ -13,6 +13,7 @@ import com.mycompany.tetris.Main;
 import com.mycompany.tetris.ScreenClickEvent;
 import com.mycompany.tetris.StageEvent;
 import com.mycompany.tetris.StageInterface;
+import com.mycompany.utils.Constants;
 import com.mycompany.utils.ParticleEffect;
 import com.mycompany.utils.Record;
 import com.mycompany.utils.TemplateOfFigure;
@@ -38,11 +39,9 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
     private ImageButton playButton;
     private TextCenterComponent label;
     private TextCenterComponent timeTCC;
-    private static final byte matrX = 10;
-    private static final byte matrY = 20;
     private static TemplateOfFigure figure;
     private TemplateOfFigure figureNext;
-    private static byte[][] figureSave = new byte[matrY][matrX];
+    private static byte[][] figureSave = new byte[Constants.matrY][Constants.matrX];
     private TemplateOfFigure figureShadow;
     private int cnt = 30;
     private int indentUp = 100;
@@ -72,18 +71,18 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
         if (!verifyGameOver()) {
             if (timeLastDown % fallSpeed > timeDown % fallSpeed) {
                 if (figure.isDownBarrier()) {
-                    for (int i = 0; i < matrY; i++) {
-                        for (int j = 0; j < matrX; j++) {
+                    for (int i = 0; i < Constants.matrY; i++) {
+                        for (int j = 0; j < Constants.matrX; j++) {
                             figureSave[i][j] += figure.getFigure()[i][j];
                         }
                     }
 
-                    for (int i = 0; i < matrY; i++) {
-                        for (int j = 0; j < matrX; j++) {
+                    for (int i = 0; i < Constants.matrY; i++) {
+                        for (int j = 0; j < Constants.matrX; j++) {
                             if (figureSave[i][j] == 0) {
                                 break;
                             }
-                            if (j == matrX - 1) {
+                            if (j == Constants.matrX - 1) {
                                 deleteFullLine(i);
                                 for (int t = 0; t < 10; t++) {
                                     particles.add(new ParticleEffect(converFromIndexX(t), converFromIndexY(i)));
@@ -116,8 +115,8 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
                     figure.down();
                 }
             }
-            for (int i = 0; i < matrY; i++) {
-                System.arraycopy(figure.getFigure()[i], 0, figureShadow.getFigure()[i], 0, matrX);
+            for (int i = 0; i < Constants.matrY; i++) {
+                System.arraycopy(figure.getFigure()[i], 0, figureShadow.getFigure()[i], 0, Constants.matrX);
             }
 
             while (!figureShadow.isDownBarrier()) {
@@ -149,7 +148,7 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
 
     public void deleteFullLine(int lineNumber) {
         for (int i = lineNumber - 1; i >= 0; i--) {
-            for (int j = 0; j < matrX; j++) {
+            for (int j = 0; j < Constants.matrX; j++) {
                 figureSave[i + 1][j] = figureSave[i][j];
                 figureSave[i][j] = 0;
             }
@@ -277,8 +276,8 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
         gr2d.setColor(Color.BLACK);
         gr2d.drawRect(indentLeft, indentUp, cnt * 10, cnt * 20);
 
-        for (int i = 0; i < matrY; i++) {
-            for (int j = 0; j < matrX; j++) {
+        for (int i = 0; i < Constants.matrY; i++) {
+            for (int j = 0; j < Constants.matrX; j++) {
                 if (figureShadow.getFigure()[i][j] != 0) {
                     gr2d.setColor(alphaShadow);
                     gr2d.fillRect(converFromIndexX(j), converFromIndexY(i), cnt, cnt);
@@ -296,8 +295,8 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
             }
         }
 
-        for (int i = 0; i < matrY; i++) {
-            for (int j = 0; j < matrX; j++) {
+        for (int i = 0; i < Constants.matrY; i++) {
+            for (int j = 0; j < Constants.matrX; j++) {
 //                gr2d.drawString(String.valueOf(figure.getFigure()[i][j]), 50 + 10 * j, 450 + 15 * i);
 //                gr2d.drawString(String.valueOf(figureSave[i][j]), 250 + 10 * j, 450 + 15 * i);
 
@@ -381,8 +380,8 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
     }
 
     public void gameReset() {
-        for (int i = 0; i < matrY; i++) {
-            for (int j = 0; j < matrX; j++) {
+        for (int i = 0; i < Constants.matrY; i++) {
+            for (int j = 0; j < Constants.matrX; j++) {
                 figureSave[i][j] = 0;
             }
         }
@@ -393,7 +392,7 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
 
     public Boolean verifyGameOver() {
         boolean over = false;
-        for (int j = 2; j < matrX - 2; j++) {
+        for (int j = 2; j < Constants.matrX - 2; j++) {
             if (figureSave[0][j] != 0) {
                 over = true;
             }

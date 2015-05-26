@@ -14,12 +14,11 @@ import com.mycompany.tetris.ScreenClickEvent;
 import com.mycompany.tetris.StageEvent;
 import com.mycompany.tetris.StageInterface;
 import com.mycompany.utils.Record;
-import java.awt.Color;
-import java.awt.Graphics2D;
+
+import java.awt.*;
 import java.util.List;
 
 /**
- *
  * @author user
  */
 public class RecordsStage implements StageInterface, GComponentClickAction {

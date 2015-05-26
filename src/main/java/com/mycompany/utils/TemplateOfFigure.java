@@ -13,33 +13,13 @@ import java.util.Random;
  */
 public class TemplateOfFigure {
 
-    private static byte sizeX = 10, sizeY = 20;
-    private byte[][] figure = new byte[sizeY][sizeX];
+    private byte[][] figure = new byte[Constants.matrY][Constants.matrX];
     private int typeOfFigure;
-    static byte[][] figureThree = new byte[4][4];
-    static byte[][] figureRotateThree = new byte[4][4];
-
-    public byte[][] getFigure() {
-        return figure;
-    }
-
-    public void setFigure(byte[][] figure) {
-        this.figure = figure;
-    }
-
-    public void clear(byte[][] figure) {
-        for (int i = 0; i < sizeY; i++) {
-            for (int j = 0; j < sizeX; j++) {
-                figure[i][j] = 0;
-            }
-        }
-    }
 
     public TemplateOfFigure() {
     }
 
     public TemplateOfFigure(int typeFigure) {
-
         typeOfFigure = typeFigure;
         clear(figure);
         switch (typeFigure) {
@@ -95,8 +75,8 @@ public class TemplateOfFigure {
         }
 
         byte indexColor = (byte) (new Random().nextInt(8) + 1);
-        for (int i = 0; i < sizeY; i++) {
-            for (int j = 0; j < sizeX; j++) {
+        for (int i = 0; i < Constants.matrY; i++) {
+            for (int j = 0; j < Constants.matrX; j++) {
                 if (figure[i][j] != 0) {
                     figure[i][j] = indexColor;
                 }
@@ -104,14 +84,30 @@ public class TemplateOfFigure {
         }
     }
 
+    public byte[][] getFigure() {
+        return figure;
+    }
+
+    public void setFigure(byte[][] figure) {
+        this.figure = figure;
+    }
+
+    public void clear(byte[][] figure) {
+        for (int i = 0; i < Constants.matrY; i++) {
+            for (int j = 0; j < Constants.matrX; j++) {
+                figure[i][j] = 0;
+            }
+        }
+    }
+
     public boolean isDownBarrier() {
-        for (int j = 0; j < sizeX; j++) {
-            if (figure[sizeY - 1][j] != 0) {
+        for (int j = 0; j < Constants.matrX; j++) {
+            if (figure[Constants.matrY - 1][j] != 0) {
                 return true;
             }
         }
-        for (int i = sizeY - 1; i > 0; i--) {
-            for (int j = 0; j < sizeX; j++) {
+        for (int i = Constants.matrY - 1; i > 0; i--) {
+            for (int j = 0; j < Constants.matrX; j++) {
                 if (figure[i][j] != 0 && TetrisStage.getFigureSave()[i + 1][j] != 0) {
                     return true;
                 }
@@ -121,8 +117,8 @@ public class TemplateOfFigure {
     }
 
     public void down() {
-        for (int i = sizeY - 1; i >= 0; i--) {//проходим снизу вверх чтобы опускать фигуру
-            for (int j = 0; j < sizeX; j++) {
+        for (int i = Constants.matrY - 1; i >= 0; i--) {//проходим снизу вверх чтобы опускать фигуру
+            for (int j = 0; j < Constants.matrX; j++) {
                 if (figure[i][j] != 0) {
                     figure[i + 1][j] = figure[i][j];
                     figure[i][j] = 0;
@@ -132,8 +128,8 @@ public class TemplateOfFigure {
     }
 
     public void up() {
-        for (int i = 0; i < sizeY; i++) {
-            for (int j = 0; j < sizeX; j++) {
+        for (int i = 0; i < Constants.matrY; i++) {
+            for (int j = 0; j < Constants.matrX; j++) {
                 if (figure[i][j] != 0) {
                     figure[i - 1][j] = figure[i][j];
                     figure[i][j] = 0;
@@ -147,8 +143,8 @@ public class TemplateOfFigure {
         byte minX = getMinCoordinate()[0];
 
         outherloop:
-        for (int i = 0; i < sizeY; i++) {
-            for (int j = 1; j < sizeX; j++) {
+        for (int i = 0; i < Constants.matrY; i++) {
+            for (int j = 1; j < Constants.matrX; j++) {
                 if (figure[i][j] != 0 && TetrisStage.getFigureSave()[i][j - 1] != 0) {
                     leftAvailable = false;
                     break outherloop;
@@ -157,8 +153,8 @@ public class TemplateOfFigure {
         }
 
         if (minX > 0 && leftAvailable) {
-            for (int i = 0; i < sizeY; i++) {
-                for (int j = 0; j < sizeX; j++) {
+            for (int i = 0; i < Constants.matrY; i++) {
+                for (int j = 0; j < Constants.matrX; j++) {
                     if (figure[i][j] != 0) {
                         figure[i][j - 1] = figure[i][j];
                         figure[i][j] = 0;
@@ -173,8 +169,8 @@ public class TemplateOfFigure {
         byte maxX = getMaxCoordinate()[0];
 
         outherloop:
-        for (int i = 0; i < sizeY; i++) {
-            for (int j = 0; j < sizeX - 1; j++) {
+        for (int i = 0; i < Constants.matrY; i++) {
+            for (int j = 0; j < Constants.matrX - 1; j++) {
                 if (figure[i][j] != 0 && TetrisStage.getFigureSave()[i][j + 1] != 0) {
                     rightAvailable = false;
                     break outherloop;
@@ -182,9 +178,9 @@ public class TemplateOfFigure {
             }
         }
 
-        if (maxX < sizeX - 1 && rightAvailable) {
-            for (int i = 0; i < sizeY; i++) {
-                for (int j = sizeX - 1; j >= 0; j--) {
+        if (maxX < Constants.matrX - 1 && rightAvailable) {
+            for (int i = 0; i < Constants.matrY; i++) {
+                for (int j = Constants.matrX - 1; j >= 0; j--) {
                     if (figure[i][j] != 0) {
                         figure[i][j + 1] = figure[i][j];
                         figure[i][j] = 0;
@@ -213,8 +209,8 @@ public class TemplateOfFigure {
             left();
         }
 
-        for (byte i = 0; i < sizeY; i++) {
-            for (byte j = 0; j < sizeX; j++) {
+        for (byte i = 0; i < Constants.matrY; i++) {
+            for (byte j = 0; j < Constants.matrX; j++) {
                 if (figure[i][j] != 0) {
                     minX = minX >= j ? j : minX;
                     minY = minY >= i ? i : minY;
@@ -251,20 +247,20 @@ public class TemplateOfFigure {
         }
 
         byte firstColumnCount = 0; //вопрос с инициализацией
-        figureThree = new byte[sizeRotY][sizeRotX];
-        figureRotateThree = new byte[sizeRotY][sizeRotX];
+        byte[][] figureLocal = new byte[sizeRotY][sizeRotX];
+        byte[][] figureRotateLocal = new byte[sizeRotY][sizeRotX];
 
         for (int i = 0; i < sizeRotY; i++) {
             for (int j = 0; j < sizeRotX; j++) {
                 if (typeOfFigure == 7) {
-                    figureThree[i][j] = figure[i + minY][j + minX];
-                    if (figureThree[i][j] != 0) {
-                        figureRotateThree[j][i] = figureThree[i][j];
+                    figureLocal[i][j] = figure[i + minY][j + minX];
+                    if (figureLocal[i][j] != 0) {
+                        figureRotateLocal[j][i] = figureLocal[i][j];
                     }
                 } else {
-                    figureThree[i][j] = figure[i + minY][j + minX];
-                    if (figureThree[i][j] != 0) {
-                        figureRotateThree[j][2 - i] = figureThree[i][j];
+                    figureLocal[i][j] = figure[i + minY][j + minX];
+                    if (figureLocal[i][j] != 0) {
+                        figureRotateLocal[j][2 - i] = figureLocal[i][j];
                     }
                 }
             }
@@ -272,7 +268,7 @@ public class TemplateOfFigure {
 
         if (typeOfFigure != 7) {
             for (int i = 0; i < sizeRotY; i++) {
-                if (figureRotateThree[i][0] != 0) {
+                if (figureRotateLocal[i][0] != 0) {
                     firstColumnCount++;
                 }
             }
@@ -281,14 +277,14 @@ public class TemplateOfFigure {
                 for (int i = 0; i < sizeRotY; i++) {
                     for (int j = 0; j < sizeRotX; j++) {
                         if (typeOfFigure == 7) {
-                            if (figureRotateThree[i][j] != 0) {
-                                figureRotateThree[i][j - 2] = figureRotateThree[i][j];
-                                figureRotateThree[i][j] = 0;
+                            if (figureRotateLocal[i][j] != 0) {
+                                figureRotateLocal[i][j - 2] = figureRotateLocal[i][j];
+                                figureRotateLocal[i][j] = 0;
                             }
                         } else {
-                            if (figureRotateThree[i][j] != 0) {
-                                figureRotateThree[i][j - 1] = figureRotateThree[i][j];
-                                figureRotateThree[i][j] = 0;
+                            if (figureRotateLocal[i][j] != 0) {
+                                figureRotateLocal[i][j - 1] = figureRotateLocal[i][j];
+                                figureRotateLocal[i][j] = 0;
                             }
                         }
                     }
@@ -300,7 +296,7 @@ public class TemplateOfFigure {
         bbb:
         for (int i = 0; i < sizeRotY; i++) {
             for (int j = 0; j < sizeRotX; j++) {
-                if (figureRotateThree[i][j] != 0 && TetrisStage.getFigureSave()[i + minY][j + minX] != 0) {
+                if (figureRotateLocal[i][j] != 0 && TetrisStage.getFigureSave()[i + minY][j + minX] != 0) {
                     flag = false;
                     break bbb;
                 }
@@ -309,7 +305,7 @@ public class TemplateOfFigure {
 
         if (flag) {
             for (int i = 0; i < sizeRotY; i++) {
-                System.arraycopy(figureRotateThree[i], 0, figure[i + minY], minX, sizeRotX);//it is necessary to examine
+                System.arraycopy(figureRotateLocal[i], 0, figure[i + minY], minX, sizeRotX);//it is necessary to examine
             }
         } else {
         }
@@ -317,8 +313,8 @@ public class TemplateOfFigure {
 
     public byte[] getMinCoordinate() {
         byte[] minCoord = {9, 19};
-        for (byte i = 0; i < sizeY; i++) {// minCoord[0] is x, minCoord[1] is y
-            for (byte j = 0; j < sizeX; j++) {
+        for (byte i = 0; i < Constants.matrY; i++) {// minCoord[0] is x, minCoord[1] is y
+            for (byte j = 0; j < Constants.matrX; j++) {
                 if (figure[i][j] != 0) {
                     minCoord[0] = minCoord[0] >= j ? j : minCoord[0];
                     minCoord[1] = minCoord[1] >= i ? i : minCoord[1];
@@ -330,8 +326,8 @@ public class TemplateOfFigure {
 
     public byte[] getMaxCoordinate() {// maxCoord[0] is x, maxCoord[1] is y
         byte[] maxCoord = {0, 0};
-        for (byte i = 0; i < sizeY; i++) {
-            for (byte j = 0; j < sizeX; j++) {
+        for (byte i = 0; i < Constants.matrY; i++) {
+            for (byte j = 0; j < Constants.matrX; j++) {
                 if (figure[i][j] != 0) {
                     maxCoord[0] = maxCoord[0] <= j ? j : maxCoord[0];
                     maxCoord[1] = maxCoord[1] <= i ? i : maxCoord[1];

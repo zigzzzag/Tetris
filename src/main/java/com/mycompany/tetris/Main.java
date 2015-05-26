@@ -6,15 +6,15 @@ package com.mycompany.tetris;
 
 import com.mycompany.stage.InputNameFrame;
 import com.mycompany.stage.WelcomeStage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
- *
  * @author user
  */
 public class Main {
@@ -27,19 +27,19 @@ public class Main {
     private static URL tetrisscore;
 
     public static void setName(String name) {
-	Main.name = name;
+        Main.name = name;
     }
 
     public static String getName() {
-	return name;
+        return name;
     }
 
     public static void setStart(boolean start) {
-	Main.start = start;
+        Main.start = start;
     }
 
     public static Screen getInstance() {
-	return scr;
+        return scr;
     }
 
     public static void main(String[] args) {
@@ -81,46 +81,46 @@ public class Main {
 //            log.info(key.getFIO() + "   " + key.getCount());
 //        }
 
-	InputNameFrame inputName = new InputNameFrame();
-	inputName.go();
+        InputNameFrame inputName = new InputNameFrame();
+        inputName.go();
 
-	try {
-	    tetrisscore = new URL("http://tetrisscore2.appspot.com/");
-	    try {
-		InputStreamReader isr = new InputStreamReader(tetrisscore.openStream(), "UTF-8");
-		log.info(convertStreamToString(isr));
-	    } catch (IOException ex) {
-		log.error(ex.getMessage(), ex);
-	    }
-	} catch (MalformedURLException ex) {
-	    log.error(ex.getMessage(), ex);
-	}
+        try {
+            tetrisscore = new URL("http://tetrisscore2.appspot.com/");
+            try {
+                InputStreamReader isr = new InputStreamReader(tetrisscore.openStream(), "UTF-8");
+                log.info(convertStreamToString(isr));
+            } catch (IOException ex) {
+                log.error(ex.getMessage(), ex);
+            }
+        } catch (MalformedURLException ex) {
+            log.error(ex.getMessage(), ex);
+        }
 
-	while (true) {
-	    if (start) {
-		if (startFirst) {
-		    scr = new Screen();
-		    scr.initScreen();
-		    scr.setCurrentStage(new WelcomeStage());
-		    startFirst = false;
-		}
-		scr.update();
-	    } else {
-		try {
-		    Thread.sleep(100);
-		} catch (InterruptedException ex) {
-		    log.error(ex.getMessage(), ex);
-		}
-	    }
-	}
+        while (true) {
+            if (start) {
+                if (startFirst) {
+                    scr = new Screen();
+                    scr.initScreen();
+                    scr.setCurrentStage(new WelcomeStage());
+                    startFirst = false;
+                }
+                scr.update();
+            } else {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ex) {
+                    log.error(ex.getMessage(), ex);
+                }
+            }
+        }
     }
 
     private static String convertStreamToString(java.io.InputStreamReader is) {
-	java.util.Scanner s = new java.util.Scanner(is);
-	String str = "";
-	while (s.hasNext()) {
-	    str += s.next();
-	}
-	return str;
+        java.util.Scanner s = new java.util.Scanner(is);
+        String str = "";
+        while (s.hasNext()) {
+            str += s.next();
+        }
+        return str;
     }
 }

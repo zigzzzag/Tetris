@@ -5,7 +5,6 @@
 package com.mycompany.tetris;
 
 /**
- *
  * @author user
  */
 public class StageEvent {
@@ -14,6 +13,7 @@ public class StageEvent {
 
         SCREEN_CLICK
     }
+
     private EventTypes event;
 
     public StageEvent(EventTypes event) {

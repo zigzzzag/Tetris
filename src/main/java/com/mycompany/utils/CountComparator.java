@@ -7,7 +7,6 @@ package com.mycompany.utils;
 import java.util.Comparator;
 
 /**
- *
  * @author user
  */
 public class CountComparator implements Comparator<Record> {

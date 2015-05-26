@@ -4,15 +4,14 @@
  */
 package com.mycompany.tetris;
 
-import java.awt.Graphics2D;
+import java.awt.*;
 
 /**
- *
  * @author user
  */
-public interface StageInterface{
+public interface StageInterface {
 
     public void render(Graphics2D gr2d);
-    
+
     public void processEvent(StageEvent evt);
 }
