@@ -23,6 +23,8 @@ public class TemplateOfFigure {
         typeOfFigure = typeFigure;
         clear(figure);
         switch (typeFigure) {
+            //  **
+            // **
             case 1: {
                 figure[0][5] = 1;
                 figure[0][6] = 1;
@@ -30,6 +32,8 @@ public class TemplateOfFigure {
                 figure[1][4] = 1;
                 break;
             }
+            // **
+            //  **
             case 2: {
                 figure[0][4] = 1;
                 figure[0][5] = 1;
@@ -37,6 +41,9 @@ public class TemplateOfFigure {
                 figure[1][6] = 1;
                 break;
             }
+            // **
+            // *
+            // *
             case 3: {
                 figure[0][4] = 1;
                 figure[0][5] = 1;
@@ -44,6 +51,9 @@ public class TemplateOfFigure {
                 figure[2][4] = 1;
                 break;
             }
+            // **
+            //  *
+            //  *
             case 4: {
                 figure[0][4] = 1;
                 figure[0][5] = 1;
@@ -51,6 +61,8 @@ public class TemplateOfFigure {
                 figure[2][5] = 1;
                 break;
             }
+            // ***
+            //  *
             case 5: {
                 figure[0][4] = 1;
                 figure[0][5] = 1;
@@ -58,6 +70,8 @@ public class TemplateOfFigure {
                 figure[1][5] = 1;
                 break;
             }
+            // **
+            // **
             case 6: {
                 figure[0][4] = 1;
                 figure[0][5] = 1;
@@ -65,6 +79,10 @@ public class TemplateOfFigure {
                 figure[1][5] = 1;
                 break;
             }
+            //  *
+            //  *
+            //  *
+            //  *
             case 7: {
                 figure[0][3] = 1;
                 figure[0][4] = 1;
