@@ -192,8 +192,8 @@ public class TemplateOfFigure {
         byte maxX = getMaxCoordinate()[0];
 
         outherloop:
-        for (int i = 0; i < Constants.matrY; i++) {
-            for (int j = 0; j < Constants.matrX - 1; j++) {
+        for (int i = 0; i < rootGlass.getRowCount(); i++) {
+            for (int j = 0; j < rootGlass.getColumnCount() - 1; j++) {
                 if (figure[i][j] != 0 && rootGlass.getFilledGlass()[i][j + 1] != 0) {
                     rightAvailable = false;
                     break outherloop;
@@ -201,9 +201,9 @@ public class TemplateOfFigure {
             }
         }
 
-        if (maxX < Constants.matrX - 1 && rightAvailable) {
-            for (int i = 0; i < Constants.matrY; i++) {
-                for (int j = Constants.matrX - 1; j >= 0; j--) {
+        if (maxX < rootGlass.getColumnCount() - 1 && rightAvailable) {
+            for (int i = 0; i < rootGlass.getRowCount(); i++) {
+                for (int j = rootGlass.getColumnCount() - 1; j >= 0; j--) {
                     if (figure[i][j] != 0) {
                         figure[i][j + 1] = figure[i][j];
                         figure[i][j] = 0;

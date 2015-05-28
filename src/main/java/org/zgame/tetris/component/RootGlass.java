@@ -7,12 +7,16 @@ import org.zgame.utils.Constants;
  */
 public class RootGlass {
 
-    private byte[][] filledGlass = new byte[Constants.matrY][Constants.matrX];
+    private byte rowCount = Constants.matrY;
+    private byte columnCount = Constants.matrX;
+    private byte[][] filledGlass;
 
     public RootGlass() {
+        filledGlass = new byte[rowCount][columnCount];
     }
 
     public RootGlass(byte[][] filledGlass) {
+        this();
         this.filledGlass = filledGlass;
     }
 
@@ -42,5 +46,21 @@ public class RootGlass {
 
     public void setFilledGlass(byte[][] filledGlass) {
         this.filledGlass = filledGlass;
+    }
+
+    public byte getRowCount() {
+        return rowCount;
+    }
+
+    public void setRowCount(byte rowCount) {
+        this.rowCount = rowCount;
+    }
+
+    public byte getColumnCount() {
+        return columnCount;
+    }
+
+    public void setColumnCount(byte columnCount) {
+        this.columnCount = columnCount;
     }
 }
