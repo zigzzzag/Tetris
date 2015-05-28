@@ -204,7 +204,7 @@ public class TemplateOfFigure {
             }
         }
 
-        if (maxX < rootGlass.getColumnCount() - 1 && rightAvailable) {
+        if (maxX < (rootGlass.getColumnCount() - 1) && rightAvailable) {
             for (int i = 0; i < rootGlass.getRowCount(); i++) {
                 for (int j = rootGlass.getColumnCount() - 1; j >= 0; j--) {
                     if (figure[i][j] != 0) {
@@ -213,6 +213,9 @@ public class TemplateOfFigure {
                     }
                 }
             }
+        } else {
+            log.info("TOF: {} no right, because " +
+                    (maxX < (rootGlass.getColumnCount() - 1) ? "maxX < (rootGlass.getColumnCount() - 1 is false" : "rightAvailable is false"), typeOfFigure);
         }
     }
 
