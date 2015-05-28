@@ -4,9 +4,9 @@
  */
 package org.zgame.tetris.component;
 
-import org.zgame.stage.TetrisStage;
 import org.zgame.utils.Constants;
 
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -16,88 +16,92 @@ public class TemplateOfFigure {
 
     private byte[][] figure = new byte[Constants.matrY][Constants.matrX];
     private int typeOfFigure;
+    private byte colorByte;
 
     public TemplateOfFigure() {
     }
 
-    public TemplateOfFigure(int typeFigure) {
-        typeOfFigure = typeFigure;
+    public TemplateOfFigure(int figureType) {
+        this(figureType, 0, 4);
+    }
+
+    public TemplateOfFigure(int figureType, int row, int column) {
+        typeOfFigure = figureType;
         clear(figure);
-        switch (typeFigure) {
+        switch (figureType) {
             //  **
             // **
             case 1: {
-                figure[0][5] = 1;
-                figure[0][6] = 1;
-                figure[1][5] = 1;
-                figure[1][4] = 1;
+                figure[0 + row][1 + column] = 1;
+                figure[0 + row][2 + column] = 1;
+                figure[1 + row][1 + column] = 1;
+                figure[1 + row][0 + column] = 1;
                 break;
             }
             // **
             //  **
             case 2: {
-                figure[0][4] = 1;
-                figure[0][5] = 1;
-                figure[1][5] = 1;
-                figure[1][6] = 1;
+                figure[0 + row][0 + column] = 1;
+                figure[0 + row][1 + column] = 1;
+                figure[1 + row][1 + column] = 1;
+                figure[1 + row][2 + column] = 1;
                 break;
             }
             // **
             // *
             // *
             case 3: {
-                figure[0][4] = 1;
-                figure[0][5] = 1;
-                figure[1][4] = 1;
-                figure[2][4] = 1;
+                figure[0 + row][0 + column] = 1;
+                figure[0 + row][1 + column] = 1;
+                figure[1 + row][0 + column] = 1;
+                figure[2 + row][0 + column] = 1;
                 break;
             }
             // **
             //  *
             //  *
             case 4: {
-                figure[0][4] = 1;
-                figure[0][5] = 1;
-                figure[1][5] = 1;
-                figure[2][5] = 1;
+                figure[0 + row][0 + column] = 1;
+                figure[0 + row][1 + column] = 1;
+                figure[1 + row][1 + column] = 1;
+                figure[2 + row][1 + column] = 1;
                 break;
             }
             // ***
             //  *
             case 5: {
-                figure[0][4] = 1;
-                figure[0][5] = 1;
-                figure[0][6] = 1;
-                figure[1][5] = 1;
+                figure[0 + row][0 + column] = 1;
+                figure[0 + row][1 + column] = 1;
+                figure[0 + row][2 + column] = 1;
+                figure[1 + row][1 + column] = 1;
                 break;
             }
             // **
             // **
             case 6: {
-                figure[0][4] = 1;
-                figure[0][5] = 1;
-                figure[1][4] = 1;
-                figure[1][5] = 1;
+                figure[0 + row][0 + column] = 1;
+                figure[0 + row][1 + column] = 1;
+                figure[1 + row][0 + column] = 1;
+                figure[1 + row][1 + column] = 1;
                 break;
             }
-            //  *
-            //  *
-            //  *
-            //  *
+            //  ****
             case 7: {
-                figure[0][3] = 1;
-                figure[0][4] = 1;
-                figure[0][5] = 1;
-                figure[0][6] = 1;
+                figure[0 + row][-1 + column] = 1;
+                figure[0 + row][0 + column] = 1;
+                figure[0 + row][1 + column] = 1;
+                figure[0 + row][2 + column] = 1;
                 break;
             }
         }
+    }
 
-        byte indexColor = (byte) (new Random().nextInt(8) + 1);
+    public void paintRandomColor() {
+        this.colorByte = (byte) (new Random().nextInt(8) + 1);
         for (int i = 0; i < Constants.matrY; i++) {
             for (int j = 0; j < Constants.matrX; j++) {
                 if (figure[i][j] != 0) {
-                    figure[i][j] = indexColor;
+                    figure[i][j] = (byte) colorByte;
                 }
             }
         }
@@ -354,5 +358,18 @@ public class TemplateOfFigure {
             }
         }
         return maxCoord;
+    }
+
+    public byte getColorByte() {
+        return colorByte;
+    }
+
+    public void setColorByte(byte colorByte) {
+        this.colorByte = colorByte;
+    }
+
+    public static void main(String[] args) {
+        TemplateOfFigure tof = new TemplateOfFigure(1, 3, 3);
+        System.out.println(Arrays.deepToString(tof.getFigure()));
     }
 }

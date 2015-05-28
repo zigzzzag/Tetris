@@ -1,6 +1,5 @@
 package org.zgame.tetris.component;
 
-import org.zgame.stage.TetrisStage;
 import org.zgame.utils.Constants;
 
 /**
@@ -11,6 +10,10 @@ public class RootGlass {
     private byte[][] filledGlass = new byte[Constants.matrY][Constants.matrX];
 
     public RootGlass() {
+    }
+
+    public RootGlass(byte[][] filledGlass) {
+        this.filledGlass = filledGlass;
     }
 
     public void deleteFullLine(int lineNumber) {
