@@ -38,4 +38,33 @@ public class TemplateOfFigureTest extends TestCase {
 
         assertTrue(Arrays.deepEquals(tof.getFigure(), matrExpected));
     }
+
+    public void testTypeOfFigure2() {
+        TemplateOfFigure tof = new TemplateOfFigure(2, 0, 4);
+
+        byte[][] matrExpected = new byte[][]{
+                {0, 0, 0, 0, 1, 1, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 1, 1, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+        };
+
+        assertTrue(Arrays.deepEquals(tof.getFigure(), matrExpected));
+    }
 }
