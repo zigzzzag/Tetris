@@ -4,6 +4,8 @@
  */
 package org.zgame.stage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zgame.components.ImageButton;
 import org.zgame.components.RootComponent;
 import org.zgame.components.TextCenterComponent;
@@ -13,12 +15,11 @@ import org.zgame.tetris.Main;
 import org.zgame.tetris.ScreenClickEvent;
 import org.zgame.tetris.StageEvent;
 import org.zgame.tetris.StageInterface;
+import org.zgame.tetris.component.RootGlass;
+import org.zgame.tetris.component.TemplateOfFigure;
 import org.zgame.utils.Constants;
 import org.zgame.utils.ParticleEffect;
 import org.zgame.utils.Record;
-import org.zgame.tetris.component.TemplateOfFigure;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -39,9 +40,9 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
     private ImageButton playButton;
     private TextCenterComponent label;
     private TextCenterComponent timeTCC;
-    private static TemplateOfFigure figure;
+    private static TemplateOfFigure figureCurrent;
     private TemplateOfFigure figureNext;
-    private static byte[][] figureSave = new byte[Constants.matrY][Constants.matrX];
+    private RootGlass rootGlass;
     private TemplateOfFigure figureShadow;
     private int cnt = 30;
     private int indentUp = 100;
@@ -56,105 +57,6 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
     private long timeLastDown;
     private static boolean downing;
 
-    public static byte[][] getFigureSave() {
-        return figureSave;
-    }
-
-    private int getSpeed(int totalPoints) {
-        if (1000 - totalPoints / 50 > 200) {
-            return 1000 - totalPoints / 50;
-        }
-        return 200;
-    }
-
-    public void continueGame() {
-        if (!verifyGameOver()) {
-            if (timeLastDown % fallSpeed > timeDown % fallSpeed) {
-                if (figure.isDownBarrier()) {
-                    for (int i = 0; i < Constants.matrY; i++) {
-                        for (int j = 0; j < Constants.matrX; j++) {
-                            figureSave[i][j] += figure.getFigure()[i][j];
-                        }
-                    }
-
-                    for (int i = 0; i < Constants.matrY; i++) {
-                        for (int j = 0; j < Constants.matrX; j++) {
-                            if (figureSave[i][j] == 0) {
-                                break;
-                            }
-                            if (j == Constants.matrX - 1) {
-                                deleteFullLine(i);
-                                for (int t = 0; t < 10; t++) {
-                                    particles.add(new ParticleEffect(converFromIndexX(t), converFromIndexY(i)));
-                                }
-                                start = ParticleEffect.TIME;
-                                pointsNow++;
-                            }
-                        }
-                    }
-                    if (pointsNow != 0) {
-                        pointsAll += countPoints(pointsNow);
-                        countTCC.setText("Счет: " + pointsAll);
-                    }
-                    if (!gameOver) {
-                        downing = false;
-                        figure = figureNext;
-                        figureNext = new TemplateOfFigure(new Random().nextInt(7) + 1);
-                        int rotateRandom = new Random().nextInt(4);
-                        for (int i = 0; i < rotateRandom; i++) {
-                            figureNext.rotate();
-                        }
-                        fallSpeed = getSpeed(pointsAll);
-                        pointsNow = 0;
-                        timeDown = 0;
-                        timeLastDown = 0;
-
-//                        AudioPlay.getInstance().setAudioText("kick");
-                    }
-                } else {
-                    figure.down();
-                }
-            }
-            for (int i = 0; i < Constants.matrY; i++) {
-                System.arraycopy(figure.getFigure()[i], 0, figureShadow.getFigure()[i], 0, Constants.matrX);
-            }
-
-            while (!figureShadow.isDownBarrier()) {
-                figureShadow.down();
-            }
-        }
-    }
-
-    public int countPoints(int points) {
-        switch (points) {
-            case 1: {
-                return 100;
-            }
-            case 2: {
-                return 300;
-            }
-            case 3: {
-                return 700;
-            }
-            case 4: {
-                return 1500;
-            }
-        }
-        return 0;
-    }
-
-    private List<ParticleEffect> particles = new ArrayList<ParticleEffect>();
-    private int start = 0;
-
-    public void deleteFullLine(int lineNumber) {
-        for (int i = lineNumber - 1; i >= 0; i--) {
-            for (int j = 0; j < Constants.matrX; j++) {
-                figureSave[i + 1][j] = figureSave[i][j];
-                figureSave[i][j] = 0;
-            }
-        }
-    }
-
     public TetrisStage() {
 //        Thread t = new Thread(AudioPlay.getInstance());
 //        t.start();
@@ -167,6 +69,7 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
         fallSpeed = 1000;
         downing = false;
 
+        rootGlass = new RootGlass();
         figureShadow = new TemplateOfFigure();
 
 //        for (int i = 19; i >= 6; i--) {
@@ -183,7 +86,7 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
 //        }
 //        figureSave[15][6] = 2;
 //        figureSave[10][7] = 3;
-        figure = new TemplateOfFigure(new Random().nextInt(7) + 1);
+        figureCurrent = new TemplateOfFigure(new Random().nextInt(7) + 1);
         figureNext = new TemplateOfFigure(new Random().nextInt(7) + 1);//new Random().nextInt(7) + 1
 
         closeButton = new ImageButton("CLOSE", "blueButton.png", "ВЫХОД");
@@ -213,6 +116,107 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
         countTCC = new TextCenterComponent("COUNT", "Счет: 0", "Arial-bold-48", Color.white, root.getWidth() - 200, 200);
         root.appendChildElement(countTCC);
     }
+
+    private int getSpeed(int totalPoints) {
+        if (1000 - totalPoints / 50 > 200) {
+            return 1000 - totalPoints / 50;
+        }
+        return 200;
+    }
+
+    public void continueGame() {
+        if (!rootGlass.verifyGameOver()) {
+            if (timeLastDown % fallSpeed > timeDown % fallSpeed) {
+                if (figureCurrent.isDownBarrier(rootGlass)) {
+                    for (int i = 0; i < Constants.matrY; i++) {
+                        for (int j = 0; j < Constants.matrX; j++) {
+                            rootGlass.getFilledGlass()[i][j] += figureCurrent.getFigure()[i][j];
+//                            figureSave[i][j] += figureCurrent.getFigure()[i][j];
+                        }
+                    }
+
+                    for (int i = 0; i < Constants.matrY; i++) {
+                        for (int j = 0; j < Constants.matrX; j++) {
+                            if (rootGlass.getFilledGlass()[i][j]/*figureSave[i][j]*/ == 0) {
+                                break;
+                            }
+                            if (j == Constants.matrX - 1) {
+                                rootGlass.deleteFullLine(i);
+                                for (int t = 0; t < 10; t++) {
+                                    particles.add(new ParticleEffect(converFromIndexX(t), converFromIndexY(i)));
+                                }
+                                start = ParticleEffect.TIME;
+                                pointsNow++;
+                            }
+                        }
+                    }
+                    if (pointsNow != 0) {
+                        pointsAll += countPoints(pointsNow);
+                        countTCC.setText("Счет: " + pointsAll);
+                    }
+                    if (!gameOver) {
+                        downing = false;
+                        figureCurrent = figureNext;
+                        figureNext = new TemplateOfFigure(new Random().nextInt(7) + 1);
+                        int rotateRandom = new Random().nextInt(4);
+                        for (int i = 0; i < rotateRandom; i++) {
+                            figureNext.rotate(rootGlass);
+                        }
+                        fallSpeed = getSpeed(pointsAll);
+                        pointsNow = 0;
+                        timeDown = 0;
+                        timeLastDown = 0;
+
+//                        AudioPlay.getInstance().setAudioText("kick");
+                    }
+                } else {
+                    figureCurrent.down();
+                }
+            }
+            for (int i = 0; i < Constants.matrY; i++) {
+                System.arraycopy(figureCurrent.getFigure()[i], 0, figureShadow.getFigure()[i], 0, Constants.matrX);
+            }
+
+            while (!figureShadow.isDownBarrier(rootGlass)) {
+                figureShadow.down();
+            }
+        } else {
+            gameOver = true;
+            log.info("GAME OVER!!!");
+
+            List<Record> recordList = Record.getRecord();
+            Record record = new Record();
+            record.setCount(pointsAll);
+            record.setFIO(Main.getName());
+            recordList.add(record);
+            Record.setRecord(recordList);
+
+            GameOverStage gos = new GameOverStage();
+            gos.setReturnStage(this);
+            Main.getInstance().setCurrentStage(gos);
+        }
+    }
+
+    public int countPoints(int points) {
+        switch (points) {
+            case 1: {
+                return 100;
+            }
+            case 2: {
+                return 300;
+            }
+            case 3: {
+                return 700;
+            }
+            case 4: {
+                return 1500;
+            }
+        }
+        return 0;
+    }
+
+    private List<ParticleEffect> particles = new ArrayList<ParticleEffect>();
+    private int start = 0;
 
     public int converFromIndexX(int j) {
         return j * cnt + indentLeft;
@@ -284,9 +288,9 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
                     gr2d.setColor(Color.black);
                     gr2d.drawRect(converFromIndexX(j), converFromIndexY(i), cnt, cnt);
                 }
-                if (figure.getFigure()[i][j] != 0) {
-                    gradientFigure(gr2d, lightColor(figure.getFigure()[i][j]),
-                            darkColor(figure.getFigure()[i][j]), converFromIndexX(j), converFromIndexY(i));
+                if (figureCurrent.getFigure()[i][j] != 0) {
+                    gradientFigure(gr2d, lightColor(figureCurrent.getFigure()[i][j]),
+                            darkColor(figureCurrent.getFigure()[i][j]), converFromIndexX(j), converFromIndexY(i));
                 }
                 if (figureNext.getFigure()[i][j] != 0) {
                     gradientFigure(gr2d, lightColor(figureNext.getFigure()[i][j]),
@@ -297,11 +301,11 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
 
         for (int i = 0; i < Constants.matrY; i++) {
             for (int j = 0; j < Constants.matrX; j++) {
-//                gr2d.drawString(String.valueOf(figure.getFigure()[i][j]), 50 + 10 * j, 450 + 15 * i);
+//                gr2d.drawString(String.valueOf(figureCurrent.getFigure()[i][j]), 50 + 10 * j, 450 + 15 * i);
 //                gr2d.drawString(String.valueOf(figureSave[i][j]), 250 + 10 * j, 450 + 15 * i);
 
-                if (figureSave[i][j] != 0) {
-                    gradientFigure(gr2d, lightColor(figureSave[i][j]), darkColor(figureSave[i][j]), converFromIndexX(j), converFromIndexY(i));
+                if (rootGlass.getFilledGlass()[i][j]/*figureSave[i][j]*/ != 0) {
+                    gradientFigure(gr2d, lightColor(rootGlass.getFilledGlass()[i][j]/*figureSave[i][j]*/), darkColor(rootGlass.getFilledGlass()[i][j]/*figureSave[i][j]*/), converFromIndexX(j), converFromIndexY(i));
                 }
                 gr2d.setColor(Color.black);
             }
@@ -382,40 +386,12 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
     public void gameReset() {
         for (int i = 0; i < Constants.matrY; i++) {
             for (int j = 0; j < Constants.matrX; j++) {
-                figureSave[i][j] = 0;
+                rootGlass.getFilledGlass()[i][j]/*figureSave[i][j]*/ = 0;
             }
         }
         fallSpeed = 1000;
         gameOver = true;
-        figure = new TemplateOfFigure(new Random().nextInt(6) + 1);
-    }
-
-    public Boolean verifyGameOver() {
-        boolean over = false;
-        for (int j = 2; j < Constants.matrX - 2; j++) {
-            if (figureSave[0][j] != 0) {
-                over = true;
-            }
-        }
-
-        if (over || figureSave[1][4] != 0 || figureSave[1][5] != 0) {
-            gameOver = true;
-
-            log.info("GAME OVER!!!");
-
-            List<Record> recordList = Record.getRecord();
-            Record record = new Record();
-            record.setCount(pointsAll);
-            record.setFIO(Main.getName());
-            recordList.add(record);
-            Record.setRecord(recordList);
-
-            GameOverStage gos = new GameOverStage();
-            gos.setReturnStage(this);
-            Main.getInstance().setCurrentStage(gos);
-            return true;
-        }
-        return false;
+        figureCurrent = new TemplateOfFigure(new Random().nextInt(6) + 1);
     }
 
     @Override
@@ -462,19 +438,19 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
         if (!pause && !downing) {
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_RIGHT: {
-                    figure.right();
+                    figureCurrent.right(rootGlass);
                     break;
                 }
                 case KeyEvent.VK_LEFT: {
-                    figure.left();
+                    figureCurrent.left(rootGlass);
                     break;
                 }
                 case KeyEvent.VK_DOWN: {
-                    figure.down();
+                    figureCurrent.down();
                     break;
                 }
                 case KeyEvent.VK_UP: {
-                    figure.rotate();
+                    figureCurrent.rotate(rootGlass);
                     break;
                 }
                 case KeyEvent.VK_SPACE: {

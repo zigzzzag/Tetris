@@ -119,7 +119,7 @@ public class TemplateOfFigure {
         }
     }
 
-    public boolean isDownBarrier() {
+    public boolean isDownBarrier(RootGlass rootGlass) {
         for (int j = 0; j < Constants.matrX; j++) {
             if (figure[Constants.matrY - 1][j] != 0) {
                 return true;
@@ -127,7 +127,7 @@ public class TemplateOfFigure {
         }
         for (int i = Constants.matrY - 1; i > 0; i--) {
             for (int j = 0; j < Constants.matrX; j++) {
-                if (figure[i][j] != 0 && TetrisStage.getFigureSave()[i + 1][j] != 0) {
+                if (figure[i][j] != 0 && rootGlass.getFilledGlass()[i + 1][j] != 0) {
                     return true;
                 }
             }
@@ -157,14 +157,14 @@ public class TemplateOfFigure {
         }
     }
 
-    public void left() {
+    public void left(RootGlass rootGlass) {
         boolean leftAvailable = true;
         byte minX = getMinCoordinate()[0];
 
         outherloop:
         for (int i = 0; i < Constants.matrY; i++) {
             for (int j = 1; j < Constants.matrX; j++) {
-                if (figure[i][j] != 0 && TetrisStage.getFigureSave()[i][j - 1] != 0) {
+                if (figure[i][j] != 0 && rootGlass.getFilledGlass()[i][j - 1] != 0) {
                     leftAvailable = false;
                     break outherloop;
                 }
@@ -183,14 +183,14 @@ public class TemplateOfFigure {
         }
     }
 
-    public void right() {
+    public void right(RootGlass rootGlass) {
         boolean rightAvailable = true;
         byte maxX = getMaxCoordinate()[0];
 
         outherloop:
         for (int i = 0; i < Constants.matrY; i++) {
             for (int j = 0; j < Constants.matrX - 1; j++) {
-                if (figure[i][j] != 0 && TetrisStage.getFigureSave()[i][j + 1] != 0) {
+                if (figure[i][j] != 0 && rootGlass.getFilledGlass()[i][j + 1] != 0) {
                     rightAvailable = false;
                     break outherloop;
                 }
@@ -209,7 +209,7 @@ public class TemplateOfFigure {
         }
     }
 
-    public void rotate() {
+    public void rotate(RootGlass rootGlass) {
         byte[] minCoord = getMinCoordinate();
         byte minX = minCoord[0];
         byte minY = minCoord[1];
@@ -225,7 +225,7 @@ public class TemplateOfFigure {
             }
         }
         for (int i = 0; i < leftMoveBarrier; i++) {
-            left();
+            left(rootGlass);
         }
 
         for (byte i = 0; i < Constants.matrY; i++) {
@@ -247,7 +247,7 @@ public class TemplateOfFigure {
         byte leftMove = (byte) (typeOfFigure == 7 ? 4 : 3);
         for (byte i = 0; i < sizeRotY; i++) {
             for (byte j = 0; j < sizeRotX; j++) {
-                if (TetrisStage.getFigureSave()[i + minY][j + minX] != 0) {
+                if (rootGlass.getFilledGlass()[i + minY][j + minX] != 0) {
                     if (j < leftMove) {
                         leftMove = j;
                     }
@@ -257,7 +257,7 @@ public class TemplateOfFigure {
 
         if (leftMove != sizeRotX) {
             for (int k = 0; k < sizeRotX - leftMove; k++) {
-                left();
+                left(rootGlass);
             }
             minX -= sizeRotX - leftMove;
             if (minX < 0) {
@@ -315,7 +315,7 @@ public class TemplateOfFigure {
         bbb:
         for (int i = 0; i < sizeRotY; i++) {
             for (int j = 0; j < sizeRotX; j++) {
-                if (figureRotateLocal[i][j] != 0 && TetrisStage.getFigureSave()[i + minY][j + minX] != 0) {
+                if (figureRotateLocal[i][j] != 0 && rootGlass.getFilledGlass()[i + minY][j + minX] != 0) {
                     flag = false;
                     break bbb;
                 }
