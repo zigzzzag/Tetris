@@ -1,5 +1,7 @@
 package org.zgame.tetris.component;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zgame.utils.Constants;
 
 /**
@@ -7,6 +9,7 @@ import org.zgame.utils.Constants;
  */
 public class RootGlass {
 
+    private static final Logger log = LoggerFactory.getLogger(RootGlass.class);
     private byte rowCount = Constants.matrY;
     private byte columnCount = Constants.matrX;
     private byte[][] filledGlass;
@@ -37,6 +40,18 @@ public class RootGlass {
             }
         }
 
+        return false;
+    }
+
+    public boolean hasIntersectionWithFigure(TemplateOfFigure tof) {
+        for (byte row = 0; row < rowCount; row++) {
+            for (byte column = 0; column < columnCount; column++) {
+                if (tof.getFigure()[row][column] != 0 && filledGlass[row][column] != 0) {
+                    log.trace("RootGlass has intersection with TOF {}: (row, column) -> ({},{})", tof.getTypeOfFigure(), row, column);
+                    return true;
+                }
+            }
+        }
         return false;
     }
 

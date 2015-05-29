@@ -438,7 +438,7 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
         if (!pause && !downing) {
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_RIGHT: {
-                    figureCurrent.right(rootGlass);
+                    figureCurrent.moveRight(rootGlass);
                     break;
                 }
                 case KeyEvent.VK_LEFT: {

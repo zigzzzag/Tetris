@@ -20,6 +20,8 @@ public class TemplateOfFigure {
     private byte[][] figure = new byte[Constants.matrY][Constants.matrX];
     private int typeOfFigure;
     private byte colorByte;
+    private int row;
+    private int column;
 
     public TemplateOfFigure() {
     }
@@ -29,7 +31,10 @@ public class TemplateOfFigure {
     }
 
     public TemplateOfFigure(int figureType, int row, int column) {
-        typeOfFigure = figureType;
+        this.typeOfFigure = figureType;
+        this.row = row;
+        this.column = column;
+
         clear(figure);
         switch (figureType) {
             //  **
@@ -190,32 +195,40 @@ public class TemplateOfFigure {
         }
     }
 
-    public void right(RootGlass rootGlass) {
-        boolean rightAvailable = true;
+    private boolean isRightAvailable(RootGlass rootGlass) {
         byte maxX = getMaxCoordinate()[0];
+        if (maxX > rootGlass.getColumnCount()) {
+            log.info("TOF: '{}' is not right available, because maxX > rootGlass.getColumnCount(); maxX = {}, rootGlass.getColumnCount() = {}",
+                    typeOfFigure, maxX, rootGlass.getColumnCount());
+            return false;
+        }
 
-        outherloop:
-        for (int i = 0; i < rootGlass.getRowCount(); i++) {
-            for (int j = 0; j < rootGlass.getColumnCount() - 1; j++) {
-                if (figure[i][j] != 0 && rootGlass.getFilledGlass()[i][j + 1] != 0) {
-                    rightAvailable = false;
-                    break outherloop;
+        TemplateOfFigure tof_right = new TemplateOfFigure(typeOfFigure, row, column + 1);
+        if (rootGlass.hasIntersectionWithFigure(tof_right)) {
+            log.debug("TOF: '{}' is not right available, because rootGlass.hasIntersectionWithFigure(tof_right)",
+                    typeOfFigure);
+            return false;
+        }
+        return true;
+    }
+
+    private void moveRightForce(RootGlass rootGlass) {
+        for (int row = 0; row < rootGlass.getRowCount(); row++) {
+            for (int column = rootGlass.getColumnCount() - 1; column >= 0; column--) {
+                if (figure[row][column] != 0) {
+                    figure[row][column + 1] = figure[row][column];
+                    figure[row][column] = 0;
                 }
             }
         }
+        column++;
 
-        if (maxX < (rootGlass.getColumnCount() - 1) && rightAvailable) {
-            for (int i = 0; i < rootGlass.getRowCount(); i++) {
-                for (int j = rootGlass.getColumnCount() - 1; j >= 0; j--) {
-                    if (figure[i][j] != 0) {
-                        figure[i][j + 1] = figure[i][j];
-                        figure[i][j] = 0;
-                    }
-                }
-            }
-        } else {
-            log.info("TOF: {} no right, because " +
-                    (maxX < (rootGlass.getColumnCount() - 1) ? "maxX < (rootGlass.getColumnCount() - 1 is false" : "rightAvailable is false"), typeOfFigure);
+        log.debug("TOF: '{}' move right force", typeOfFigure);
+    }
+
+    public void moveRight(RootGlass rootGlass) {
+        if (isRightAvailable(rootGlass)) {
+            moveRightForce(rootGlass);
         }
     }
 
@@ -372,6 +385,30 @@ public class TemplateOfFigure {
 
     public void setColorByte(byte colorByte) {
         this.colorByte = colorByte;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public void setRow(int row) {
+        this.row = row;
+    }
+
+    public int getColumn() {
+        return column;
+    }
+
+    public void setColumn(int column) {
+        this.column = column;
+    }
+
+    public int getTypeOfFigure() {
+        return typeOfFigure;
+    }
+
+    public void setTypeOfFigure(int typeOfFigure) {
+        this.typeOfFigure = typeOfFigure;
     }
 
     public static void main(String[] args) {
