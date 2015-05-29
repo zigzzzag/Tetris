@@ -18,7 +18,7 @@ public class TemplateOfFigure {
 
     private static final Logger log = LoggerFactory.getLogger(TemplateOfFigure.class);
     private byte[][] figure = new byte[Constants.matrY][Constants.matrX];
-    private int typeOfFigure;
+    private FigureType typeOfFigure;
     private byte colorByte;
     private int row;
     private int column;
@@ -30,16 +30,20 @@ public class TemplateOfFigure {
         this(figureType, 0, 4);
     }
 
-    public TemplateOfFigure(int figureType, int row, int column) {
-        this.typeOfFigure = figureType;
+    public TemplateOfFigure(FigureType figureType, int row, int column) {
+        this(figureType.getValue(), row, column);
+    }
+
+    public TemplateOfFigure(int figureTypeInt, int row, int column) {
+        this.typeOfFigure = FigureType.getTypeByIntVal(figureTypeInt);
         this.row = row;
         this.column = column;
 
         clear(figure);
-        switch (figureType) {
+        switch (typeOfFigure) {
             //  **
             // **
-            case 1: {
+            case S: {
                 figure[0 + row][1 + column] = 1;
                 figure[0 + row][2 + column] = 1;
                 figure[1 + row][1 + column] = 1;
@@ -48,7 +52,7 @@ public class TemplateOfFigure {
             }
             // **
             //  **
-            case 2: {
+            case S_R: {
                 figure[0 + row][0 + column] = 1;
                 figure[0 + row][1 + column] = 1;
                 figure[1 + row][1 + column] = 1;
@@ -58,7 +62,7 @@ public class TemplateOfFigure {
             // **
             // *
             // *
-            case 3: {
+            case G: {
                 figure[0 + row][0 + column] = 1;
                 figure[0 + row][1 + column] = 1;
                 figure[1 + row][0 + column] = 1;
@@ -68,7 +72,7 @@ public class TemplateOfFigure {
             // **
             //  *
             //  *
-            case 4: {
+            case G_R: {
                 figure[0 + row][0 + column] = 1;
                 figure[0 + row][1 + column] = 1;
                 figure[1 + row][1 + column] = 1;
@@ -77,7 +81,7 @@ public class TemplateOfFigure {
             }
             // ***
             //  *
-            case 5: {
+            case T: {
                 figure[0 + row][0 + column] = 1;
                 figure[0 + row][1 + column] = 1;
                 figure[0 + row][2 + column] = 1;
@@ -86,7 +90,7 @@ public class TemplateOfFigure {
             }
             // **
             // **
-            case 6: {
+            case QUADRATE: {
                 figure[0 + row][0 + column] = 1;
                 figure[0 + row][1 + column] = 1;
                 figure[1 + row][0 + column] = 1;
@@ -94,7 +98,7 @@ public class TemplateOfFigure {
                 break;
             }
             //  ****
-            case 7: {
+            case STICK: {
                 figure[0 + row][-1 + column] = 1;
                 figure[0 + row][0 + column] = 1;
                 figure[0 + row][1 + column] = 1;
@@ -238,7 +242,7 @@ public class TemplateOfFigure {
         byte minY = minCoord[1];
 
         byte leftMoveBarrier = 0;
-        if (typeOfFigure == 7) {
+        if (typeOfFigure.equals(FigureType.STICK)) {
             if (minX > 6) {
                 leftMoveBarrier = (byte) (minX - 6);
             }
@@ -260,14 +264,14 @@ public class TemplateOfFigure {
             }
         }
 
-        if (minY + typeOfFigure / 7 > 17) {//нельзя поворачивать когда фигура находится слишком низко
+        if (minY + typeOfFigure.getValue() / 7 > 17) {//нельзя поворачивать когда фигура находится слишком низко
             return;
         }
 
-        byte sizeRotY = (byte) (typeOfFigure == 7 ? 4 : 3);
-        byte sizeRotX = (byte) (typeOfFigure == 7 ? 4 : 3);
+        byte sizeRotY = (byte) (typeOfFigure.equals(FigureType.STICK) ? 4 : 3);
+        byte sizeRotX = (byte) (typeOfFigure.equals(FigureType.STICK) ? 4 : 3);
 
-        byte leftMove = (byte) (typeOfFigure == 7 ? 4 : 3);
+        byte leftMove = (byte) (typeOfFigure.equals(FigureType.STICK) ? 4 : 3);
         for (byte i = 0; i < sizeRotY; i++) {
             for (byte j = 0; j < sizeRotX; j++) {
                 if (rootGlass.getFilledGlass()[i + minY][j + minX] != 0) {
@@ -294,7 +298,7 @@ public class TemplateOfFigure {
 
         for (int i = 0; i < sizeRotY; i++) {
             for (int j = 0; j < sizeRotX; j++) {
-                if (typeOfFigure == 7) {
+                if (typeOfFigure.equals(FigureType.STICK)) {
                     figureLocal[i][j] = figure[i + minY][j + minX];
                     if (figureLocal[i][j] != 0) {
                         figureRotateLocal[j][i] = figureLocal[i][j];
@@ -308,7 +312,7 @@ public class TemplateOfFigure {
             }
         }
 
-        if (typeOfFigure != 7) {
+        if (!typeOfFigure.equals(FigureType.STICK)) {
             for (int i = 0; i < sizeRotY; i++) {
                 if (figureRotateLocal[i][0] != 0) {
                     firstColumnCount++;
@@ -318,7 +322,7 @@ public class TemplateOfFigure {
             if (firstColumnCount == 0) { // смещение вправо матрицы 3 на 3
                 for (int i = 0; i < sizeRotY; i++) {
                     for (int j = 0; j < sizeRotX; j++) {
-                        if (typeOfFigure == 7) {
+                        if (typeOfFigure.equals(FigureType.STICK)) {
                             if (figureRotateLocal[i][j] != 0) {
                                 figureRotateLocal[i][j - 2] = figureRotateLocal[i][j];
                                 figureRotateLocal[i][j] = 0;
@@ -403,11 +407,11 @@ public class TemplateOfFigure {
         this.column = column;
     }
 
-    public int getTypeOfFigure() {
+    public FigureType getTypeOfFigure() {
         return typeOfFigure;
     }
 
-    public void setTypeOfFigure(int typeOfFigure) {
+    public void setTypeOfFigure(FigureType typeOfFigure) {
         this.typeOfFigure = typeOfFigure;
     }
 
