@@ -86,8 +86,8 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
 //        }
 //        figureSave[15][6] = 2;
 //        figureSave[10][7] = 3;
-        figureCurrent = new TemplateOfFigure(new Random().nextInt(7) + 1);
-        figureNext = new TemplateOfFigure(new Random().nextInt(7) + 1);//new Random().nextInt(7) + 1
+        figureCurrent = new TemplateOfFigure(3);//new Random().nextInt(7) + 1
+        figureNext = new TemplateOfFigure(3);//new Random().nextInt(7) + 1
 
         closeButton = new ImageButton("CLOSE", "blueButton.png", "ВЫХОД");
         closeButton.setComponentPosX(Main.getInstance().getWidth() - closeButton.getWidth() - 20);

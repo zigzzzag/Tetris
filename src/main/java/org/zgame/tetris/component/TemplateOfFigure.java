@@ -201,11 +201,13 @@ public class TemplateOfFigure {
 
     private boolean isRightAvailable(RootGlass rootGlass) {
         byte maxX = getMaxCoordinate()[0];
-        if (maxX > rootGlass.getColumnCount()) {
-            log.info("TOF: '{}' is not right available, because maxX > rootGlass.getColumnCount(); maxX = {}, rootGlass.getColumnCount() = {}",
+        if (maxX >= rootGlass.getColumnCount() - 1) {
+            log.debug("TOF: '{}' is not right available, because maxX > rootGlass.getColumnCount() - 1; maxX = {}, rootGlass.getColumnCount() = {}",
                     typeOfFigure, maxX, rootGlass.getColumnCount());
             return false;
         }
+        log.trace("TOF: '{}' is right border; maxX = {}, rootGlass.getColumnCount() = {}",
+                typeOfFigure, maxX, rootGlass.getColumnCount());
 
         TemplateOfFigure tof_right = new TemplateOfFigure(typeOfFigure, row, column + 1);
         if (rootGlass.hasIntersectionWithFigure(tof_right)) {
