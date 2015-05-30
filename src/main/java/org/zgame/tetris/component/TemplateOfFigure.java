@@ -173,29 +173,42 @@ public class TemplateOfFigure {
         }
     }
 
-    public void left(RootGlass rootGlass) {
-        boolean leftAvailable = true;
+    private boolean isLeftAvailable(RootGlass rootGlass) {
         byte minX = getMinCoordinate()[0];
+        if (minX <= 0) {
+            log.debug("TOF: '{}' is not left available, because minX > rootGlass.getColumnCount() - 1; minX = {}, rootGlass.getColumnCount() = {}",
+                    typeOfFigure, minX, rootGlass.getColumnCount());
+            return false;
+        }
+        log.trace("TOF: '{}' is left border; maxX = {}, rootGlass.getColumnCount() = {}",
+                typeOfFigure, minX, rootGlass.getColumnCount());
 
-        outherloop:
-        for (int i = 0; i < Constants.matrY; i++) {
-            for (int j = 1; j < Constants.matrX; j++) {
-                if (figure[i][j] != 0 && rootGlass.getFilledGlass()[i][j - 1] != 0) {
-                    leftAvailable = false;
-                    break outherloop;
+        TemplateOfFigure tof_left = new TemplateOfFigure(typeOfFigure, row, column - 1);
+        if (rootGlass.hasIntersectionWithFigure(tof_left)) {
+            log.debug("TOF: '{}' is not left available, because rootGlass.hasIntersectionWithFigure(tof_left)",
+                    typeOfFigure);
+            return false;
+        }
+        return true;
+    }
+
+    private void moveLeftForce(RootGlass rootGlass) {
+        for (int row = 0; row < Constants.matrY; row++) {
+            for (int column = 0; column < Constants.matrX; column++) {
+                if (figure[row][column] != 0) {
+                    figure[row][column - 1] = figure[row][column];
+                    figure[row][column] = 0;
                 }
             }
         }
+        column--;
 
-        if (minX > 0 && leftAvailable) {
-            for (int i = 0; i < Constants.matrY; i++) {
-                for (int j = 0; j < Constants.matrX; j++) {
-                    if (figure[i][j] != 0) {
-                        figure[i][j - 1] = figure[i][j];
-                        figure[i][j] = 0;
-                    }
-                }
-            }
+        log.debug("TOF: '{}' move left force", typeOfFigure);
+    }
+
+    public void moveLeft(RootGlass rootGlass) {
+        if (isLeftAvailable(rootGlass)) {
+            moveLeftForce(rootGlass);
         }
     }
 
@@ -254,7 +267,7 @@ public class TemplateOfFigure {
             }
         }
         for (int i = 0; i < leftMoveBarrier; i++) {
-            left(rootGlass);
+            moveLeft(rootGlass);
         }
 
         for (byte i = 0; i < Constants.matrY; i++) {
@@ -286,7 +299,7 @@ public class TemplateOfFigure {
 
         if (leftMove != sizeRotX) {
             for (int k = 0; k < sizeRotX - leftMove; k++) {
-                left(rootGlass);
+                moveLeft(rootGlass);
             }
             minX -= sizeRotX - leftMove;
             if (minX < 0) {
