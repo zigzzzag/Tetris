@@ -183,6 +183,7 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
             case KeyEvent.VK_SPACE: {
                 //downing = true;
                 gameContext.getCurrentFigure().setState(FigureState.FALL);
+                gameContext.fallCurrentFigure();
                 break;
             }
         }

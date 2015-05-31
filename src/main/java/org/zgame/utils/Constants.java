@@ -15,7 +15,6 @@ public final class Constants {
     public static int indentUp = 100;
     public static int indentLeft = Main.getInstance().getWidth() / 2 - 5 * quadrateSize;
 
-
     public static Color alphaBlack = new Color(0, 0, 0, 0x80);
     public static Color alphaBlack2 = new Color(0, 0, 0, 0x99);
     public static Color alphaBlack3 = new Color(0, 0, 0, 140);

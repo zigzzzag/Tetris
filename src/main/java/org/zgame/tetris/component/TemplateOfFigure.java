@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zgame.tetris.component.comedowntime.ComeDownTime;
 import org.zgame.tetris.component.comedowntime.ComeDownTimeImpl;
+import org.zgame.tetris.component.comedowntime.TestComeDownTime;
 import org.zgame.utils.Constants;
 
 import java.awt.*;
@@ -29,7 +30,7 @@ public class TemplateOfFigure {
     private FigureState state = FigureState.NORMAL;
 
     public TemplateOfFigure() {
-        this.comeDownTime = new ComeDownTimeImpl();
+        this.comeDownTime = new TestComeDownTime();
     }
 
     public TemplateOfFigure(int figureType) {
@@ -178,14 +179,14 @@ public class TemplateOfFigure {
     }
 
     public boolean isDownBarrier(RootGlass rootGlass) {
-        for (int j = 0; j < Constants.matrX; j++) {
-            if (figure[Constants.matrY - 1][j] != 0) {
+        for (int column = 0; column < rootGlass.getColumnCount(); column++) {
+            if (figure[rootGlass.getRowCount() - 1][column] != 0) {
                 return true;
             }
         }
-        for (int i = Constants.matrY - 1; i > 0; i--) {
-            for (int j = 0; j < Constants.matrX; j++) {
-                if (figure[i][j] != 0 && rootGlass.getFilledGlass()[i + 1][j] != 0) {
+        for (int row = rootGlass.getRowCount() - 1; row > 0; row--) {
+            for (int column = 0; column < rootGlass.getColumnCount(); column++) {
+                if (figure[row][column] != 0 && rootGlass.getFilledGlass()[row + 1][column] != 0) {
                     return true;
                 }
             }

@@ -24,7 +24,6 @@ public class GameContext implements Runnable {
     private boolean gameOver = false;
     private int pointsNow;
     private int pointsAll;
-    private boolean downing;
 
     public GameContext() {
         rootGlass = new RootGlass();
@@ -38,11 +37,6 @@ public class GameContext implements Runnable {
     public void run() {
         while (!gameOver) {
             if (currentFigure.isDownBarrier(rootGlass)) {
-                for (int row = 0; row < Constants.matrY; row++) {
-                    for (int column = 0; column < Constants.matrX; column++) {
-                        rootGlass.getFilledGlass()[row][column] += currentFigure.getFigure()[row][column];
-                    }
-                }
 
                 for (int row = 0; row < Constants.matrY; row++) {
                     for (int column = 0; column < Constants.matrX; column++) {
@@ -64,14 +58,7 @@ public class GameContext implements Runnable {
 //                    countTCC.setText("Счет: " + pointsAll);
                 }
                 if (!gameOver) {
-                    downing = false;
-                    currentFigure = nextFigure;
-                    nextFigure = new TemplateOfFigure(new Random().nextInt(7) + 1);
-                    int rotateRandom = new Random().nextInt(4);
-                    for (int i = 0; i < rotateRandom; i++) {
-                        nextFigure.rotate(rootGlass);
-                    }
-                    pointsNow = 0;
+                    nextStep();
                 }
             } else {
                 currentFigure.down();
@@ -104,6 +91,34 @@ public class GameContext implements Runnable {
         GameOverStage gos = new GameOverStage(this);
 //        gos.setReturnStage(this);
         Main.getInstance().setCurrentStage(gos);
+    }
+
+    public void nextStep() {
+        for (int row = 0; row < Constants.matrY; row++) {
+            for (int column = 0; column < Constants.matrX; column++) {
+                rootGlass.getFilledGlass()[row][column] += currentFigure.getFigure()[row][column];
+            }
+        }
+
+        currentFigure = nextFigure;
+        nextFigure = new TemplateOfFigure(new Random().nextInt(7) + 1);
+        int rotateRandom = new Random().nextInt(4);
+        for (int i = 0; i < rotateRandom; i++) {
+            nextFigure.rotate(rootGlass);
+        }
+        pointsNow = 0;
+    }
+
+    public void fallCurrentFigure() {
+        while (!currentFigure.isDownBarrier(rootGlass)) {
+            currentFigure.down();
+            try {
+                Thread.sleep(20);
+            } catch (InterruptedException e) {
+                log.error(e.getMessage(), e);
+            }
+        }
+        nextStep();
     }
 
     public void paint(Graphics2D gr2d) {
