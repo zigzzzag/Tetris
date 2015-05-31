@@ -262,8 +262,6 @@ public class TemplateOfFigure {
                     typeOfFigure, maxX, rootGlass.getColumnCount());
             return false;
         }
-        log.trace("TOF: '{}' is right border; maxX = {}, rootGlass.getColumnCount() = {}",
-                typeOfFigure, maxX, rootGlass.getColumnCount());
 
         TemplateOfFigure tof_right = new TemplateOfFigure(typeOfFigure, row, column + 1);
         if (rootGlass.hasIntersectionWithFigure(tof_right)) {
