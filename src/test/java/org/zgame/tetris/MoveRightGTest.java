@@ -11,9 +11,9 @@ import java.util.Arrays;
 /**
  * Created by SBT-Nikiforov-MO on 28.05.2015.
  */
-public class MoveRightTest extends TestCase {
+public class MoveRightGTest extends TestCase {
 
-    private static final Logger log = LoggerFactory.getLogger(MoveRightTest.class);
+    private static final Logger log = LoggerFactory.getLogger(MoveRightGTest.class);
 
     public void testCaseFigure_3_0() {
         byte[][] rootGlassMatr = new byte[][]{
