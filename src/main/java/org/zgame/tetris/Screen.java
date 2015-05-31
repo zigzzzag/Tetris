@@ -27,7 +27,6 @@ public class Screen extends JFrame implements KeyListener {
     private GraphicsDevice gd = null;
     private StageInterface currentStage = null;
     private BufferStrategy bufferStrategy;
-    private TetrisStage tetrisStage;
 
     public Screen() {
         super("Tetris");
@@ -44,9 +43,6 @@ public class Screen extends JFrame implements KeyListener {
         setDisplayMode(1024, 768, 32);
 
         setBufferStrategy();
-
-//        tetrisStage = TetrisStage.getInstance();
-        addKeyListener(new TetrisStage());
 
         addMouseListener(new MouseAdapter() {
             @Override

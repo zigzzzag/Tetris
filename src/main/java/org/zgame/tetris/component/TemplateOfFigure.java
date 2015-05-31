@@ -6,8 +6,11 @@ package org.zgame.tetris.component;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.zgame.tetris.component.comedowntime.ComeDownTime;
+import org.zgame.tetris.component.comedowntime.ComeDownTimeImpl;
 import org.zgame.utils.Constants;
 
+import java.awt.*;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -22,8 +25,11 @@ public class TemplateOfFigure {
     private byte colorByte;
     private int row;
     private int column;
+    private ComeDownTime comeDownTime;
+    private FigureState state = FigureState.NORMAL;
 
     public TemplateOfFigure() {
+        this.comeDownTime = new ComeDownTimeImpl();
     }
 
     public TemplateOfFigure(int figureType) {
@@ -35,6 +41,7 @@ public class TemplateOfFigure {
     }
 
     public TemplateOfFigure(int figureTypeInt, int row, int column) {
+        this();
         this.typeOfFigure = FigureType.getTypeByIntVal(figureTypeInt);
         this.row = row;
         this.column = column;
@@ -104,6 +111,41 @@ public class TemplateOfFigure {
                 figure[0 + row][1 + column] = 1;
                 figure[0 + row][2 + column] = 1;
                 break;
+            }
+        }
+    }
+
+    public void paintFigure(Graphics2D g2d) {
+        for (int row = 0; row < Constants.matrY; row++) {
+            for (int column = 0; column < Constants.matrX; column++) {
+                if (this.getFigure()[row][column] != 0) {
+                    FigurePaint.gradientFigure(g2d, FigurePaint.lightColor(this.getFigure()[row][column]),
+                            FigurePaint.darkColor(this.getFigure()[row][column]), FigurePaint.converFromIndexColumn(column), FigurePaint.converFromIndexRow(row));
+                }
+            }
+        }
+    }
+
+    public void paintFigureShadow(Graphics2D g2d) {
+        for (int row = 0; row < Constants.matrY; row++) {
+            for (int column = 0; column < Constants.matrX; column++) {
+                if (this.getFigure()[row][column] != 0) {
+                    g2d.setColor(Constants.alphaShadow);
+                    g2d.fillRect(FigurePaint.converFromIndexColumn(column), FigurePaint.converFromIndexRow(row), Constants.quadrateSize, Constants.quadrateSize);
+                    g2d.setColor(Color.black);
+                    g2d.drawRect(FigurePaint.converFromIndexColumn(column), FigurePaint.converFromIndexRow(row), Constants.quadrateSize, Constants.quadrateSize);
+                }
+            }
+        }
+    }
+
+    public void paintFigureNext(Graphics2D g2d) {
+        for (int row = 0; row < Constants.matrY; row++) {
+            for (int column = 0; column < Constants.matrX; column++) {
+                if (this.getFigure()[row][column] != 0) {
+                    FigurePaint.gradientFigure(g2d, FigurePaint.lightColor(this.getFigure()[row][column]),
+                            FigurePaint.darkColor(this.getFigure()[row][column]), FigurePaint.converFromIndexColumn(column) - 300, FigurePaint.converFromIndexRow(row));
+                }
             }
         }
     }
@@ -372,7 +414,14 @@ public class TemplateOfFigure {
         }
     }
 
-    public byte[] getMinCoordinate() {
+    public long getComeDownTime(int totalPoints) {
+        if (FigureState.FALL.equals(state)) {
+            return 20;
+        }
+        return comeDownTime.getComeDownTime(totalPoints);
+    }
+
+    private byte[] getMinCoordinate() {
         byte[] minCoord = {9, 19};
         for (byte i = 0; i < Constants.matrY; i++) {// minCoord[0] is x, minCoord[1] is y
             for (byte j = 0; j < Constants.matrX; j++) {
@@ -385,7 +434,7 @@ public class TemplateOfFigure {
         return minCoord;
     }
 
-    public byte[] getMaxCoordinate() {// maxCoord[0] is x, maxCoord[1] is y
+    private byte[] getMaxCoordinate() {// maxCoord[0] is x, maxCoord[1] is y
         byte[] maxCoord = {0, 0};
         for (byte i = 0; i < Constants.matrY; i++) {
             for (byte j = 0; j < Constants.matrX; j++) {
@@ -428,6 +477,14 @@ public class TemplateOfFigure {
 
     public void setTypeOfFigure(FigureType typeOfFigure) {
         this.typeOfFigure = typeOfFigure;
+    }
+
+    public FigureState getState() {
+        return state;
+    }
+
+    public void setState(FigureState state) {
+        this.state = state;
     }
 
     public static void main(String[] args) {

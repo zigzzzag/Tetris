@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zgame.utils.Constants;
 
+import java.awt.*;
+
 /**
  * Created by SBT-Nikiforov-MO on 28.05.2015.
  */
@@ -23,11 +25,22 @@ public class RootGlass {
         this.filledGlass = filledGlass;
     }
 
+    public void paintRootGlass(Graphics2D g2d) {
+        for (int row = 0; row < rowCount; row++) {
+            for (int column = 0; column < columnCount; column++) {
+                if (this.getFilledGlass()[row][column] != 0) {
+                    FigurePaint.gradientFigure(g2d, FigurePaint.lightColor(this.getFilledGlass()[row][column]), FigurePaint.darkColor(this.getFilledGlass()[row][column]),
+                            FigurePaint.converFromIndexColumn(column), FigurePaint.converFromIndexRow(row));
+                }
+            }
+        }
+    }
+
     public void deleteFullLine(int lineNumber) {
-        for (int i = lineNumber - 1; i >= 0; i--) {
-            for (int j = 0; j < Constants.matrX; j++) {
-                filledGlass[i + 1][j] = filledGlass[i][j];
-                filledGlass[i][j] = 0;
+        for (int row = lineNumber - 1; row >= 0; row--) {
+            for (int column = 0; column < Constants.matrX; column++) {
+                filledGlass[row + 1][column] = filledGlass[row][column];
+                filledGlass[row][column] = 0;
             }
         }
     }

@@ -12,6 +12,7 @@ import org.zgame.tetris.Main;
 import org.zgame.tetris.ScreenClickEvent;
 import org.zgame.tetris.StageEvent;
 import org.zgame.tetris.StageInterface;
+import org.zgame.tetris.component.GameContext;
 import org.zgame.utils.Constants;
 
 import java.awt.Color;
@@ -34,8 +35,11 @@ public class GameOverStage implements StageInterface, GComponentClickAction {
     int sh = Main.getInstance().getHeight();
     private StageInterface returnStage;
     private BufferedImage preImage = new BufferedImage(Main.getInstance().getWidth(), Main.getInstance().getHeight(), BufferedImage.TYPE_INT_ARGB);
+    private GameContext gameContext;
 
-    public GameOverStage() {
+    public GameOverStage(GameContext gameContext) {
+        this.gameContext = gameContext;
+
         root = new RootComponent();
         root.setWidth(Main.getInstance().getWidth());
         root.setHeight(Main.getInstance().getHeight());
@@ -81,7 +85,7 @@ public class GameOverStage implements StageInterface, GComponentClickAction {
         if ("OK".equals(action)) {
             Main.getInstance().setCurrentStage(new WelcomeStage());
             TetrisStage ts = (TetrisStage)returnStage;
-            ts.gameReset();
+            gameContext.gameReset();
 //            TetrisStage.gameReset();
         }
         return true;

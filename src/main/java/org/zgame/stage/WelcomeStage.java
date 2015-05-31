@@ -13,6 +13,7 @@ import org.zgame.tetris.Main;
 import org.zgame.tetris.ScreenClickEvent;
 import org.zgame.tetris.StageEvent;
 import org.zgame.tetris.StageInterface;
+import org.zgame.tetris.component.GameContext;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -64,8 +65,10 @@ public class WelcomeStage implements StageInterface, GComponentClickAction {
         exitGame.setComponentPosY(offset + instructions.getHeight() * 3);
         root.appendChildElement(exitGame);
         exitGame.setAction((GComponentClickAction) this);
-        
-        tetrisStage = new TetrisStage();
+
+        GameContext gameContext = new GameContext();
+        tetrisStage = new TetrisStage(gameContext);
+        Main.getInstance().addKeyListener(tetrisStage);
     }
 
     @Override
@@ -83,7 +86,7 @@ public class WelcomeStage implements StageInterface, GComponentClickAction {
         final String action = target.getComponentName();
 
         if ("NEW_GAME".equals(action)) {
-            tetrisStage.setGameOver(false);
+//            tetrisStage.setGameOver(false);
             Main.getInstance().setCurrentStage(tetrisStage);
         }
 
