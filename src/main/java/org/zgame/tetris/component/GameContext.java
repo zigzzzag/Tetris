@@ -36,8 +36,7 @@ public class GameContext implements Runnable {
     @Override
     public void run() {
         while (!gameOver) {
-            if (currentFigure.isDownBarrier(rootGlass)) {
-
+            if (!currentFigure.isDownAvailable(rootGlass)) {
                 for (int row = 0; row < Constants.matrY; row++) {
                     for (int column = 0; column < Constants.matrX; column++) {
                         if (rootGlass.getFilledGlass()[row][column] == 0) {
@@ -61,7 +60,7 @@ public class GameContext implements Runnable {
                     nextStep();
                 }
             } else {
-                currentFigure.down();
+                currentFigure.moveDown(rootGlass);
             }
 //            for (int row = 0; row < Constants.matrY; row++) {
 //                System.arraycopy(currentFigure.getFigure()[row], 0, figureShadow.getFigure()[row], 0, Constants.matrX);
@@ -110,8 +109,8 @@ public class GameContext implements Runnable {
     }
 
     public void fallCurrentFigure() {
-        while (!currentFigure.isDownBarrier(rootGlass)) {
-            currentFigure.down();
+        while (currentFigure.isDownAvailable(rootGlass)) {
+            currentFigure.moveDown(rootGlass);
             try {
                 Thread.sleep(20);
             } catch (InterruptedException e) {

@@ -52,9 +52,9 @@ public class MoveRightForceTest extends TestCase {
         TemplateOfFigure tof = new TemplateOfFigure(3, 10, 4);
         TemplateOfFigure tof_expected = new TemplateOfFigure(3, 10, 5);
 
-        Method method = TemplateOfFigure.class.getDeclaredMethod("moveRightForce", RootGlass.class);
+        Method method = TemplateOfFigure.class.getDeclaredMethod("moveRightForce");
         method.setAccessible(true);
-        method.invoke(tof, rootGlass);
+        method.invoke(tof);
 
         if (Arrays.deepEquals(tof.getFigure(), tof_expected.getFigure())) {
             assertTrue(true);

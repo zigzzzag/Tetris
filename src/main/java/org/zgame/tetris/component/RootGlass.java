@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.zgame.utils.Constants;
 
 import java.awt.*;
+import java.util.Arrays;
 
 /**
  * Created by SBT-Nikiforov-MO on 28.05.2015.
@@ -66,6 +67,11 @@ public class RootGlass {
             }
         }
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return Arrays.deepToString(filledGlass);
     }
 
     public byte[][] getFilledGlass() {

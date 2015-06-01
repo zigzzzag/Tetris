@@ -7,7 +7,6 @@ package org.zgame.tetris.component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zgame.tetris.component.comedowntime.ComeDownTime;
-import org.zgame.tetris.component.comedowntime.ComeDownTimeImpl;
 import org.zgame.tetris.component.comedowntime.TestComeDownTime;
 import org.zgame.utils.Constants;
 
@@ -21,7 +20,9 @@ import java.util.Random;
 public class TemplateOfFigure {
 
     private static final Logger log = LoggerFactory.getLogger(TemplateOfFigure.class);
-    private byte[][] figure = new byte[Constants.matrY][Constants.matrX];
+    private int rowCount = Constants.matrY;
+    private int columnCount = Constants.matrX;
+    private byte[][] figure = new byte[rowCount][columnCount];
     private FigureType typeOfFigure;
     private byte colorByte;
     private int row;
@@ -178,30 +179,42 @@ public class TemplateOfFigure {
         }
     }
 
-    public boolean isDownBarrier(RootGlass rootGlass) {
-        for (int column = 0; column < rootGlass.getColumnCount(); column++) {
-            if (figure[rootGlass.getRowCount() - 1][column] != 0) {
-                return true;
-            }
+    public boolean isDownAvailable(RootGlass rootGlass) {
+        byte maxRow = getMaxCoordinate()[1];
+        if (maxRow >= rootGlass.getRowCount() - 1) {
+            log.debug("TOF: '{}' is not DOWN available, because maxRow >= rootGlass.getRowCount() - 1; maxRow = {}, rootGlass.getColumnCount() = {}",
+                    typeOfFigure, maxRow, rootGlass.getColumnCount());
+            return false;
         }
-        for (int row = rootGlass.getRowCount() - 1; row > 0; row--) {
-            for (int column = 0; column < rootGlass.getColumnCount(); column++) {
-                if (figure[row][column] != 0 && rootGlass.getFilledGlass()[row + 1][column] != 0) {
-                    return true;
-                }
-            }
+
+        TemplateOfFigure tof_down = new TemplateOfFigure(typeOfFigure, row + 1, column);
+
+        if (rootGlass.hasIntersectionWithFigure(tof_down)) {
+            log.debug("TOF: '{}' is not DOWN available, because rootGlass.hasIntersectionWithFigure(tof_down)",
+                    typeOfFigure);
+            return false;
         }
-        return false;
+        return true;
     }
 
-    public void down() {
-        for (int i = Constants.matrY - 1; i >= 0; i--) {//проходим снизу вверх чтобы опускать фигуру
-            for (int j = 0; j < Constants.matrX; j++) {
-                if (figure[i][j] != 0) {
-                    figure[i + 1][j] = figure[i][j];
-                    figure[i][j] = 0;
+    private void moveDownForce() {
+        for (int row = rowCount - 1; row >= 0; row--) {
+            for (int column = 0; column < columnCount; column++) {
+                if (figure[row][column] != 0) {
+                    figure[row + 1][column] = figure[row][column];
+                    figure[row][column] = 0;
                 }
             }
+        }
+
+        row++;
+
+        log.debug("TOF: '{}' move DOWN force", typeOfFigure);
+    }
+
+    public void moveDown(RootGlass rootGlass) {
+        if (isDownAvailable(rootGlass)) {
+            moveDownForce();
         }
     }
 
@@ -217,27 +230,25 @@ public class TemplateOfFigure {
     }
 
     private boolean isLeftAvailable(RootGlass rootGlass) {
-        byte minX = getMinCoordinate()[0];
-        if (minX <= 0) {
-            log.debug("TOF: '{}' is not left available, because minX > rootGlass.getColumnCount() - 1; minX = {}, rootGlass.getColumnCount() = {}",
-                    typeOfFigure, minX, rootGlass.getColumnCount());
+        byte minColumn = getMinCoordinate()[0];
+        if (minColumn <= 0) {
+            log.debug("TOF: '{}' is not LEFT available, because minColumn <= 0; minColumn = {}, rootGlass.getColumnCount() = {}",
+                    typeOfFigure, minColumn, rootGlass.getColumnCount());
             return false;
         }
-        log.trace("TOF: '{}' is left border; maxX = {}, rootGlass.getColumnCount() = {}",
-                typeOfFigure, minX, rootGlass.getColumnCount());
 
         TemplateOfFigure tof_left = new TemplateOfFigure(typeOfFigure, row, column - 1);
         if (rootGlass.hasIntersectionWithFigure(tof_left)) {
-            log.debug("TOF: '{}' is not left available, because rootGlass.hasIntersectionWithFigure(tof_left)",
+            log.debug("TOF: '{}' is not LEFT available, because rootGlass.hasIntersectionWithFigure(tof_left)",
                     typeOfFigure);
             return false;
         }
         return true;
     }
 
-    private void moveLeftForce(RootGlass rootGlass) {
-        for (int row = 0; row < Constants.matrY; row++) {
-            for (int column = 0; column < Constants.matrX; column++) {
+    private void moveLeftForce() {
+        for (int row = 0; row < rowCount; row++) {
+            for (int column = 0; column < columnCount; column++) {
                 if (figure[row][column] != 0) {
                     figure[row][column - 1] = figure[row][column];
                     figure[row][column] = 0;
@@ -246,35 +257,35 @@ public class TemplateOfFigure {
         }
         column--;
 
-        log.debug("TOF: '{}' move left force", typeOfFigure);
+        log.debug("TOF: '{}' move LEFT force", typeOfFigure);
     }
 
     public void moveLeft(RootGlass rootGlass) {
         if (isLeftAvailable(rootGlass)) {
-            moveLeftForce(rootGlass);
+            moveLeftForce();
         }
     }
 
     private boolean isRightAvailable(RootGlass rootGlass) {
-        byte maxX = getMaxCoordinate()[0];
-        if (maxX >= rootGlass.getColumnCount() - 1) {
-            log.debug("TOF: '{}' is not right available, because maxX > rootGlass.getColumnCount() - 1; maxX = {}, rootGlass.getColumnCount() = {}",
-                    typeOfFigure, maxX, rootGlass.getColumnCount());
+        byte maxColumn = getMaxCoordinate()[0];
+        if (maxColumn >= rootGlass.getColumnCount() - 1) {
+            log.debug("TOF: '{}' is not RIGHT available, because maxColumn > rootGlass.getColumnCount() - 1; maxColumn = {}, rootGlass.getColumnCount() = {}",
+                    typeOfFigure, maxColumn, rootGlass.getColumnCount());
             return false;
         }
 
         TemplateOfFigure tof_right = new TemplateOfFigure(typeOfFigure, row, column + 1);
         if (rootGlass.hasIntersectionWithFigure(tof_right)) {
-            log.debug("TOF: '{}' is not right available, because rootGlass.hasIntersectionWithFigure(tof_right)",
+            log.debug("TOF: '{}' is not RIGHT available, because rootGlass.hasIntersectionWithFigure(tof_right)",
                     typeOfFigure);
             return false;
         }
         return true;
     }
 
-    private void moveRightForce(RootGlass rootGlass) {
-        for (int row = 0; row < rootGlass.getRowCount(); row++) {
-            for (int column = rootGlass.getColumnCount() - 1; column >= 0; column--) {
+    private void moveRightForce() {
+        for (int row = 0; row < rowCount; row++) {
+            for (int column = columnCount - 1; column >= 0; column--) {
                 if (figure[row][column] != 0) {
                     figure[row][column + 1] = figure[row][column];
                     figure[row][column] = 0;
@@ -288,7 +299,7 @@ public class TemplateOfFigure {
 
     public void moveRight(RootGlass rootGlass) {
         if (isRightAvailable(rootGlass)) {
-            moveRightForce(rootGlass);
+            moveRightForce();
         }
     }
 
@@ -446,6 +457,11 @@ public class TemplateOfFigure {
         return maxCoord;
     }
 
+    @Override
+    public String toString() {
+        return Arrays.deepToString(figure);
+    }
+
     public byte getColorByte() {
         return colorByte;
     }
@@ -484,6 +500,22 @@ public class TemplateOfFigure {
 
     public void setState(FigureState state) {
         this.state = state;
+    }
+
+    public int getRowCount() {
+        return rowCount;
+    }
+
+    public void setRowCount(int rowCount) {
+        this.rowCount = rowCount;
+    }
+
+    public int getColumnCount() {
+        return columnCount;
+    }
+
+    public void setColumnCount(int columnCount) {
+        this.columnCount = columnCount;
     }
 
     public static void main(String[] args) {
