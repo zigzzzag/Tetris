@@ -1,6 +1,7 @@
 package org.zgame.tetris;
 
 import junit.framework.TestCase;
+import org.zgame.tetris.component.FigureType;
 import org.zgame.tetris.component.TemplateOfFigure;
 
 import java.util.Arrays;
@@ -11,7 +12,7 @@ import java.util.Arrays;
 public class TemplateOfFigureTest extends TestCase {
 
     public void testTypeOfFigure1() {
-        TemplateOfFigure tof = new TemplateOfFigure(1, 3, 7);
+        TemplateOfFigure tof = new TemplateOfFigure(FigureType.S, 3, 7);
 
         byte[][] matrExpected = new byte[][]{
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -40,7 +41,7 @@ public class TemplateOfFigureTest extends TestCase {
     }
 
     public void testTypeOfFigure2() {
-        TemplateOfFigure tof = new TemplateOfFigure(2, 0, 4);
+        TemplateOfFigure tof = new TemplateOfFigure(FigureType.S_R, 0, 4);
 
         byte[][] matrExpected = new byte[][]{
                 {0, 0, 0, 0, 1, 1, 0, 0, 0, 0},

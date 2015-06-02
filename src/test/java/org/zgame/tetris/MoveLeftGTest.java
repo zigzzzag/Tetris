@@ -3,6 +3,7 @@ package org.zgame.tetris;
 import junit.framework.TestCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.zgame.tetris.component.FigureType;
 import org.zgame.tetris.component.RootGlass;
 import org.zgame.tetris.component.TemplateOfFigure;
 
@@ -83,8 +84,8 @@ public class MoveLeftGTest extends TestCase {
         };
 
         RootGlass rootGlass = new RootGlass(rootGlassMatr);
-        TemplateOfFigure tof = new TemplateOfFigure(3, 9, 4);
-        TemplateOfFigure tof_expected = new TemplateOfFigure(3, 9, 3);
+        TemplateOfFigure tof = new TemplateOfFigure(FigureType.G, 9, 4);
+        TemplateOfFigure tof_expected = new TemplateOfFigure(FigureType.G, 9, 3);
 
         tof.moveLeft(rootGlass);
 
@@ -125,8 +126,8 @@ public class MoveLeftGTest extends TestCase {
         };
 
         RootGlass rootGlass = new RootGlass(rootGlassMatr);
-        TemplateOfFigure tof = new TemplateOfFigure(3, 9, 4);
-        TemplateOfFigure tof_expected = new TemplateOfFigure(3, 9, 4);
+        TemplateOfFigure tof = new TemplateOfFigure(FigureType.G, 9, 4);
+        TemplateOfFigure tof_expected = new TemplateOfFigure(FigureType.G, 9, 4);
 
         tof.moveLeft(rootGlass);
 
@@ -167,8 +168,8 @@ public class MoveLeftGTest extends TestCase {
         };
 
         RootGlass rootGlass = new RootGlass(rootGlassMatr);
-        TemplateOfFigure tof = new TemplateOfFigure(3, 9, 4);
-        TemplateOfFigure tof_expected = new TemplateOfFigure(3, 9, 3);
+        TemplateOfFigure tof = new TemplateOfFigure(FigureType.G, 9, 4);
+        TemplateOfFigure tof_expected = new TemplateOfFigure(FigureType.G, 9, 3);
 
         tof.moveLeft(rootGlass);
         tof.moveLeft(rootGlass);
@@ -210,8 +211,8 @@ public class MoveLeftGTest extends TestCase {
         };
 
         RootGlass rootGlass = new RootGlass(rootGlassMatr);
-        TemplateOfFigure tof = new TemplateOfFigure(3, 9, 4);
-        TemplateOfFigure tof_expected = new TemplateOfFigure(3, 9, 3);
+        TemplateOfFigure tof = new TemplateOfFigure(FigureType.G, 9, 4);
+        TemplateOfFigure tof_expected = new TemplateOfFigure(FigureType.G, 9, 3);
 
         for (int i = 0; i < 10; i++) {
             tof.moveLeft(rootGlass);
@@ -254,8 +255,8 @@ public class MoveLeftGTest extends TestCase {
         };
 
         RootGlass rootGlass = new RootGlass(rootGlassMatr);
-        TemplateOfFigure tof = new TemplateOfFigure(3, 15, 1);
-        TemplateOfFigure tof_expected = new TemplateOfFigure(3, 15, 0);
+        TemplateOfFigure tof = new TemplateOfFigure(FigureType.G, 15, 1);
+        TemplateOfFigure tof_expected = new TemplateOfFigure(FigureType.G, 15, 0);
 
         tof.moveLeft(rootGlass);
 
@@ -296,8 +297,8 @@ public class MoveLeftGTest extends TestCase {
         };
 
         RootGlass rootGlass = new RootGlass(rootGlassMatr);
-        TemplateOfFigure tof = new TemplateOfFigure(3, 15, 0);
-        TemplateOfFigure tof_expected = new TemplateOfFigure(3, 15, 0);
+        TemplateOfFigure tof = new TemplateOfFigure(FigureType.G, 15, 0);
+        TemplateOfFigure tof_expected = new TemplateOfFigure(FigureType.G, 15, 0);
 
         tof.moveLeft(rootGlass);
 
@@ -338,8 +339,8 @@ public class MoveLeftGTest extends TestCase {
         };
 
         RootGlass rootGlass = new RootGlass(rootGlassMatr);
-        TemplateOfFigure tof = new TemplateOfFigure(3, 8, 8);
-        TemplateOfFigure tof_expected = new TemplateOfFigure(3, 8, 7);
+        TemplateOfFigure tof = new TemplateOfFigure(FigureType.G, 8, 8);
+        TemplateOfFigure tof_expected = new TemplateOfFigure(FigureType.G, 8, 7);
 
         tof.moveLeft(rootGlass);
 
@@ -380,8 +381,8 @@ public class MoveLeftGTest extends TestCase {
         };
 
         RootGlass rootGlass = new RootGlass(rootGlassMatr);
-        TemplateOfFigure tof = new TemplateOfFigure(3, 8, 8);
-        TemplateOfFigure tof_expected = new TemplateOfFigure(3, 8, 0);
+        TemplateOfFigure tof = new TemplateOfFigure(FigureType.G, 8, 8);
+        TemplateOfFigure tof_expected = new TemplateOfFigure(FigureType.G, 8, 0);
 
         for (int i = 0; i < 20; i++) {
             tof.moveLeft(rootGlass);

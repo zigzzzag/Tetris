@@ -3,6 +3,7 @@ package org.zgame.tetris;
 import junit.framework.TestCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.zgame.tetris.component.FigureType;
 import org.zgame.tetris.component.RootGlass;
 import org.zgame.tetris.component.TemplateOfFigure;
 
@@ -49,8 +50,8 @@ public class MoveRightForceTest extends TestCase {
     }
 
     public void testCaseFigure3_1() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        TemplateOfFigure tof = new TemplateOfFigure(3, 10, 4);
-        TemplateOfFigure tof_expected = new TemplateOfFigure(3, 10, 5);
+        TemplateOfFigure tof = new TemplateOfFigure(FigureType.G, 10, 4);
+        TemplateOfFigure tof_expected = new TemplateOfFigure(FigureType.G, 10, 5);
 
         Method method = TemplateOfFigure.class.getDeclaredMethod("moveRightForce");
         method.setAccessible(true);

@@ -3,6 +3,7 @@ package org.zgame.tetris;
 import junit.framework.TestCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.zgame.tetris.component.FigureType;
 import org.zgame.tetris.component.RootGlass;
 import org.zgame.tetris.component.TemplateOfFigure;
 
@@ -41,8 +42,8 @@ public class MoveRightGTest extends TestCase {
         };
 
         RootGlass rootGlass = new RootGlass(rootGlassMatr);
-        TemplateOfFigure tof = new TemplateOfFigure(3, 9, 4);
-        TemplateOfFigure tof_expected = new TemplateOfFigure(3, 9, 5);
+        TemplateOfFigure tof = new TemplateOfFigure(FigureType.G, 9, 4);
+        TemplateOfFigure tof_expected = new TemplateOfFigure(FigureType.G, 9, 5);
 
         tof.moveRight(rootGlass);
 
@@ -83,8 +84,8 @@ public class MoveRightGTest extends TestCase {
         };
 
         RootGlass rootGlass = new RootGlass(rootGlassMatr);
-        TemplateOfFigure tof = new TemplateOfFigure(3, 9, 4);
-        TemplateOfFigure tof_expected = new TemplateOfFigure(3, 9, 5);
+        TemplateOfFigure tof = new TemplateOfFigure(FigureType.G, 9, 4);
+        TemplateOfFigure tof_expected = new TemplateOfFigure(FigureType.G, 9, 5);
 
         tof.moveRight(rootGlass);
 
@@ -125,8 +126,8 @@ public class MoveRightGTest extends TestCase {
         };
 
         RootGlass rootGlass = new RootGlass(rootGlassMatr);
-        TemplateOfFigure tof = new TemplateOfFigure(3, 9, 4);
-        TemplateOfFigure tof_expected = new TemplateOfFigure(3, 9, 4);
+        TemplateOfFigure tof = new TemplateOfFigure(FigureType.G, 9, 4);
+        TemplateOfFigure tof_expected = new TemplateOfFigure(FigureType.G, 9, 4);
 
         tof.moveRight(rootGlass);
 
@@ -167,8 +168,8 @@ public class MoveRightGTest extends TestCase {
         };
 
         RootGlass rootGlass = new RootGlass(rootGlassMatr);
-        TemplateOfFigure tof = new TemplateOfFigure(3, 9, 4);
-        TemplateOfFigure tof_expected = new TemplateOfFigure(3, 9, 5);
+        TemplateOfFigure tof = new TemplateOfFigure(FigureType.G, 9, 4);
+        TemplateOfFigure tof_expected = new TemplateOfFigure(FigureType.G, 9, 5);
 
         tof.moveRight(rootGlass);
         tof.moveRight(rootGlass);
@@ -210,8 +211,8 @@ public class MoveRightGTest extends TestCase {
         };
 
         RootGlass rootGlass = new RootGlass(rootGlassMatr);
-        TemplateOfFigure tof = new TemplateOfFigure(3, 9, 4);
-        TemplateOfFigure tof_expected = new TemplateOfFigure(3, 9, 5);
+        TemplateOfFigure tof = new TemplateOfFigure(FigureType.G, 9, 4);
+        TemplateOfFigure tof_expected = new TemplateOfFigure(FigureType.G, 9, 5);
 
         for (int i = 0; i < 10; i++) {
             tof.moveRight(rootGlass);
@@ -254,8 +255,8 @@ public class MoveRightGTest extends TestCase {
         };
 
         RootGlass rootGlass = new RootGlass(rootGlassMatr);
-        TemplateOfFigure tof = new TemplateOfFigure(3, 15, 7);
-        TemplateOfFigure tof_expected = new TemplateOfFigure(3, 15, 8);
+        TemplateOfFigure tof = new TemplateOfFigure(FigureType.G, 15, 7);
+        TemplateOfFigure tof_expected = new TemplateOfFigure(FigureType.G, 15, 8);
 
         tof.moveRight(rootGlass);
 
@@ -296,8 +297,8 @@ public class MoveRightGTest extends TestCase {
         };
 
         RootGlass rootGlass = new RootGlass(rootGlassMatr);
-        TemplateOfFigure tof = new TemplateOfFigure(3, 15, 8);
-        TemplateOfFigure tof_expected = new TemplateOfFigure(3, 15, 8);
+        TemplateOfFigure tof = new TemplateOfFigure(FigureType.G, 15, 8);
+        TemplateOfFigure tof_expected = new TemplateOfFigure(FigureType.G, 15, 8);
 
         tof.moveRight(rootGlass);
 
@@ -338,8 +339,8 @@ public class MoveRightGTest extends TestCase {
         };
 
         RootGlass rootGlass = new RootGlass(rootGlassMatr);
-        TemplateOfFigure tof = new TemplateOfFigure(3, 4, 0);
-        TemplateOfFigure tof_expected = new TemplateOfFigure(3, 4, 1);
+        TemplateOfFigure tof = new TemplateOfFigure(FigureType.G, 4, 0);
+        TemplateOfFigure tof_expected = new TemplateOfFigure(FigureType.G, 4, 1);
 
         tof.moveRight(rootGlass);
 
@@ -380,8 +381,8 @@ public class MoveRightGTest extends TestCase {
         };
 
         RootGlass rootGlass = new RootGlass(rootGlassMatr);
-        TemplateOfFigure tof = new TemplateOfFigure(3, 4, 0);
-        TemplateOfFigure tof_expected = new TemplateOfFigure(3, 4, 8);
+        TemplateOfFigure tof = new TemplateOfFigure(FigureType.G, 4, 0);
+        TemplateOfFigure tof_expected = new TemplateOfFigure(FigureType.G, 4, 8);
 
         for (int i = 0; i < 20; i++) {
             tof.moveRight(rootGlass);

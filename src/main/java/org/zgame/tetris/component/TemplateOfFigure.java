@@ -44,10 +44,10 @@ public class TemplateOfFigure {
         this(figureType.getValue(), row, columnSubQuadrate);
     }
 
-    public TemplateOfFigure(int figureTypeInt, int row, int columnSubQuadrate) {
+    public TemplateOfFigure(int figureTypeInt, int rowSubQuadrate, int columnSubQuadrate) {
         this();
         this.typeOfFigure = FigureType.getTypeByIntVal(figureTypeInt);
-        this.rowSubQuadrate = row;
+        this.rowSubQuadrate = rowSubQuadrate;
         this.columnSubQuadrate = columnSubQuadrate;
 
         clear(figure);
@@ -55,65 +55,65 @@ public class TemplateOfFigure {
             //  **
             // **
             case S: {
-                figure[0 + row][1 + columnSubQuadrate] = 1;
-                figure[0 + row][2 + columnSubQuadrate] = 1;
-                figure[1 + row][1 + columnSubQuadrate] = 1;
-                figure[1 + row][0 + columnSubQuadrate] = 1;
+                figure[0 + rowSubQuadrate][1 + columnSubQuadrate] = 1;
+                figure[0 + rowSubQuadrate][2 + columnSubQuadrate] = 1;
+                figure[1 + rowSubQuadrate][1 + columnSubQuadrate] = 1;
+                figure[1 + rowSubQuadrate][0 + columnSubQuadrate] = 1;
                 break;
             }
             // **
             //  **
             case S_R: {
-                figure[0 + row][0 + columnSubQuadrate] = 1;
-                figure[0 + row][1 + columnSubQuadrate] = 1;
-                figure[1 + row][1 + columnSubQuadrate] = 1;
-                figure[1 + row][2 + columnSubQuadrate] = 1;
+                figure[0 + rowSubQuadrate][0 + columnSubQuadrate] = 1;
+                figure[0 + rowSubQuadrate][1 + columnSubQuadrate] = 1;
+                figure[1 + rowSubQuadrate][1 + columnSubQuadrate] = 1;
+                figure[1 + rowSubQuadrate][2 + columnSubQuadrate] = 1;
                 break;
             }
             // **
             // *
             // *
             case G: {
-                figure[0 + row][0 + columnSubQuadrate] = 1;
-                figure[0 + row][1 + columnSubQuadrate] = 1;
-                figure[1 + row][0 + columnSubQuadrate] = 1;
-                figure[2 + row][0 + columnSubQuadrate] = 1;
+                figure[0 + rowSubQuadrate][0 + columnSubQuadrate] = 1;
+                figure[0 + rowSubQuadrate][1 + columnSubQuadrate] = 1;
+                figure[1 + rowSubQuadrate][0 + columnSubQuadrate] = 1;
+                figure[2 + rowSubQuadrate][0 + columnSubQuadrate] = 1;
                 break;
             }
             // **
             //  *
             //  *
             case G_R: {
-                figure[0 + row][0 + columnSubQuadrate] = 1;
-                figure[0 + row][1 + columnSubQuadrate] = 1;
-                figure[1 + row][1 + columnSubQuadrate] = 1;
-                figure[2 + row][1 + columnSubQuadrate] = 1;
+                figure[0 + rowSubQuadrate][0 + columnSubQuadrate] = 1;
+                figure[0 + rowSubQuadrate][1 + columnSubQuadrate] = 1;
+                figure[1 + rowSubQuadrate][1 + columnSubQuadrate] = 1;
+                figure[2 + rowSubQuadrate][1 + columnSubQuadrate] = 1;
                 break;
             }
             // ***
             //  *
             case T: {
-                figure[0 + row][0 + columnSubQuadrate] = 1;
-                figure[0 + row][1 + columnSubQuadrate] = 1;
-                figure[0 + row][2 + columnSubQuadrate] = 1;
-                figure[1 + row][1 + columnSubQuadrate] = 1;
+                figure[0 + rowSubQuadrate][0 + columnSubQuadrate] = 1;
+                figure[0 + rowSubQuadrate][1 + columnSubQuadrate] = 1;
+                figure[0 + rowSubQuadrate][2 + columnSubQuadrate] = 1;
+                figure[1 + rowSubQuadrate][1 + columnSubQuadrate] = 1;
                 break;
             }
             // **
             // **
             case QUADRATE: {
-                figure[0 + row][0 + columnSubQuadrate] = 1;
-                figure[0 + row][1 + columnSubQuadrate] = 1;
-                figure[1 + row][0 + columnSubQuadrate] = 1;
-                figure[1 + row][1 + columnSubQuadrate] = 1;
+                figure[0 + rowSubQuadrate][0 + columnSubQuadrate] = 1;
+                figure[0 + rowSubQuadrate][1 + columnSubQuadrate] = 1;
+                figure[1 + rowSubQuadrate][0 + columnSubQuadrate] = 1;
+                figure[1 + rowSubQuadrate][1 + columnSubQuadrate] = 1;
                 break;
             }
             //  ****
             case STICK: {
-                figure[0 + row][-1 + columnSubQuadrate] = 1;
-                figure[0 + row][0 + columnSubQuadrate] = 1;
-                figure[0 + row][1 + columnSubQuadrate] = 1;
-                figure[0 + row][2 + columnSubQuadrate] = 1;
+                figure[0 + rowSubQuadrate][-1 + columnSubQuadrate] = 1;
+                figure[0 + rowSubQuadrate][0 + columnSubQuadrate] = 1;
+                figure[0 + rowSubQuadrate][1 + columnSubQuadrate] = 1;
+                figure[0 + rowSubQuadrate][2 + columnSubQuadrate] = 1;
                 break;
             }
         }
