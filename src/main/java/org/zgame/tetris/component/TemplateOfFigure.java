@@ -23,10 +23,12 @@ public class TemplateOfFigure {
     private int rowCount = Constants.matrY;
     private int columnCount = Constants.matrX;
     private byte[][] figure = new byte[rowCount][columnCount];
+
+    //каждую фигуру(кроме палки) можно впихнуть в квадрат 3х3(SubQuadrate)
+    private int rowSubQuadrate;
+    private int columnSubQuadrate;
     private FigureType typeOfFigure;
     private byte colorByte;
-    private int row;
-    private int column;
     private ComeDownTime comeDownTime;
     private FigureState state = FigureState.NORMAL;
 
@@ -38,80 +40,80 @@ public class TemplateOfFigure {
         this(figureType, 0, 4);
     }
 
-    public TemplateOfFigure(FigureType figureType, int row, int column) {
-        this(figureType.getValue(), row, column);
+    public TemplateOfFigure(FigureType figureType, int row, int columnSubQuadrate) {
+        this(figureType.getValue(), row, columnSubQuadrate);
     }
 
-    public TemplateOfFigure(int figureTypeInt, int row, int column) {
+    public TemplateOfFigure(int figureTypeInt, int row, int columnSubQuadrate) {
         this();
         this.typeOfFigure = FigureType.getTypeByIntVal(figureTypeInt);
-        this.row = row;
-        this.column = column;
+        this.rowSubQuadrate = row;
+        this.columnSubQuadrate = columnSubQuadrate;
 
         clear(figure);
         switch (typeOfFigure) {
             //  **
             // **
             case S: {
-                figure[0 + row][1 + column] = 1;
-                figure[0 + row][2 + column] = 1;
-                figure[1 + row][1 + column] = 1;
-                figure[1 + row][0 + column] = 1;
+                figure[0 + row][1 + columnSubQuadrate] = 1;
+                figure[0 + row][2 + columnSubQuadrate] = 1;
+                figure[1 + row][1 + columnSubQuadrate] = 1;
+                figure[1 + row][0 + columnSubQuadrate] = 1;
                 break;
             }
             // **
             //  **
             case S_R: {
-                figure[0 + row][0 + column] = 1;
-                figure[0 + row][1 + column] = 1;
-                figure[1 + row][1 + column] = 1;
-                figure[1 + row][2 + column] = 1;
+                figure[0 + row][0 + columnSubQuadrate] = 1;
+                figure[0 + row][1 + columnSubQuadrate] = 1;
+                figure[1 + row][1 + columnSubQuadrate] = 1;
+                figure[1 + row][2 + columnSubQuadrate] = 1;
                 break;
             }
             // **
             // *
             // *
             case G: {
-                figure[0 + row][0 + column] = 1;
-                figure[0 + row][1 + column] = 1;
-                figure[1 + row][0 + column] = 1;
-                figure[2 + row][0 + column] = 1;
+                figure[0 + row][0 + columnSubQuadrate] = 1;
+                figure[0 + row][1 + columnSubQuadrate] = 1;
+                figure[1 + row][0 + columnSubQuadrate] = 1;
+                figure[2 + row][0 + columnSubQuadrate] = 1;
                 break;
             }
             // **
             //  *
             //  *
             case G_R: {
-                figure[0 + row][0 + column] = 1;
-                figure[0 + row][1 + column] = 1;
-                figure[1 + row][1 + column] = 1;
-                figure[2 + row][1 + column] = 1;
+                figure[0 + row][0 + columnSubQuadrate] = 1;
+                figure[0 + row][1 + columnSubQuadrate] = 1;
+                figure[1 + row][1 + columnSubQuadrate] = 1;
+                figure[2 + row][1 + columnSubQuadrate] = 1;
                 break;
             }
             // ***
             //  *
             case T: {
-                figure[0 + row][0 + column] = 1;
-                figure[0 + row][1 + column] = 1;
-                figure[0 + row][2 + column] = 1;
-                figure[1 + row][1 + column] = 1;
+                figure[0 + row][0 + columnSubQuadrate] = 1;
+                figure[0 + row][1 + columnSubQuadrate] = 1;
+                figure[0 + row][2 + columnSubQuadrate] = 1;
+                figure[1 + row][1 + columnSubQuadrate] = 1;
                 break;
             }
             // **
             // **
             case QUADRATE: {
-                figure[0 + row][0 + column] = 1;
-                figure[0 + row][1 + column] = 1;
-                figure[1 + row][0 + column] = 1;
-                figure[1 + row][1 + column] = 1;
+                figure[0 + row][0 + columnSubQuadrate] = 1;
+                figure[0 + row][1 + columnSubQuadrate] = 1;
+                figure[1 + row][0 + columnSubQuadrate] = 1;
+                figure[1 + row][1 + columnSubQuadrate] = 1;
                 break;
             }
             //  ****
             case STICK: {
-                figure[0 + row][-1 + column] = 1;
-                figure[0 + row][0 + column] = 1;
-                figure[0 + row][1 + column] = 1;
-                figure[0 + row][2 + column] = 1;
+                figure[0 + row][-1 + columnSubQuadrate] = 1;
+                figure[0 + row][0 + columnSubQuadrate] = 1;
+                figure[0 + row][1 + columnSubQuadrate] = 1;
+                figure[0 + row][2 + columnSubQuadrate] = 1;
                 break;
             }
         }
@@ -180,14 +182,14 @@ public class TemplateOfFigure {
     }
 
     public boolean isDownAvailable(RootGlass rootGlass) {
-        byte maxRow = getMaxCoordinate()[1];
+        byte maxRow = getMaxRow();
         if (maxRow >= rootGlass.getRowCount() - 1) {
             log.debug("TOF: '{}' is not DOWN available, because maxRow >= rootGlass.getRowCount() - 1; maxRow = {}, rootGlass.getColumnCount() = {}",
                     typeOfFigure, maxRow, rootGlass.getColumnCount());
             return false;
         }
 
-        TemplateOfFigure tof_down = new TemplateOfFigure(typeOfFigure, row + 1, column);
+        TemplateOfFigure tof_down = new TemplateOfFigure(typeOfFigure, rowSubQuadrate + 1, columnSubQuadrate);
 
         if (rootGlass.hasIntersectionWithFigure(tof_down)) {
             log.debug("TOF: '{}' is not DOWN available, because rootGlass.hasIntersectionWithFigure(tof_down)",
@@ -206,9 +208,7 @@ public class TemplateOfFigure {
                 }
             }
         }
-
-        row++;
-
+        rowSubQuadrate++;
         log.debug("TOF: '{}' move DOWN force", typeOfFigure);
     }
 
@@ -230,14 +230,14 @@ public class TemplateOfFigure {
     }
 
     private boolean isLeftAvailable(RootGlass rootGlass) {
-        byte minColumn = getMinCoordinate()[0];
+        byte minColumn = getMinColumn();
         if (minColumn <= 0) {
             log.debug("TOF: '{}' is not LEFT available, because minColumn <= 0; minColumn = {}, rootGlass.getColumnCount() = {}",
                     typeOfFigure, minColumn, rootGlass.getColumnCount());
             return false;
         }
 
-        TemplateOfFigure tof_left = new TemplateOfFigure(typeOfFigure, row, column - 1);
+        TemplateOfFigure tof_left = new TemplateOfFigure(typeOfFigure, rowSubQuadrate, columnSubQuadrate - 1);
         if (rootGlass.hasIntersectionWithFigure(tof_left)) {
             log.debug("TOF: '{}' is not LEFT available, because rootGlass.hasIntersectionWithFigure(tof_left)",
                     typeOfFigure);
@@ -255,8 +255,7 @@ public class TemplateOfFigure {
                 }
             }
         }
-        column--;
-
+        columnSubQuadrate--;
         log.debug("TOF: '{}' move LEFT force", typeOfFigure);
     }
 
@@ -267,14 +266,14 @@ public class TemplateOfFigure {
     }
 
     private boolean isRightAvailable(RootGlass rootGlass) {
-        byte maxColumn = getMaxCoordinate()[0];
+        byte maxColumn = getMaxColumn();
         if (maxColumn >= rootGlass.getColumnCount() - 1) {
             log.debug("TOF: '{}' is not RIGHT available, because maxColumn > rootGlass.getColumnCount() - 1; maxColumn = {}, rootGlass.getColumnCount() = {}",
                     typeOfFigure, maxColumn, rootGlass.getColumnCount());
             return false;
         }
 
-        TemplateOfFigure tof_right = new TemplateOfFigure(typeOfFigure, row, column + 1);
+        TemplateOfFigure tof_right = new TemplateOfFigure(typeOfFigure, rowSubQuadrate, columnSubQuadrate + 1);
         if (rootGlass.hasIntersectionWithFigure(tof_right)) {
             log.debug("TOF: '{}' is not RIGHT available, because rootGlass.hasIntersectionWithFigure(tof_right)",
                     typeOfFigure);
@@ -292,8 +291,7 @@ public class TemplateOfFigure {
                 }
             }
         }
-        column++;
-
+        columnSubQuadrate++;
         log.debug("TOF: '{}' move right force", typeOfFigure);
     }
 
@@ -304,18 +302,17 @@ public class TemplateOfFigure {
     }
 
     public void rotate(RootGlass rootGlass) {
-        byte[] minCoord = getMinCoordinate();
-        byte minX = minCoord[0];
-        byte minY = minCoord[1];
+        byte minColumn = getMinColumn();
+        byte minRow = getMinRow();
 
         byte leftMoveBarrier = 0;
         if (typeOfFigure.equals(FigureType.STICK)) {
-            if (minX > 6) {
-                leftMoveBarrier = (byte) (minX - 6);
+            if (minColumn > 6) {
+                leftMoveBarrier = (byte) (minColumn - 6);
             }
         } else {
-            if (minX > 7) {
-                leftMoveBarrier = (byte) (minX - 7);
+            if (minColumn > 7) {
+                leftMoveBarrier = (byte) (minColumn - 7);
             }
         }
         for (int i = 0; i < leftMoveBarrier; i++) {
@@ -325,13 +322,13 @@ public class TemplateOfFigure {
         for (byte i = 0; i < Constants.matrY; i++) {
             for (byte j = 0; j < Constants.matrX; j++) {
                 if (figure[i][j] != 0) {
-                    minX = minX >= j ? j : minX;
-                    minY = minY >= i ? i : minY;
+                    minColumn = minColumn >= j ? j : minColumn;
+                    minRow = minRow >= i ? i : minRow;
                 }
             }
         }
 
-        if (minY + typeOfFigure.getValue() / 7 > 17) {//нельзя поворачивать когда фигура находится слишком низко
+        if (minRow + typeOfFigure.getValue() / 7 > 17) {//нельзя поворачивать когда фигура находится слишком низко
             return;
         }
 
@@ -341,7 +338,7 @@ public class TemplateOfFigure {
         byte leftMove = (byte) (typeOfFigure.equals(FigureType.STICK) ? 4 : 3);
         for (byte i = 0; i < sizeRotY; i++) {
             for (byte j = 0; j < sizeRotX; j++) {
-                if (rootGlass.getFilledGlass()[i + minY][j + minX] != 0) {
+                if (rootGlass.getFilledGlass()[i + minRow][j + minColumn] != 0) {
                     if (j < leftMove) {
                         leftMove = j;
                     }
@@ -353,8 +350,8 @@ public class TemplateOfFigure {
             for (int k = 0; k < sizeRotX - leftMove; k++) {
                 moveLeft(rootGlass);
             }
-            minX -= sizeRotX - leftMove;
-            if (minX < 0) {
+            minColumn -= sizeRotX - leftMove;
+            if (minColumn < 0) {
                 return;
             }
         }
@@ -366,12 +363,12 @@ public class TemplateOfFigure {
         for (int i = 0; i < sizeRotY; i++) {
             for (int j = 0; j < sizeRotX; j++) {
                 if (typeOfFigure.equals(FigureType.STICK)) {
-                    figureLocal[i][j] = figure[i + minY][j + minX];
+                    figureLocal[i][j] = figure[i + minRow][j + minColumn];
                     if (figureLocal[i][j] != 0) {
                         figureRotateLocal[j][i] = figureLocal[i][j];
                     }
                 } else {
-                    figureLocal[i][j] = figure[i + minY][j + minX];
+                    figureLocal[i][j] = figure[i + minRow][j + minColumn];
                     if (figureLocal[i][j] != 0) {
                         figureRotateLocal[j][2 - i] = figureLocal[i][j];
                     }
@@ -409,7 +406,7 @@ public class TemplateOfFigure {
         bbb:
         for (int i = 0; i < sizeRotY; i++) {
             for (int j = 0; j < sizeRotX; j++) {
-                if (figureRotateLocal[i][j] != 0 && rootGlass.getFilledGlass()[i + minY][j + minX] != 0) {
+                if (figureRotateLocal[i][j] != 0 && rootGlass.getFilledGlass()[i + minRow][j + minColumn] != 0) {
                     flag = false;
                     break bbb;
                 }
@@ -418,7 +415,7 @@ public class TemplateOfFigure {
 
         if (flag) {
             for (int i = 0; i < sizeRotY; i++) {
-                System.arraycopy(figureRotateLocal[i], 0, figure[i + minY], minX, sizeRotX);//it is necessary to examine
+                System.arraycopy(figureRotateLocal[i], 0, figure[i + minRow], minColumn, sizeRotX);//it is necessary to examine
             }
         } else {
         }
@@ -431,30 +428,62 @@ public class TemplateOfFigure {
         return comeDownTime.getComeDownTime(totalPoints);
     }
 
-    private byte[] getMinCoordinate() {
-        byte[] minCoord = {9, 19};
-        for (byte i = 0; i < Constants.matrY; i++) {// minCoord[0] is x, minCoord[1] is y
-            for (byte j = 0; j < Constants.matrX; j++) {
-                if (figure[i][j] != 0) {
-                    minCoord[0] = minCoord[0] >= j ? j : minCoord[0];
-                    minCoord[1] = minCoord[1] >= i ? i : minCoord[1];
-                }
+    private boolean isEmptyRow(byte rowNum) {
+        for (int column = 0; column < columnCount; column++) {
+            if (figure[rowNum][column] != 0) {
+                return false;
             }
         }
-        return minCoord;
+        return true;
     }
 
-    private byte[] getMaxCoordinate() {// maxCoord[0] is x, maxCoord[1] is y
-        byte[] maxCoord = {0, 0};
-        for (byte i = 0; i < Constants.matrY; i++) {
-            for (byte j = 0; j < Constants.matrX; j++) {
-                if (figure[i][j] != 0) {
-                    maxCoord[0] = maxCoord[0] <= j ? j : maxCoord[0];
-                    maxCoord[1] = maxCoord[1] <= i ? i : maxCoord[1];
-                }
+    private boolean isEmptyColumn(byte columnNum) {
+        for (int row = 0; row < rowCount; row++) {
+            if (figure[row][columnNum] != 0) {
+                return false;
             }
         }
-        return maxCoord;
+        return true;
+    }
+
+    private byte getMinRow() {
+        for (byte row = 0; row < rowCount; row++) {
+            if (!isEmptyRow(row)) {
+                return row;
+            }
+        }
+        log.error("MAX rowSubQuadrate is -1 !!!");
+        return -1;
+    }
+
+    private byte getMinColumn() {
+        for (byte column = 0; column < columnCount; column++) {
+            if (!isEmptyColumn(column)) {
+                return column;
+            }
+        }
+        log.error("MIN columnSubQuadrate is -1 !!!");
+        return -1;
+    }
+
+    private byte getMaxRow() {
+        for (byte row = (byte) (rowCount - 1); row >= 0; row--) {
+            if (!isEmptyRow(row)) {
+                return row;
+            }
+        }
+        log.error("MIN rowSubQuadrate is -1 !!!");
+        return -1;
+    }
+
+    private byte getMaxColumn() {
+        for (byte column = (byte) (columnCount - 1); column >= 0; column--) {
+            if (!isEmptyColumn(column)) {
+                return column;
+            }
+        }
+        log.error("MAX columnSubQuadrate is -1 !!!");
+        return -1;
     }
 
     @Override
@@ -470,20 +499,20 @@ public class TemplateOfFigure {
         this.colorByte = colorByte;
     }
 
-    public int getRow() {
-        return row;
+    public int getRowSubQuadrate() {
+        return rowSubQuadrate;
     }
 
-    public void setRow(int row) {
-        this.row = row;
+    public void setRowSubQuadrate(int rowSubQuadrate) {
+        this.rowSubQuadrate = rowSubQuadrate;
     }
 
-    public int getColumn() {
-        return column;
+    public int getColumnSubQuadrate() {
+        return columnSubQuadrate;
     }
 
-    public void setColumn(int column) {
-        this.column = column;
+    public void setColumnSubQuadrate(int columnSubQuadrate) {
+        this.columnSubQuadrate = columnSubQuadrate;
     }
 
     public FigureType getTypeOfFigure() {

@@ -101,10 +101,10 @@ public class GameContext implements Runnable {
 
         currentFigure = nextFigure;
         nextFigure = new TemplateOfFigure(new Random().nextInt(7) + 1);
-        int rotateRandom = new Random().nextInt(4);
-        for (int i = 0; i < rotateRandom; i++) {
-            nextFigure.rotate(rootGlass);
-        }
+//        int rotateRandom = new Random().nextInt(4);
+//        for (int i = 0; i < rotateRandom; i++) {
+//            nextFigure.rotate(rootGlass);
+//        }
         pointsNow = 0;
     }
 
