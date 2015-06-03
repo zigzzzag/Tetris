@@ -29,8 +29,8 @@ public class GameContext implements Runnable {
         rootGlass = new RootGlass();
 //        figureShadow = new TemplateOfFigure();
 
-        currentFigure = new TemplateOfFigure(3);//new Random().nextInt(7) + 1
-        nextFigure = new TemplateOfFigure(3);//new Random().nextInt(7) + 1
+        currentFigure = new TemplateOfFigure(5);//new Random().nextInt(7) + 1
+        nextFigure = new TemplateOfFigure(5);//new Random().nextInt(7) + 1
     }
 
     @Override

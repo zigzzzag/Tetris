@@ -31,6 +31,15 @@ public class TemplateOfFigure {
     private byte colorByte;
     private ComeDownTime comeDownTime;
     private FigureState state = FigureState.NORMAL;
+    private RotationAngle rotationAngle = new RotationAngle(0);
+
+    public TemplateOfFigure rotationAngleInt(int angle) {
+        this.rotationAngle.setAngle(angle);
+        for (int rotateCount = 0; rotateCount < rotationAngle.getCountRotate(); rotateCount++) {
+            rotateForce();
+        }
+        return this;
+    }
 
     public TemplateOfFigure() {
         this.comeDownTime = new TestComeDownTime();
@@ -301,123 +310,62 @@ public class TemplateOfFigure {
         }
     }
 
+    private boolean isRotateAvailable(RootGlass rootGlass) {
+//        byte maxColumn = getMaxColumn();
+//        if (maxColumn >= rootGlass.getColumnCount() - 1) {
+//            log.debug("TOF: '{}' is not ROTATE available, because maxColumn > rootGlass.getColumnCount() - 1; maxColumn = {}, rootGlass.getColumnCount() = {}",
+//                    typeOfFigure, maxColumn, rootGlass.getColumnCount());
+//            return false;
+//        }
+
+        TemplateOfFigure tof_rotate = new TemplateOfFigure(typeOfFigure, rowSubQuadrate, columnSubQuadrate).rotationAngleInt(90);
+        if (rootGlass.hasIntersectionWithFigure(tof_rotate)) {
+            log.debug("TOF: '{}' is not ROTATE available, because rootGlass.hasIntersectionWithFigure(tof_rotate)",
+                    typeOfFigure);
+            return false;
+        }
+        return true;
+    }
+
     public void rotate(RootGlass rootGlass) {
+        if (isRotateAvailable(rootGlass)) {
+            rotateForce();
+            rotationAngle.rotate();
+        }
+    }
+
+    private void rotateForce() {
         byte minColumn = getMinColumn();
-        byte minRow = getMinRow();
+        byte maxRow = getMaxRow();
 
-        byte leftMoveBarrier = 0;
-        if (typeOfFigure.equals(FigureType.STICK)) {
-            if (minColumn > 6) {
-                leftMoveBarrier = (byte) (minColumn - 6);
-            }
-        } else {
-            if (minColumn > 7) {
-                leftMoveBarrier = (byte) (minColumn - 7);
-            }
-        }
-        for (int i = 0; i < leftMoveBarrier; i++) {
-            moveLeft(rootGlass);
-        }
-
-        for (byte i = 0; i < Constants.matrY; i++) {
-            for (byte j = 0; j < Constants.matrX; j++) {
-                if (figure[i][j] != 0) {
-                    minColumn = minColumn >= j ? j : minColumn;
-                    minRow = minRow >= i ? i : minRow;
-                }
-            }
-        }
-
-        if (minRow + typeOfFigure.getValue() / 7 > 17) {//нельзя поворачивать когда фигура находится слишком низко
+        if (maxRow + typeOfFigure.getValue() / 7 > 17) {//нельзя поворачивать когда фигура находится слишком низко
             return;
         }
 
         byte sizeRotY = (byte) (typeOfFigure.equals(FigureType.STICK) ? 4 : 3);
         byte sizeRotX = (byte) (typeOfFigure.equals(FigureType.STICK) ? 4 : 3);
 
-        byte leftMove = (byte) (typeOfFigure.equals(FigureType.STICK) ? 4 : 3);
-        for (byte i = 0; i < sizeRotY; i++) {
-            for (byte j = 0; j < sizeRotX; j++) {
-                if (rootGlass.getFilledGlass()[i + minRow][j + minColumn] != 0) {
-                    if (j < leftMove) {
-                        leftMove = j;
-                    }
-                }
-            }
-        }
-
-        if (leftMove != sizeRotX) {
-            for (int k = 0; k < sizeRotX - leftMove; k++) {
-                moveLeft(rootGlass);
-            }
-            minColumn -= sizeRotX - leftMove;
-            if (minColumn < 0) {
-                return;
-            }
-        }
-
-        byte firstColumnCount = 0; //вопрос с инициализацией
         byte[][] figureLocal = new byte[sizeRotY][sizeRotX];
         byte[][] figureRotateLocal = new byte[sizeRotY][sizeRotX];
 
-        for (int i = 0; i < sizeRotY; i++) {
-            for (int j = 0; j < sizeRotX; j++) {
+        for (int rowLocal = 0; rowLocal < sizeRotY; rowLocal++) {
+            for (int columnLocal = 0; columnLocal < sizeRotX; columnLocal++) {
                 if (typeOfFigure.equals(FigureType.STICK)) {
-                    figureLocal[i][j] = figure[i + minRow][j + minColumn];
-                    if (figureLocal[i][j] != 0) {
-                        figureRotateLocal[j][i] = figureLocal[i][j];
+                    figureLocal[rowLocal][columnLocal] = figure[rowSubQuadrate + rowLocal][columnSubQuadrate + columnLocal];
+                    if (figureLocal[rowLocal][columnLocal] != 0) {
+                        figureRotateLocal[columnLocal][rowLocal] = figureLocal[rowLocal][columnLocal];
                     }
                 } else {
-                    figureLocal[i][j] = figure[i + minRow][j + minColumn];
-                    if (figureLocal[i][j] != 0) {
-                        figureRotateLocal[j][2 - i] = figureLocal[i][j];
+                    figureLocal[rowLocal][columnLocal] = figure[rowSubQuadrate + rowLocal][columnSubQuadrate + columnLocal];
+                    if (figureLocal[rowLocal][columnLocal] != 0) {
+                        figureRotateLocal[columnLocal][2 - rowLocal] = figureLocal[rowLocal][columnLocal];
                     }
                 }
             }
         }
 
-        if (!typeOfFigure.equals(FigureType.STICK)) {
-            for (int i = 0; i < sizeRotY; i++) {
-                if (figureRotateLocal[i][0] != 0) {
-                    firstColumnCount++;
-                }
-            }
-
-            if (firstColumnCount == 0) { // смещение вправо матрицы 3 на 3
-                for (int i = 0; i < sizeRotY; i++) {
-                    for (int j = 0; j < sizeRotX; j++) {
-                        if (typeOfFigure.equals(FigureType.STICK)) {
-                            if (figureRotateLocal[i][j] != 0) {
-                                figureRotateLocal[i][j - 2] = figureRotateLocal[i][j];
-                                figureRotateLocal[i][j] = 0;
-                            }
-                        } else {
-                            if (figureRotateLocal[i][j] != 0) {
-                                figureRotateLocal[i][j - 1] = figureRotateLocal[i][j];
-                                figureRotateLocal[i][j] = 0;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        boolean flag = true;
-        bbb:
         for (int i = 0; i < sizeRotY; i++) {
-            for (int j = 0; j < sizeRotX; j++) {
-                if (figureRotateLocal[i][j] != 0 && rootGlass.getFilledGlass()[i + minRow][j + minColumn] != 0) {
-                    flag = false;
-                    break bbb;
-                }
-            }
-        }
-
-        if (flag) {
-            for (int i = 0; i < sizeRotY; i++) {
-                System.arraycopy(figureRotateLocal[i], 0, figure[i + minRow], minColumn, sizeRotX);//it is necessary to examine
-            }
-        } else {
+            System.arraycopy(figureRotateLocal[i], 0, figure[i + maxRow], minColumn, sizeRotX);//it is necessary to examine
         }
     }
 

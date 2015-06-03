@@ -42,8 +42,8 @@ public class MoveLeftGTest extends TestCase {
         };
 
         RootGlass rootGlass = new RootGlass(rootGlassMatr);
-        TemplateOfFigure tof = new TemplateOfFigure(3, 9, 4);
-        TemplateOfFigure tof_expected = new TemplateOfFigure(3, 9, 3);
+        TemplateOfFigure tof = new TemplateOfFigure(FigureType.G, 9, 4);
+        TemplateOfFigure tof_expected = new TemplateOfFigure(FigureType.G, 9, 3);
 
         tof.moveLeft(rootGlass);
 
