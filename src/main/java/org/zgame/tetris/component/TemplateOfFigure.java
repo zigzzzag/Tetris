@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.zgame.tetris.component.comedowntime.ComeDownTime;
 import org.zgame.tetris.component.comedowntime.TestComeDownTime;
 import org.zgame.utils.Constants;
+import org.zgame.utils.MatrixUtils;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -35,9 +36,9 @@ public class TemplateOfFigure {
 
     public TemplateOfFigure rotationAngleInt(int angle) {
         this.rotationAngle.setAngle(angle);
-        for (int rotateCount = 0; rotateCount < rotationAngle.getCountRotate(); rotateCount++) {
-            rotateForce();
-        }
+//        for (int rotateCount = 0; rotateCount < rotationAngle.getCountRotate(); rotateCount++) {
+//            rotateForce();
+//        }
         return this;
     }
 
@@ -338,34 +339,35 @@ public class TemplateOfFigure {
         byte minColumn = getMinColumn();
         byte maxRow = getMaxRow();
 
-        if (maxRow + typeOfFigure.getValue() / 7 > 17) {//нельзя поворачивать когда фигура находится слишком низко
-            return;
-        }
-
         byte sizeRotY = (byte) (typeOfFigure.equals(FigureType.STICK) ? 4 : 3);
         byte sizeRotX = (byte) (typeOfFigure.equals(FigureType.STICK) ? 4 : 3);
 
         byte[][] figureLocal = new byte[sizeRotY][sizeRotX];
         byte[][] figureRotateLocal = new byte[sizeRotY][sizeRotX];
 
-        for (int rowLocal = 0; rowLocal < sizeRotY; rowLocal++) {
-            for (int columnLocal = 0; columnLocal < sizeRotX; columnLocal++) {
-                if (typeOfFigure.equals(FigureType.STICK)) {
+        for (int row = 0; row < sizeRotY; row++) {
+            for (int column = 0; column < sizeRotX; column++) {
+                figureLocal[row][column] = figure[rowSubQuadrate + row][columnSubQuadrate + column];
+            }
+        }
+
+        if (typeOfFigure.equals(FigureType.STICK)) {
+            for (int rowLocal = 0; rowLocal < sizeRotY; rowLocal++) {
+                for (int columnLocal = 0; columnLocal < sizeRotX; columnLocal++) {
                     figureLocal[rowLocal][columnLocal] = figure[rowSubQuadrate + rowLocal][columnSubQuadrate + columnLocal];
                     if (figureLocal[rowLocal][columnLocal] != 0) {
                         figureRotateLocal[columnLocal][rowLocal] = figureLocal[rowLocal][columnLocal];
                     }
-                } else {
-                    figureLocal[rowLocal][columnLocal] = figure[rowSubQuadrate + rowLocal][columnSubQuadrate + columnLocal];
-                    if (figureLocal[rowLocal][columnLocal] != 0) {
-                        figureRotateLocal[columnLocal][2 - rowLocal] = figureLocal[rowLocal][columnLocal];
-                    }
                 }
             }
+        } else {
+            figureRotateLocal = MatrixUtils.transposeMatrixClockWise(figureLocal, sizeRotY, sizeRotX);
         }
 
-        for (int i = 0; i < sizeRotY; i++) {
-            System.arraycopy(figureRotateLocal[i], 0, figure[i + maxRow], minColumn, sizeRotX);//it is necessary to examine
+        for (int row = 0; row < sizeRotY; row++) {
+            for (int column = 0; column < sizeRotX; column++) {
+                figure[rowSubQuadrate + row][columnSubQuadrate + column] = figureRotateLocal[row][column];
+            }
         }
     }
 
