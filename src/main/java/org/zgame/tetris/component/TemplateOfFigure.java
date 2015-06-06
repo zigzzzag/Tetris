@@ -36,9 +36,9 @@ public class TemplateOfFigure {
 
     public TemplateOfFigure rotationAngleInt(int angle) {
         this.rotationAngle.setAngle(angle);
-//        for (int rotateCount = 0; rotateCount < rotationAngle.getCountRotate(); rotateCount++) {
-//            rotateForce();
-//        }
+        for (int rotateCount = 0; rotateCount < rotationAngle.getCountRotate(); rotateCount++) {
+            rotateForce();
+        }
         return this;
     }
 
