@@ -18,12 +18,12 @@ import java.util.Random;
 /**
  * @author user
  */
-public class TemplateOfFigure {
+public class TemplateOfFigure implements Cloneable {
 
     private static final Logger log = LoggerFactory.getLogger(TemplateOfFigure.class);
     private int rowCount = Constants.matrY;
     private int columnCount = Constants.matrX;
-    private byte[][] figure = new byte[rowCount][columnCount];
+    private byte[][] figure;
 
     //каждую фигуру(кроме палки) можно впихнуть в квадрат 3х3(SubQuadrate)
     private int rowSubQuadrate;
@@ -43,6 +43,7 @@ public class TemplateOfFigure {
     }
 
     public TemplateOfFigure() {
+        this.figure = new byte[rowCount][columnCount];
         this.comeDownTime = new TestComeDownTime();
     }
 
@@ -60,7 +61,7 @@ public class TemplateOfFigure {
         this.rowSubQuadrate = rowSubQuadrate;
         this.columnSubQuadrate = columnSubQuadrate;
 
-        clear(figure);
+        clear();
         switch (typeOfFigure) {
             //  **
             // **
@@ -183,10 +184,10 @@ public class TemplateOfFigure {
         this.figure = figure;
     }
 
-    public void clear(byte[][] figure) {
+    private void clear() {
         for (int i = 0; i < Constants.matrY; i++) {
             for (int j = 0; j < Constants.matrX; j++) {
-                figure[i][j] = 0;
+                this.figure[i][j] = 0;
             }
         }
     }
@@ -283,7 +284,14 @@ public class TemplateOfFigure {
             return false;
         }
 
-        TemplateOfFigure tof_right = new TemplateOfFigure(typeOfFigure, rowSubQuadrate, columnSubQuadrate + 1);
+        TemplateOfFigure tof_right;//new TemplateOfFigure(typeOfFigure, rowSubQuadrate, columnSubQuadrate + 1);
+        try {
+            tof_right = this.clone();
+        } catch (CloneNotSupportedException e) {
+            log.error(e.getMessage() + "; isRightAvailable return false", e);
+            return false;
+        }
+        tof_right.moveRightForce();
         if (rootGlass.hasIntersectionWithFigure(tof_right)) {
             log.debug("TOF: '{}' is not RIGHT available, because rootGlass.hasIntersectionWithFigure(tof_right)",
                     typeOfFigure);
@@ -294,7 +302,7 @@ public class TemplateOfFigure {
 
     private void moveRightForce() {
         for (int row = 0; row < rowCount; row++) {
-            for (int column = columnCount - 1; column >= 0; column--) {
+            for (int column = columnCount - 2; column >= 0; column--) {
                 if (figure[row][column] != 0) {
                     figure[row][column + 1] = figure[row][column];
                     figure[row][column] = 0;
@@ -302,7 +310,7 @@ public class TemplateOfFigure {
             }
         }
         columnSubQuadrate++;
-        log.debug("TOF: '{}' move right force", typeOfFigure);
+        log.debug("move right force TOF: '{}'", this);
     }
 
     public void moveRight(RootGlass rootGlass) {
@@ -436,9 +444,20 @@ public class TemplateOfFigure {
         return -1;
     }
 
+    public TemplateOfFigure clone() throws CloneNotSupportedException {
+        TemplateOfFigure tofClone = new TemplateOfFigure();
+        tofClone.typeOfFigure = FigureType.valueOf(typeOfFigure.name());
+        for (int row = 0; row < rowCount; row++) {
+            for (int column = 0; column < columnCount; column++) {
+                tofClone.figure[row][column] = figure[row][column];
+            }
+        }
+        return tofClone;
+    }
+
     @Override
     public String toString() {
-        return Arrays.deepToString(figure);
+        return figure.hashCode() + " " + getTypeOfFigure().toString() + " " + hashCode() + ": " + Arrays.deepToString(figure);
     }
 
     public byte getColorByte() {

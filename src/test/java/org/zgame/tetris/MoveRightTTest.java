@@ -40,20 +40,42 @@ public class MoveRightTTest extends TestCase {
            /*18*/{0, 0, 0, 0, 0, 0, 0,  0,  0, 0},
            /*19*/{0, 0, 0, 0, 0, 0, 0,  0,  0, 0}
         };
+        byte[][] matrExpected = new byte[][]{
+            //    0  1  2  3  4  5  6  7   8   9
+            /*0*/{0, 0, 0, 0, 0, 0, 0, 0,  0,  0},
+            /*1*/{0, 0, 0, 0, 0, 0, 0, 0,  0,  0},
+            /*2*/{0, 0, 0, 0, 0, 0, 0, 0,  0,  0},
+            /*3*/{0, 0, 0, 0, 0, 0, 0, 0,  0,  0},
+            /*4*/{0, 0, 0, 0, 0, 0, 0, 0,  0,  0},
+            /*5*/{0, 0, 0, 0, 0, 0, 0, 0,  0,  0},
+            /*6*/{0, 0, 0, 0, 0, 0, 0, 0,  0,  0},
+            /*7*/{0, 0, 0, 0, 0, 0, 0, 0, 01,  0},
+            /*8*/{0, 0, 0, 0, 0, 0, 0, 0, 01, 01},
+            /*9*/{0, 0, 0, 0, 0, 0, 0, 0, 01,  0},
+           /*10*/{0, 0, 0, 0, 0, 0, 0, 0,  0,  0},
+           /*11*/{0, 0, 0, 0, 0, 0, 0, 0,  0,  0},
+           /*12*/{0, 0, 0, 0, 0, 0, 0, 0,  0,  0},
+           /*13*/{0, 0, 0, 0, 0, 0, 0, 0,  0,  0},
+           /*14*/{0, 0, 0, 0, 0, 0, 0, 0,  0,  0},
+           /*15*/{0, 0, 0, 0, 0, 0, 0, 0,  0,  0},
+           /*16*/{0, 0, 0, 0, 0, 0, 0, 0,  0,  0},
+           /*17*/{0, 0, 0, 0, 0, 0, 0, 0,  0,  0},
+           /*18*/{0, 0, 0, 0, 0, 0, 0, 0,  0,  0},
+           /*19*/{0, 0, 0, 0, 0, 0, 0, 0,  0,  0}
+        };
 
         RootGlass rootGlass = new RootGlass(rootGlassMatr);
         TemplateOfFigure tof = new TemplateOfFigure(FigureType.T, 7, 7).rotationAngleInt(270);
-        TemplateOfFigure tof_expected = new TemplateOfFigure(FigureType.T, 7, 8).rotationAngleInt(270);
 
         tof.moveRight(rootGlass);
 
-        if (Arrays.deepEquals(tof.getFigure(), tof_expected.getFigure())) {
+        if (Arrays.deepEquals(tof.getFigure(), matrExpected)) {
             log.debug("testCaseFigure_3_0 is passed!");
             assertTrue(true);
         } else {
             log.error("testCaseFigure_3_0 is not passed");
-            log.debug("tof.getFigure():          {}", Arrays.deepToString(tof.getFigure()));
-            log.debug("tof_expected.getFigure(): {}", Arrays.deepToString(tof_expected.getFigure()));
+            log.debug("tof.getFigure(): {}", Arrays.deepToString(tof.getFigure()));
+            log.debug("matrExpected):   {}", Arrays.deepToString(matrExpected));
             assertTrue(false);
         }
     }
