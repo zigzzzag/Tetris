@@ -18,7 +18,7 @@ import java.util.Random;
 /**
  * @author user
  */
-public class TemplateOfFigure implements Cloneable {
+public class TemplateOfFigure {
 
     private static final Logger log = LoggerFactory.getLogger(TemplateOfFigure.class);
     private int rowCount = Constants.matrY;
@@ -248,7 +248,7 @@ public class TemplateOfFigure implements Cloneable {
             return false;
         }
 
-        TemplateOfFigure tof_left = new TemplateOfFigure(typeOfFigure, rowSubQuadrate, columnSubQuadrate - 1);
+        TemplateOfFigure tof_left = this.clone();
         if (rootGlass.hasIntersectionWithFigure(tof_left)) {
             log.debug("TOF: '{}' is not LEFT available, because rootGlass.hasIntersectionWithFigure(tof_left)",
                     typeOfFigure);
@@ -284,13 +284,7 @@ public class TemplateOfFigure implements Cloneable {
             return false;
         }
 
-        TemplateOfFigure tof_right;//new TemplateOfFigure(typeOfFigure, rowSubQuadrate, columnSubQuadrate + 1);
-        try {
-            tof_right = this.clone();
-        } catch (CloneNotSupportedException e) {
-            log.error(e.getMessage() + "; isRightAvailable return false", e);
-            return false;
-        }
+        TemplateOfFigure tof_right = this.clone();
         tof_right.moveRightForce();
         if (rootGlass.hasIntersectionWithFigure(tof_right)) {
             log.debug("TOF: '{}' is not RIGHT available, because rootGlass.hasIntersectionWithFigure(tof_right)",
@@ -444,7 +438,7 @@ public class TemplateOfFigure implements Cloneable {
         return -1;
     }
 
-    public TemplateOfFigure clone() throws CloneNotSupportedException {
+    public TemplateOfFigure clone() {
         TemplateOfFigure tofClone = new TemplateOfFigure();
         tofClone.typeOfFigure = FigureType.valueOf(typeOfFigure.name());
         for (int row = 0; row < rowCount; row++) {
