@@ -248,9 +248,10 @@ public class TemplateOfFigure {
             return false;
         }
 
-        TemplateOfFigure tof_left = this.clone();
-        if (rootGlass.hasIntersectionWithFigure(tof_left)) {
-            log.debug("TOF: '{}' is not LEFT available, because rootGlass.hasIntersectionWithFigure(tof_left)",
+        TemplateOfFigure tofLeft = this.clone();
+        tofLeft.moveLeftForce();
+        if (rootGlass.hasIntersectionWithFigure(tofLeft)) {
+            log.debug("TOF: '{}' is not LEFT available, because rootGlass.hasIntersectionWithFigure(tofLeft)",
                     typeOfFigure);
             return false;
         }
@@ -258,13 +259,18 @@ public class TemplateOfFigure {
     }
 
     private void moveLeftForce() {
-        for (int row = 0; row < rowCount; row++) {
-            for (int column = 0; column < columnCount; column++) {
-                if (figure[row][column] != 0) {
-                    figure[row][column - 1] = figure[row][column];
-                    figure[row][column] = 0;
+        try {
+            for (int row = 0; row < rowCount; row++) {
+                for (int column = 0; column < columnCount; column++) {
+                    if (figure[row][column] != 0) {
+                        figure[row][column - 1] = figure[row][column];
+                        figure[row][column] = 0;
+                    }
                 }
             }
+        } catch (ArrayIndexOutOfBoundsException ex) {
+            log.error(ex.getMessage(), ex);
+            return;
         }
         columnSubQuadrate--;
         log.debug("TOF: '{}' move LEFT force", typeOfFigure);
@@ -295,13 +301,18 @@ public class TemplateOfFigure {
     }
 
     private void moveRightForce() {
-        for (int row = 0; row < rowCount; row++) {
-            for (int column = columnCount - 2; column >= 0; column--) {
-                if (figure[row][column] != 0) {
-                    figure[row][column + 1] = figure[row][column];
-                    figure[row][column] = 0;
+        try {
+            for (int row = 0; row < rowCount; row++) {
+                for (int column = columnCount - 2; column >= 0; column--) {
+                    if (figure[row][column] != 0) {
+                        figure[row][column + 1] = figure[row][column];
+                        figure[row][column] = 0;
+                    }
                 }
             }
+        } catch (ArrayIndexOutOfBoundsException ex) {
+            log.error(ex.getMessage(), ex);
+            return;
         }
         columnSubQuadrate++;
         log.debug("move right force TOF: '{}'", this);
@@ -338,9 +349,6 @@ public class TemplateOfFigure {
     }
 
     private void rotateForce() {
-        byte minColumn = getMinColumn();
-        byte maxRow = getMaxRow();
-
         byte sizeRotY = (byte) (typeOfFigure.equals(FigureType.STICK) ? 4 : 3);
         byte sizeRotX = (byte) (typeOfFigure.equals(FigureType.STICK) ? 4 : 3);
 
@@ -370,6 +378,20 @@ public class TemplateOfFigure {
             for (int column = 0; column < sizeRotX; column++) {
                 figure[rowSubQuadrate + row][columnSubQuadrate + column] = figureRotateLocal[row][column];
             }
+        }
+
+        updateSubQuadrateCoord();
+    }
+
+    private void updateSubQuadrateCoord() {
+        this.rowSubQuadrate = getMinRow();
+        this.columnSubQuadrate = getMinColumn();
+
+        if (this.rowSubQuadrate > (rowCount - 1) - 3) {
+            this.rowSubQuadrate = rowCount - 4;
+        }
+        if (this.columnSubQuadrate > (columnCount - 1) - 3) {
+            this.columnSubQuadrate = columnCount - 4;
         }
     }
 
@@ -439,13 +461,7 @@ public class TemplateOfFigure {
     }
 
     public TemplateOfFigure clone() {
-        TemplateOfFigure tofClone = new TemplateOfFigure();
-        tofClone.typeOfFigure = FigureType.valueOf(typeOfFigure.name());
-        for (int row = 0; row < rowCount; row++) {
-            for (int column = 0; column < columnCount; column++) {
-                tofClone.figure[row][column] = figure[row][column];
-            }
-        }
+        TemplateOfFigure tofClone = new TemplateOfFigure(typeOfFigure, rowSubQuadrate, columnSubQuadrate);
         return tofClone;
     }
 
