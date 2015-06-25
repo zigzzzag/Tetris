@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.zgame.tetris.component.comedowntime.ComeDownTime;
 import org.zgame.tetris.component.comedowntime.TestComeDownTime;
 import org.zgame.tetris.component.matr.Matr;
+import org.zgame.tetris.component.matr.SubMatr;
 import org.zgame.utils.Constants;
-import org.zgame.utils.MatrixUtils;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -23,10 +23,11 @@ public class TemplateOfFigure {
 
     private static final Logger log = LoggerFactory.getLogger(TemplateOfFigure.class);
     private Matr figure;
+    private SubMatr subFigure;
 
     //каждую фигуру(кроме палки) можно впихнуть в квадрат 3х3(SubQuadrate)
-    private int rowSubQuadrate;
-    private int columnSubQuadrate;
+//    private int rowSubQuadrate;
+//    private int columnSubQuadrate;
     private FigureType typeOfFigure;
     private byte colorByte;
     private ComeDownTime comeDownTime;
@@ -57,8 +58,6 @@ public class TemplateOfFigure {
     public TemplateOfFigure(int figureTypeInt, int rowSubQuadrate, int columnSubQuadrate) {
         this();
         this.typeOfFigure = FigureType.getTypeByIntVal(figureTypeInt);
-        this.rowSubQuadrate = rowSubQuadrate;
-        this.columnSubQuadrate = columnSubQuadrate;
 
         clear();
         switch (typeOfFigure) {
@@ -69,6 +68,7 @@ public class TemplateOfFigure {
                 figure.setElement(1, 0 + rowSubQuadrate, 2 + columnSubQuadrate);
                 figure.setElement(1, 1 + rowSubQuadrate, 1 + columnSubQuadrate);
                 figure.setElement(1, 1 + rowSubQuadrate, 0 + columnSubQuadrate);
+                subFigure = new SubMatr(3, 3).rowCoord(rowSubQuadrate).columnCoord(columnSubQuadrate);
                 break;
             }
             // **
@@ -78,6 +78,7 @@ public class TemplateOfFigure {
                 figure.setElement(1, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
                 figure.setElement(1, 1 + rowSubQuadrate, 1 + columnSubQuadrate);
                 figure.setElement(1, 1 + rowSubQuadrate, 2 + columnSubQuadrate);
+                subFigure = new SubMatr(3, 3).rowCoord(rowSubQuadrate).columnCoord(columnSubQuadrate);
                 break;
             }
             // **
@@ -88,6 +89,7 @@ public class TemplateOfFigure {
                 figure.setElement(1, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
                 figure.setElement(1, 1 + rowSubQuadrate, 0 + columnSubQuadrate);
                 figure.setElement(1, 2 + rowSubQuadrate, 0 + columnSubQuadrate);
+                subFigure = new SubMatr(3, 3).rowCoord(rowSubQuadrate).columnCoord(columnSubQuadrate);
                 break;
             }
             // **
@@ -98,6 +100,7 @@ public class TemplateOfFigure {
                 figure.setElement(1, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
                 figure.setElement(1, 1 + rowSubQuadrate, 1 + columnSubQuadrate);
                 figure.setElement(1, 2 + rowSubQuadrate, 1 + columnSubQuadrate);
+                subFigure = new SubMatr(3, 3).rowCoord(rowSubQuadrate).columnCoord(columnSubQuadrate);
                 break;
             }
             // ***
@@ -107,6 +110,7 @@ public class TemplateOfFigure {
                 figure.setElement(1, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
                 figure.setElement(1, 0 + rowSubQuadrate, 2 + columnSubQuadrate);
                 figure.setElement(1, 1 + rowSubQuadrate, 1 + columnSubQuadrate);
+                subFigure = new SubMatr(3, 3).rowCoord(rowSubQuadrate).columnCoord(columnSubQuadrate);
                 break;
             }
             // **
@@ -116,6 +120,7 @@ public class TemplateOfFigure {
                 figure.setElement(1, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
                 figure.setElement(1, 1 + rowSubQuadrate, 0 + columnSubQuadrate);
                 figure.setElement(1, 1 + rowSubQuadrate, 1 + columnSubQuadrate);
+                subFigure = new SubMatr(2, 2).rowCoord(rowSubQuadrate).columnCoord(columnSubQuadrate);
                 break;
             }
             //  ****
@@ -124,6 +129,7 @@ public class TemplateOfFigure {
                 figure.setElement(1, 0 + rowSubQuadrate, 0 + columnSubQuadrate);
                 figure.setElement(1, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
                 figure.setElement(1, 0 + rowSubQuadrate, 2 + columnSubQuadrate);
+                subFigure = new SubMatr(4, 4).rowCoord(rowSubQuadrate).columnCoord(columnSubQuadrate);
                 break;
             }
         }
@@ -189,7 +195,7 @@ public class TemplateOfFigure {
             return false;
         }
 
-        TemplateOfFigure tof_down = new TemplateOfFigure(typeOfFigure, rowSubQuadrate + 1, columnSubQuadrate);
+        TemplateOfFigure tof_down = new TemplateOfFigure(typeOfFigure, subFigure.getRowCoord() + 1, subFigure.getColumnCoord());
 
         if (rootGlass.hasIntersectionWithFigure(tof_down)) {
             log.debug("TOF: '{}' is not DOWN available, because rootGlass.hasIntersectionWithFigure(tof_down)",
@@ -208,7 +214,7 @@ public class TemplateOfFigure {
                 }
             }
         }
-        rowSubQuadrate++;
+        subFigure.incrementRow();
         log.debug("TOF: '{}' move DOWN force", typeOfFigure);
     }
 
@@ -261,7 +267,7 @@ public class TemplateOfFigure {
             log.error(ex.getMessage(), ex);
             return;
         }
-        columnSubQuadrate--;
+        subFigure.decrementColumn();
         log.debug("TOF: '{}' move LEFT force", typeOfFigure);
     }
 
@@ -303,7 +309,7 @@ public class TemplateOfFigure {
             log.error(ex.getMessage(), ex);
             return;
         }
-        columnSubQuadrate++;
+        subFigure.incrementColumn();
         log.debug("move right force TOF: '{}'", this);
     }
 
@@ -321,7 +327,7 @@ public class TemplateOfFigure {
 //            return false;
 //        }
 
-        TemplateOfFigure tof_rotate = new TemplateOfFigure(typeOfFigure, rowSubQuadrate, columnSubQuadrate).rotationAngleInt(90);
+        TemplateOfFigure tof_rotate = new TemplateOfFigure(typeOfFigure, subFigure.getRowCoord(), subFigure.getColumnCoord()).rotationAngleInt(90);
         if (rootGlass.hasIntersectionWithFigure(tof_rotate)) {
             log.debug("TOF: '{}' is not ROTATE available, because rootGlass.hasIntersectionWithFigure(tof_rotate)",
                     typeOfFigure);
@@ -338,50 +344,9 @@ public class TemplateOfFigure {
     }
 
     private void rotateForce() {
-        byte sizeRotY = (byte) (typeOfFigure.equals(FigureType.STICK) ? 4 : 3);
-        byte sizeRotX = (byte) (typeOfFigure.equals(FigureType.STICK) ? 4 : 3);
-
-        byte[][] figureLocal = new byte[sizeRotY][sizeRotX];
-        byte[][] figureRotateLocal = new byte[sizeRotY][sizeRotX];
-
-        for (int row = 0; row < sizeRotY; row++) {
-            for (int column = 0; column < sizeRotX; column++) {
-                figureLocal[row][column] = figure.getMatr()[rowSubQuadrate + row][columnSubQuadrate + column];
-            }
-        }
-
-        if (typeOfFigure.equals(FigureType.STICK)) {
-            for (int rowLocal = 0; rowLocal < sizeRotY; rowLocal++) {
-                for (int columnLocal = 0; columnLocal < sizeRotX; columnLocal++) {
-                    figureLocal[rowLocal][columnLocal] = figure.getMatr()[rowSubQuadrate + rowLocal][columnSubQuadrate + columnLocal];
-                    if (figureLocal[rowLocal][columnLocal] != 0) {
-                        figureRotateLocal[columnLocal][rowLocal] = figureLocal[rowLocal][columnLocal];
-                    }
-                }
-            }
-        } else {
-            figureRotateLocal = MatrixUtils.transposeMatrixClockWise(figureLocal, sizeRotY, sizeRotX);
-        }
-
-        for (int row = 0; row < sizeRotY; row++) {
-            for (int column = 0; column < sizeRotX; column++) {
-                figure.getMatr()[rowSubQuadrate + row][columnSubQuadrate + column] = figureRotateLocal[row][column];
-            }
-        }
-
-        updateSubQuadrateCoord();
-    }
-
-    private void updateSubQuadrateCoord() {
-        this.rowSubQuadrate = getMinRow();
-        this.columnSubQuadrate = getMinColumn();
-
-        if (this.rowSubQuadrate > (figure.getRowCount() - 1) - 3) {
-            this.rowSubQuadrate = figure.getRowCount() - 4;
-        }
-        if (this.columnSubQuadrate > (figure.getColumnCount() - 1) - 3) {
-            this.columnSubQuadrate = figure.getColumnCount() - 4;
-        }
+        subFigure.update(figure);
+        subFigure.transposeMatrClockWise();
+        figure.copySubMatr(subFigure);
     }
 
     public long getComeDownTime(int totalPoints) {
@@ -450,7 +415,7 @@ public class TemplateOfFigure {
     }
 
     public TemplateOfFigure clone() {
-        TemplateOfFigure tofClone = new TemplateOfFigure(typeOfFigure, rowSubQuadrate, columnSubQuadrate);
+        TemplateOfFigure tofClone = new TemplateOfFigure(typeOfFigure, subFigure.getRowCoord(), subFigure.getColumnCoord());
         return tofClone;
     }
 
@@ -465,22 +430,6 @@ public class TemplateOfFigure {
 
     public void setColorByte(byte colorByte) {
         this.colorByte = colorByte;
-    }
-
-    public int getRowSubQuadrate() {
-        return rowSubQuadrate;
-    }
-
-    public void setRowSubQuadrate(int rowSubQuadrate) {
-        this.rowSubQuadrate = rowSubQuadrate;
-    }
-
-    public int getColumnSubQuadrate() {
-        return columnSubQuadrate;
-    }
-
-    public void setColumnSubQuadrate(int columnSubQuadrate) {
-        this.columnSubQuadrate = columnSubQuadrate;
     }
 
     public FigureType getTypeOfFigure() {

@@ -76,7 +76,7 @@ public class MoveLeftTTest extends TestCase {
         } else {
             log.error("testMoveLeftT is not passed");
             log.debug("tof.getFigure().getMatr(): {}", Arrays.deepToString(tof.getFigure().getMatr()));
-            log.debug("matrExpected:    {}", Arrays.deepToString(matrExpected));
+            log.debug("matrExpected:              {}", Arrays.deepToString(matrExpected));
             assertTrue(false);
         }
     }

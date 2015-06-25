@@ -5,11 +5,11 @@ package org.zgame.tetris.component.matr;
  */
 public class Matr {
 
-    private byte[][] matr;
-    private byte rowCount;
-    private byte columnCount;
+    protected byte[][] matr;
+    protected int rowCount;
+    protected int columnCount;
 
-    public Matr(byte rowCount, byte columnCount) {
+    public Matr(int rowCount, int columnCount) {
         this.rowCount = rowCount;
         this.columnCount = columnCount;
         this.matr = new byte[rowCount][columnCount];
@@ -41,24 +41,13 @@ public class Matr {
         }
     }
 
-    public void transposeMatrCounterClockWise() {
-        byte[][] result = new byte[rowCount][columnCount];
-        for (int row = 0; row < rowCount; row++) {
-            for (int column = 0; column < columnCount; column++) {
-                result[columnCount - column - 1][row] = matr[row][column];
+    public void copySubMatr(SubMatr subMatr) {
+        clear();
+        for (int row = 0; row < subMatr.getRowCount(); row++) {
+            for (int column = 0; column < subMatr.getColumnCount(); column++) {
+                matr[subMatr.getRowCoord() + row][subMatr.getColumnCoord() + column] = subMatr.getElement(row, column);
             }
         }
-        this.matr = result;
-    }
-
-    public void transposeMatrixClockWise() {
-        byte[][] result = new byte[rowCount][columnCount];
-        for (int row = 0; row < rowCount; row++) {
-            for (int column = 0; column < columnCount; column++) {
-                result[column][rowCount - row - 1] = matr[row][column];
-            }
-        }
-        this.matr = result;
     }
 
     public byte[][] getMatr() {
@@ -69,19 +58,19 @@ public class Matr {
         this.matr = matr;
     }
 
-    public byte getRowCount() {
+    public int getRowCount() {
         return rowCount;
     }
 
-    public void setRowCount(byte rowCount) {
+    public void setRowCount(int rowCount) {
         this.rowCount = rowCount;
     }
 
-    public byte getColumnCount() {
+    public int getColumnCount() {
         return columnCount;
     }
 
-    public void setColumnCount(byte columnCount) {
+    public void setColumnCount(int columnCount) {
         this.columnCount = columnCount;
     }
 }
