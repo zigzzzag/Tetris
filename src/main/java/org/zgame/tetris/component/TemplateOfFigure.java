@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zgame.tetris.component.comedowntime.ComeDownTime;
 import org.zgame.tetris.component.comedowntime.TestComeDownTime;
+import org.zgame.tetris.component.matr.Matr;
 import org.zgame.utils.Constants;
 import org.zgame.utils.MatrixUtils;
 
@@ -21,9 +22,7 @@ import java.util.Random;
 public class TemplateOfFigure {
 
     private static final Logger log = LoggerFactory.getLogger(TemplateOfFigure.class);
-    private int rowCount = Constants.matrY;
-    private int columnCount = Constants.matrX;
-    private byte[][] figure;
+    private Matr figure;
 
     //каждую фигуру(кроме палки) можно впихнуть в квадрат 3х3(SubQuadrate)
     private int rowSubQuadrate;
@@ -43,16 +42,16 @@ public class TemplateOfFigure {
     }
 
     public TemplateOfFigure() {
-        this.figure = new byte[rowCount][columnCount];
+        this.figure = new Matr(Constants.matrY, Constants.matrX);
         this.comeDownTime = new TestComeDownTime();
     }
 
-    public TemplateOfFigure(int figureType) {
-        this(figureType, 0, 4);
+    public TemplateOfFigure(int figureTypeInt) {
+        this(figureTypeInt, (byte) 0, (byte) 4);
     }
 
-    public TemplateOfFigure(FigureType figureType, int row, int columnSubQuadrate) {
-        this(figureType.getValue(), row, columnSubQuadrate);
+    public TemplateOfFigure(FigureType figureType, int rowSubQuadrate, int columnSubQuadrate) {
+        this(figureType.getValue(), rowSubQuadrate, columnSubQuadrate);
     }
 
     public TemplateOfFigure(int figureTypeInt, int rowSubQuadrate, int columnSubQuadrate) {
@@ -66,65 +65,65 @@ public class TemplateOfFigure {
             //  **
             // **
             case S: {
-                figure[0 + rowSubQuadrate][1 + columnSubQuadrate] = 1;
-                figure[0 + rowSubQuadrate][2 + columnSubQuadrate] = 1;
-                figure[1 + rowSubQuadrate][1 + columnSubQuadrate] = 1;
-                figure[1 + rowSubQuadrate][0 + columnSubQuadrate] = 1;
+                figure.setElement(1, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
+                figure.setElement(1, 0 + rowSubQuadrate, 2 + columnSubQuadrate);
+                figure.setElement(1, 1 + rowSubQuadrate, 1 + columnSubQuadrate);
+                figure.setElement(1, 1 + rowSubQuadrate, 0 + columnSubQuadrate);
                 break;
             }
             // **
             //  **
             case S_R: {
-                figure[0 + rowSubQuadrate][0 + columnSubQuadrate] = 1;
-                figure[0 + rowSubQuadrate][1 + columnSubQuadrate] = 1;
-                figure[1 + rowSubQuadrate][1 + columnSubQuadrate] = 1;
-                figure[1 + rowSubQuadrate][2 + columnSubQuadrate] = 1;
+                figure.setElement(1, 0 + rowSubQuadrate, 0 + columnSubQuadrate);
+                figure.setElement(1, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
+                figure.setElement(1, 1 + rowSubQuadrate, 1 + columnSubQuadrate);
+                figure.setElement(1, 1 + rowSubQuadrate, 2 + columnSubQuadrate);
                 break;
             }
             // **
             // *
             // *
             case G: {
-                figure[0 + rowSubQuadrate][0 + columnSubQuadrate] = 1;
-                figure[0 + rowSubQuadrate][1 + columnSubQuadrate] = 1;
-                figure[1 + rowSubQuadrate][0 + columnSubQuadrate] = 1;
-                figure[2 + rowSubQuadrate][0 + columnSubQuadrate] = 1;
+                figure.setElement(1, 0 + rowSubQuadrate, 0 + columnSubQuadrate);
+                figure.setElement(1, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
+                figure.setElement(1, 1 + rowSubQuadrate, 0 + columnSubQuadrate);
+                figure.setElement(1, 2 + rowSubQuadrate, 0 + columnSubQuadrate);
                 break;
             }
             // **
             //  *
             //  *
             case G_R: {
-                figure[0 + rowSubQuadrate][0 + columnSubQuadrate] = 1;
-                figure[0 + rowSubQuadrate][1 + columnSubQuadrate] = 1;
-                figure[1 + rowSubQuadrate][1 + columnSubQuadrate] = 1;
-                figure[2 + rowSubQuadrate][1 + columnSubQuadrate] = 1;
+                figure.setElement(1, 0 + rowSubQuadrate, 0 + columnSubQuadrate);
+                figure.setElement(1, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
+                figure.setElement(1, 1 + rowSubQuadrate, 1 + columnSubQuadrate);
+                figure.setElement(1, 2 + rowSubQuadrate, 1 + columnSubQuadrate);
                 break;
             }
             // ***
             //  *
             case T: {
-                figure[0 + rowSubQuadrate][0 + columnSubQuadrate] = 1;
-                figure[0 + rowSubQuadrate][1 + columnSubQuadrate] = 1;
-                figure[0 + rowSubQuadrate][2 + columnSubQuadrate] = 1;
-                figure[1 + rowSubQuadrate][1 + columnSubQuadrate] = 1;
+                figure.setElement(1, 0 + rowSubQuadrate, 0 + columnSubQuadrate);
+                figure.setElement(1, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
+                figure.setElement(1, 0 + rowSubQuadrate, 2 + columnSubQuadrate);
+                figure.setElement(1, 1 + rowSubQuadrate, 1 + columnSubQuadrate);
                 break;
             }
             // **
             // **
             case QUADRATE: {
-                figure[0 + rowSubQuadrate][0 + columnSubQuadrate] = 1;
-                figure[0 + rowSubQuadrate][1 + columnSubQuadrate] = 1;
-                figure[1 + rowSubQuadrate][0 + columnSubQuadrate] = 1;
-                figure[1 + rowSubQuadrate][1 + columnSubQuadrate] = 1;
+                figure.setElement(1, 0 + rowSubQuadrate, 0 + columnSubQuadrate);
+                figure.setElement(1, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
+                figure.setElement(1, 1 + rowSubQuadrate, 0 + columnSubQuadrate);
+                figure.setElement(1, 1 + rowSubQuadrate, 1 + columnSubQuadrate);
                 break;
             }
             //  ****
             case STICK: {
-                figure[0 + rowSubQuadrate][-1 + columnSubQuadrate] = 1;
-                figure[0 + rowSubQuadrate][0 + columnSubQuadrate] = 1;
-                figure[0 + rowSubQuadrate][1 + columnSubQuadrate] = 1;
-                figure[0 + rowSubQuadrate][2 + columnSubQuadrate] = 1;
+                figure.setElement(1, 0 + rowSubQuadrate, -1 + columnSubQuadrate);
+                figure.setElement(1, 0 + rowSubQuadrate, 0 + columnSubQuadrate);
+                figure.setElement(1, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
+                figure.setElement(1, 0 + rowSubQuadrate, 2 + columnSubQuadrate);
                 break;
             }
         }
@@ -133,9 +132,9 @@ public class TemplateOfFigure {
     public void paintFigure(Graphics2D g2d) {
         for (int row = 0; row < Constants.matrY; row++) {
             for (int column = 0; column < Constants.matrX; column++) {
-                if (this.getFigure()[row][column] != 0) {
-                    FigurePaint.gradientFigure(g2d, FigurePaint.lightColor(this.getFigure()[row][column]),
-                            FigurePaint.darkColor(this.getFigure()[row][column]), FigurePaint.converFromIndexColumn(column), FigurePaint.converFromIndexRow(row));
+                if (figure.getElement(row, column) != 0) {
+                    FigurePaint.gradientFigure(g2d, FigurePaint.lightColor(figure.getElement(row, column)),
+                            FigurePaint.darkColor(figure.getElement(row, column)), FigurePaint.converFromIndexColumn(column), FigurePaint.converFromIndexRow(row));
                 }
             }
         }
@@ -144,7 +143,7 @@ public class TemplateOfFigure {
     public void paintFigureShadow(Graphics2D g2d) {
         for (int row = 0; row < Constants.matrY; row++) {
             for (int column = 0; column < Constants.matrX; column++) {
-                if (this.getFigure()[row][column] != 0) {
+                if (figure.getElement(row, column) != 0) {
                     g2d.setColor(Constants.alphaShadow);
                     g2d.fillRect(FigurePaint.converFromIndexColumn(column), FigurePaint.converFromIndexRow(row), Constants.quadrateSize, Constants.quadrateSize);
                     g2d.setColor(Color.black);
@@ -157,9 +156,9 @@ public class TemplateOfFigure {
     public void paintFigureNext(Graphics2D g2d) {
         for (int row = 0; row < Constants.matrY; row++) {
             for (int column = 0; column < Constants.matrX; column++) {
-                if (this.getFigure()[row][column] != 0) {
-                    FigurePaint.gradientFigure(g2d, FigurePaint.lightColor(this.getFigure()[row][column]),
-                            FigurePaint.darkColor(this.getFigure()[row][column]), FigurePaint.converFromIndexColumn(column) - 300, FigurePaint.converFromIndexRow(row));
+                if (figure.getElement(row, column) != 0) {
+                    FigurePaint.gradientFigure(g2d, FigurePaint.lightColor(figure.getElement(row, column)),
+                            FigurePaint.darkColor(figure.getElement(row, column)), FigurePaint.converFromIndexColumn(column) - 300, FigurePaint.converFromIndexRow(row));
                 }
             }
         }
@@ -167,29 +166,19 @@ public class TemplateOfFigure {
 
     public void paintRandomColor() {
         this.colorByte = (byte) (new Random().nextInt(8) + 1);
-        for (int i = 0; i < Constants.matrY; i++) {
-            for (int j = 0; j < Constants.matrX; j++) {
-                if (figure[i][j] != 0) {
-                    figure[i][j] = (byte) colorByte;
-                }
-            }
-        }
+        this.figure.setAllNotNullElements(colorByte);
     }
 
-    public byte[][] getFigure() {
+    public Matr getFigure() {
         return figure;
     }
 
-    public void setFigure(byte[][] figure) {
+    public void setFigure(Matr figure) {
         this.figure = figure;
     }
 
     private void clear() {
-        for (int i = 0; i < Constants.matrY; i++) {
-            for (int j = 0; j < Constants.matrX; j++) {
-                this.figure[i][j] = 0;
-            }
-        }
+        this.figure.clear();
     }
 
     public boolean isDownAvailable(RootGlass rootGlass) {
@@ -211,11 +200,11 @@ public class TemplateOfFigure {
     }
 
     private void moveDownForce() {
-        for (int row = rowCount - 1; row >= 0; row--) {
-            for (int column = 0; column < columnCount; column++) {
-                if (figure[row][column] != 0) {
-                    figure[row + 1][column] = figure[row][column];
-                    figure[row][column] = 0;
+        for (int row = figure.getRowCount() - 1; row >= 0; row--) {
+            for (int column = 0; column < figure.getColumnCount(); column++) {
+                if (figure.getMatr()[row][column] != 0) {
+                    figure.getMatr()[row + 1][column] = figure.getMatr()[row][column];
+                    figure.getMatr()[row][column] = 0;
                 }
             }
         }
@@ -232,9 +221,9 @@ public class TemplateOfFigure {
     public void up() {
         for (int i = 0; i < Constants.matrY; i++) {
             for (int j = 0; j < Constants.matrX; j++) {
-                if (figure[i][j] != 0) {
-                    figure[i - 1][j] = figure[i][j];
-                    figure[i][j] = 0;
+                if (figure.getMatr()[i][j] != 0) {
+                    figure.getMatr()[i - 1][j] = figure.getMatr()[i][j];
+                    figure.getMatr()[i][j] = 0;
                 }
             }
         }
@@ -260,11 +249,11 @@ public class TemplateOfFigure {
 
     private void moveLeftForce() {
         try {
-            for (int row = 0; row < rowCount; row++) {
-                for (int column = 0; column < columnCount; column++) {
-                    if (figure[row][column] != 0) {
-                        figure[row][column - 1] = figure[row][column];
-                        figure[row][column] = 0;
+            for (int row = 0; row < figure.getRowCount(); row++) {
+                for (int column = 0; column < figure.getColumnCount(); column++) {
+                    if (figure.getMatr()[row][column] != 0) {
+                        figure.getMatr()[row][column - 1] = figure.getMatr()[row][column];
+                        figure.getMatr()[row][column] = 0;
                     }
                 }
             }
@@ -302,11 +291,11 @@ public class TemplateOfFigure {
 
     private void moveRightForce() {
         try {
-            for (int row = 0; row < rowCount; row++) {
-                for (int column = columnCount - 2; column >= 0; column--) {
-                    if (figure[row][column] != 0) {
-                        figure[row][column + 1] = figure[row][column];
-                        figure[row][column] = 0;
+            for (int row = 0; row < figure.getRowCount(); row++) {
+                for (int column = figure.getColumnCount() - 2; column >= 0; column--) {
+                    if (figure.getMatr()[row][column] != 0) {
+                        figure.getMatr()[row][column + 1] = figure.getMatr()[row][column];
+                        figure.getMatr()[row][column] = 0;
                     }
                 }
             }
@@ -357,14 +346,14 @@ public class TemplateOfFigure {
 
         for (int row = 0; row < sizeRotY; row++) {
             for (int column = 0; column < sizeRotX; column++) {
-                figureLocal[row][column] = figure[rowSubQuadrate + row][columnSubQuadrate + column];
+                figureLocal[row][column] = figure.getMatr()[rowSubQuadrate + row][columnSubQuadrate + column];
             }
         }
 
         if (typeOfFigure.equals(FigureType.STICK)) {
             for (int rowLocal = 0; rowLocal < sizeRotY; rowLocal++) {
                 for (int columnLocal = 0; columnLocal < sizeRotX; columnLocal++) {
-                    figureLocal[rowLocal][columnLocal] = figure[rowSubQuadrate + rowLocal][columnSubQuadrate + columnLocal];
+                    figureLocal[rowLocal][columnLocal] = figure.getMatr()[rowSubQuadrate + rowLocal][columnSubQuadrate + columnLocal];
                     if (figureLocal[rowLocal][columnLocal] != 0) {
                         figureRotateLocal[columnLocal][rowLocal] = figureLocal[rowLocal][columnLocal];
                     }
@@ -376,7 +365,7 @@ public class TemplateOfFigure {
 
         for (int row = 0; row < sizeRotY; row++) {
             for (int column = 0; column < sizeRotX; column++) {
-                figure[rowSubQuadrate + row][columnSubQuadrate + column] = figureRotateLocal[row][column];
+                figure.getMatr()[rowSubQuadrate + row][columnSubQuadrate + column] = figureRotateLocal[row][column];
             }
         }
 
@@ -387,11 +376,11 @@ public class TemplateOfFigure {
         this.rowSubQuadrate = getMinRow();
         this.columnSubQuadrate = getMinColumn();
 
-        if (this.rowSubQuadrate > (rowCount - 1) - 3) {
-            this.rowSubQuadrate = rowCount - 4;
+        if (this.rowSubQuadrate > (figure.getRowCount() - 1) - 3) {
+            this.rowSubQuadrate = figure.getRowCount() - 4;
         }
-        if (this.columnSubQuadrate > (columnCount - 1) - 3) {
-            this.columnSubQuadrate = columnCount - 4;
+        if (this.columnSubQuadrate > (figure.getColumnCount() - 1) - 3) {
+            this.columnSubQuadrate = figure.getColumnCount() - 4;
         }
     }
 
@@ -403,8 +392,8 @@ public class TemplateOfFigure {
     }
 
     private boolean isEmptyRow(byte rowNum) {
-        for (int column = 0; column < columnCount; column++) {
-            if (figure[rowNum][column] != 0) {
+        for (int column = 0; column < figure.getColumnCount(); column++) {
+            if (figure.getMatr()[rowNum][column] != 0) {
                 return false;
             }
         }
@@ -412,8 +401,8 @@ public class TemplateOfFigure {
     }
 
     private boolean isEmptyColumn(byte columnNum) {
-        for (int row = 0; row < rowCount; row++) {
-            if (figure[row][columnNum] != 0) {
+        for (int row = 0; row < figure.getRowCount(); row++) {
+            if (figure.getMatr()[row][columnNum] != 0) {
                 return false;
             }
         }
@@ -421,7 +410,7 @@ public class TemplateOfFigure {
     }
 
     private byte getMinRow() {
-        for (byte row = 0; row < rowCount; row++) {
+        for (byte row = 0; row < figure.getRowCount(); row++) {
             if (!isEmptyRow(row)) {
                 return row;
             }
@@ -431,7 +420,7 @@ public class TemplateOfFigure {
     }
 
     private byte getMinColumn() {
-        for (byte column = 0; column < columnCount; column++) {
+        for (byte column = 0; column < figure.getColumnCount(); column++) {
             if (!isEmptyColumn(column)) {
                 return column;
             }
@@ -441,7 +430,7 @@ public class TemplateOfFigure {
     }
 
     private byte getMaxRow() {
-        for (byte row = (byte) (rowCount - 1); row >= 0; row--) {
+        for (byte row = (byte) (figure.getRowCount() - 1); row >= 0; row--) {
             if (!isEmptyRow(row)) {
                 return row;
             }
@@ -451,7 +440,7 @@ public class TemplateOfFigure {
     }
 
     private byte getMaxColumn() {
-        for (byte column = (byte) (columnCount - 1); column >= 0; column--) {
+        for (byte column = (byte) (figure.getColumnCount() - 1); column >= 0; column--) {
             if (!isEmptyColumn(column)) {
                 return column;
             }
@@ -467,7 +456,7 @@ public class TemplateOfFigure {
 
     @Override
     public String toString() {
-        return figure.hashCode() + " " + getTypeOfFigure().toString() + " " + hashCode() + ": " + Arrays.deepToString(figure);
+        return figure.hashCode() + " " + getTypeOfFigure().toString() + " " + hashCode() + ": " + Arrays.deepToString(figure.getMatr());
     }
 
     public byte getColorByte() {
@@ -508,26 +497,5 @@ public class TemplateOfFigure {
 
     public void setState(FigureState state) {
         this.state = state;
-    }
-
-    public int getRowCount() {
-        return rowCount;
-    }
-
-    public void setRowCount(int rowCount) {
-        this.rowCount = rowCount;
-    }
-
-    public int getColumnCount() {
-        return columnCount;
-    }
-
-    public void setColumnCount(int columnCount) {
-        this.columnCount = columnCount;
-    }
-
-    public static void main(String[] args) {
-        TemplateOfFigure tof = new TemplateOfFigure(1, 3, 3);
-        log.info(Arrays.deepToString(tof.getFigure()));
     }
 }

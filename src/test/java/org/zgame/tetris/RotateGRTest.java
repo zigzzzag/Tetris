@@ -69,12 +69,12 @@ public class RotateGRTest extends TestCase {
 
         tof.rotate(rootGlass);
 
-        if (Arrays.deepEquals(tof.getFigure(), matrExpected)) {
+        if (Arrays.deepEquals(tof.getFigure().getMatr(), matrExpected)) {
             log.debug("rotateGRTest is passed!");
             assertTrue(true);
         } else {
             log.error("rotateGRTest is not passed");
-            log.debug("tof.getFigure(): {}", Arrays.deepToString(tof.getFigure()));
+            log.debug("tof.getFigure().getMatr(): {}", Arrays.deepToString(tof.getFigure().getMatr()));
             log.debug("matrExpected:    {}", Arrays.deepToString(matrExpected));
             assertTrue(false);
         }

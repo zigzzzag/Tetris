@@ -47,13 +47,13 @@ public class MoveDownTTest extends TestCase {
 
         tof.moveDown(rootGlass);
 
-        if (Arrays.deepEquals(tof.getFigure(), tof_expected.getFigure())) {
+        if (Arrays.deepEquals(tof.getFigure().getMatr(), tof_expected.getFigure().getMatr())) {
             log.debug("testCaseFigure_3_0 is passed!");
             assertTrue(true);
         } else {
             log.error("testCaseFigure_3_0 is not passed");
-            log.debug("tof.getFigure():          {}", Arrays.deepToString(tof.getFigure()));
-            log.debug("tof_expected.getFigure(): {}", Arrays.deepToString(tof_expected.getFigure()));
+            log.debug("tof.getFigure().getMatr():          {}", Arrays.deepToString(tof.getFigure().getMatr()));
+            log.debug("tof_expected.getFigure().getMatr(): {}", Arrays.deepToString(tof_expected.getFigure().getMatr()));
             assertTrue(false);
         }
     }

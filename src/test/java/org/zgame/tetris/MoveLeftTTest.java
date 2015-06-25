@@ -70,12 +70,12 @@ public class MoveLeftTTest extends TestCase {
         tof.rotate(rootGlass);
         tof.moveLeft(rootGlass);
 
-        if (Arrays.deepEquals(tof.getFigure(), matrExpected)) {
+        if (Arrays.deepEquals(tof.getFigure().getMatr(), matrExpected)) {
             log.debug("testMoveLeftT is passed!");
             assertTrue(true);
         } else {
             log.error("testMoveLeftT is not passed");
-            log.debug("tof.getFigure(): {}", Arrays.deepToString(tof.getFigure()));
+            log.debug("tof.getFigure().getMatr(): {}", Arrays.deepToString(tof.getFigure().getMatr()));
             log.debug("matrExpected:    {}", Arrays.deepToString(matrExpected));
             assertTrue(false);
         }

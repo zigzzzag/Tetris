@@ -95,7 +95,7 @@ public class GameContext implements Runnable {
     public void nextStep() {
         for (int row = 0; row < Constants.matrY; row++) {
             for (int column = 0; column < Constants.matrX; column++) {
-                rootGlass.getFilledGlass()[row][column] += currentFigure.getFigure()[row][column];
+                rootGlass.getFilledGlass()[row][column] += currentFigure.getFigure().getMatr()[row][column];
             }
         }
 

@@ -60,7 +60,7 @@ public class RootGlass {
     public boolean hasIntersectionWithFigure(TemplateOfFigure tof) {
         for (byte row = 0; row < rowCount; row++) {
             for (byte column = 0; column < columnCount; column++) {
-                if (tof.getFigure()[row][column] != 0 && filledGlass[row][column] != 0) {
+                if (tof.getFigure().getMatr()[row][column] != 0 && filledGlass[row][column] != 0) {
                     log.trace("RootGlass has intersection with TOF {}: (row, column) -> ({},{})", tof.getTypeOfFigure(), row, column);
                     return true;
                 }

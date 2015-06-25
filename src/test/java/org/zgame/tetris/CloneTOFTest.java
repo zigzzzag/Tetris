@@ -93,14 +93,14 @@ public class CloneTOFTest extends TestCase {
 
         tofClone.moveRight(rootGlass);
 
-        if (Arrays.deepEquals(tofOriginal.getFigure(), matrOriginalExpected) &&
-                Arrays.deepEquals(tofClone.getFigure(), matrCloneExpected)) {
+        if (Arrays.deepEquals(tofOriginal.getFigure().getMatr(), matrOriginalExpected) &&
+                Arrays.deepEquals(tofClone.getFigure().getMatr(), matrCloneExpected)) {
             log.debug("testCloneTOF is passed!");
             assertTrue(true);
         } else {
             log.error("testCloneTOF is not passed");
-            log.debug("tofOriginal.getFigure(): {}", Arrays.deepToString(tofOriginal.getFigure()));
-            log.debug("tofClone.getFigure():    {}", Arrays.deepToString(tofClone.getFigure()));
+            log.debug("tofOriginal.getFigure(): {}", Arrays.deepToString(tofOriginal.getFigure().getMatr()));
+            log.debug("tofClone.getFigure():    {}", Arrays.deepToString(tofClone.getFigure().getMatr()));
             assertTrue(false);
         }
     }

@@ -37,7 +37,7 @@ public class TemplateOfFigureTest extends TestCase {
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
         };
 
-        assertTrue(Arrays.deepEquals(tof.getFigure(), matrExpected));
+        assertTrue(Arrays.deepEquals(tof.getFigure().getMatr(), matrExpected));
     }
 
     public void testTypeOfFigure2() {
@@ -66,6 +66,6 @@ public class TemplateOfFigureTest extends TestCase {
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
         };
 
-        assertTrue(Arrays.deepEquals(tof.getFigure(), matrExpected));
+        assertTrue(Arrays.deepEquals(tof.getFigure().getMatr(), matrExpected));
     }
 }

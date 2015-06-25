@@ -57,12 +57,12 @@ public class MoveRightForceTest extends TestCase {
         method.setAccessible(true);
         method.invoke(tof);
 
-        if (Arrays.deepEquals(tof.getFigure(), tof_expected.getFigure())) {
+        if (Arrays.deepEquals(tof.getFigure().getMatr(), tof_expected.getFigure().getMatr())) {
             assertTrue(true);
         } else {
             log.error("testCaseFigure3_1 is not passed");
-            log.debug("tof.getFigure():       {}", Arrays.deepToString(tof.getFigure()));
-            log.debug("tof_after.getFigure(): {}", Arrays.deepToString(tof_expected.getFigure()));
+            log.debug("tof.getFigure().getMatr():       {}", Arrays.deepToString(tof.getFigure().getMatr()));
+            log.debug("tof_after.getFigure(): {}", Arrays.deepToString(tof_expected.getFigure().getMatr()));
             assertTrue(false);
         }
     }
