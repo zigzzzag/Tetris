@@ -4,8 +4,10 @@
  */
 package org.zgame.utils;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.InputVerifier;
+import javax.swing.JComponent;
+import javax.swing.JTextField;
+import java.awt.Color;
 
 /**
  * @author user

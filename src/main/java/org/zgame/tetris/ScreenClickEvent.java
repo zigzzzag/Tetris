@@ -5,7 +5,6 @@
 package org.zgame.tetris;
 
 /**
- *
  * @author user
  */
 public class ScreenClickEvent extends StageEvent {

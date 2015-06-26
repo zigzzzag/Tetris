@@ -7,7 +7,7 @@ import org.zgame.tetris.Main;
 import org.zgame.utils.Constants;
 import org.zgame.utils.Record;
 
-import java.awt.*;
+import java.awt.Graphics2D;
 import java.util.List;
 import java.util.Random;
 

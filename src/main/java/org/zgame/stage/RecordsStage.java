@@ -15,7 +15,8 @@ import org.zgame.tetris.StageEvent;
 import org.zgame.tetris.StageInterface;
 import org.zgame.utils.Record;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.util.List;
 
 /**

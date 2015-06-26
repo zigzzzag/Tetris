@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zgame.utils.Constants;
 
-import java.awt.*;
+import java.awt.Graphics2D;
 import java.util.Arrays;
 
 /**

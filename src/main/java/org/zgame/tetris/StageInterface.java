@@ -4,7 +4,7 @@
  */
 package org.zgame.tetris;
 
-import java.awt.*;
+import java.awt.Graphics2D;
 
 /**
  * @author user

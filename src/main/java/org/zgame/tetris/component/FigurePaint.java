@@ -2,7 +2,10 @@ package org.zgame.tetris.component;
 
 import org.zgame.utils.Constants;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.GradientPaint;
+import java.awt.Graphics2D;
+
 
 /**
  * Created by mnikiforov on 31.05.2015.

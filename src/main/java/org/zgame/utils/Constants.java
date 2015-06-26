@@ -2,7 +2,7 @@ package org.zgame.utils;
 
 import org.zgame.tetris.Main;
 
-import java.awt.*;
+import java.awt.Color;
 
 /**
  * Created by SBT-Nikiforov-MO on 26.05.2015.

@@ -12,7 +12,8 @@ import org.zgame.tetris.component.matr.Matr;
 import org.zgame.tetris.component.matr.SubMatr;
 import org.zgame.utils.Constants;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.util.Arrays;
 import java.util.Random;
 

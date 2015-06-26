@@ -7,7 +7,7 @@ package org.zgame.tetris;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.awt.*;
+import java.awt.Graphics2D;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
