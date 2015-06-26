@@ -122,10 +122,10 @@ public class TemplateOfFigure {
             }
             //  ****
             case STICK: {
-                figure.setElement(1, 0 + rowSubQuadrate, -1 + columnSubQuadrate);
                 figure.setElement(1, 0 + rowSubQuadrate, 0 + columnSubQuadrate);
                 figure.setElement(1, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
                 figure.setElement(1, 0 + rowSubQuadrate, 2 + columnSubQuadrate);
+                figure.setElement(1, 0 + rowSubQuadrate, 3 + columnSubQuadrate);
                 subFigure = new SubMatr(1, 4).rowCoord(rowSubQuadrate).columnCoord(columnSubQuadrate);
                 break;
             }
