@@ -316,13 +316,6 @@ public class TemplateOfFigure {
     }
 
     private boolean isRotateAvailable(RootGlass rootGlass) {
-//        byte maxColumn = getMaxColumn();
-//        if (maxColumn >= rootGlass.getColumnCount() - 1) {
-//            log.debug("TOF: '{}' is not ROTATE available, because maxColumn > rootGlass.getColumnCount() - 1; maxColumn = {}, rootGlass.getColumnCount() = {}",
-//                    typeOfFigure, maxColumn, rootGlass.getColumnCount());
-//            return false;
-//        }
-
         TemplateOfFigure tof_rotate = new TemplateOfFigure(typeOfFigure, subFigure.getRowCoord(), subFigure.getColumnCoord()).rotationAngleInt(90);
         if (rootGlass.hasIntersectionWithFigure(tof_rotate)) {
             log.debug("TOF: '{}' is not ROTATE available, because rootGlass.hasIntersectionWithFigure(tof_rotate)",
@@ -332,7 +325,17 @@ public class TemplateOfFigure {
         return true;
     }
 
+    /**
+     * Метод для движа влево, если фигура плотничком в правом краю и ее длина больше ширины
+     */
+    private void leftBeforeRotate(RootGlass rootGlass) {
+        if (subFigure.getRowCount() > figure.getColumnCount() -  subFigure.getColumnCoord()) {
+            moveLeftForce();
+        }
+    }
+
     public void rotate(RootGlass rootGlass) {
+        leftBeforeRotate(rootGlass);
         if (isRotateAvailable(rootGlass)) {
             rotateForce();
             rotationAngle.rotate();
