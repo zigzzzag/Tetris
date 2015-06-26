@@ -64,7 +64,7 @@ public class TemplateOfFigure {
                 figure.setElement(1, 0 + rowSubQuadrate, 2 + columnSubQuadrate);
                 figure.setElement(1, 1 + rowSubQuadrate, 1 + columnSubQuadrate);
                 figure.setElement(1, 1 + rowSubQuadrate, 0 + columnSubQuadrate);
-                subFigure = new SubMatr(3, 3).rowCoord(rowSubQuadrate).columnCoord(columnSubQuadrate);
+                subFigure = new SubMatr(2, 3).rowCoord(rowSubQuadrate).columnCoord(columnSubQuadrate);
                 break;
             }
             // **
@@ -74,7 +74,7 @@ public class TemplateOfFigure {
                 figure.setElement(1, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
                 figure.setElement(1, 1 + rowSubQuadrate, 1 + columnSubQuadrate);
                 figure.setElement(1, 1 + rowSubQuadrate, 2 + columnSubQuadrate);
-                subFigure = new SubMatr(3, 3).rowCoord(rowSubQuadrate).columnCoord(columnSubQuadrate);
+                subFigure = new SubMatr(2, 3).rowCoord(rowSubQuadrate).columnCoord(columnSubQuadrate);
                 break;
             }
             // **
@@ -85,7 +85,7 @@ public class TemplateOfFigure {
                 figure.setElement(1, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
                 figure.setElement(1, 1 + rowSubQuadrate, 0 + columnSubQuadrate);
                 figure.setElement(1, 2 + rowSubQuadrate, 0 + columnSubQuadrate);
-                subFigure = new SubMatr(3, 3).rowCoord(rowSubQuadrate).columnCoord(columnSubQuadrate);
+                subFigure = new SubMatr(3, 2).rowCoord(rowSubQuadrate).columnCoord(columnSubQuadrate);
                 break;
             }
             // **
@@ -96,7 +96,7 @@ public class TemplateOfFigure {
                 figure.setElement(1, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
                 figure.setElement(1, 1 + rowSubQuadrate, 1 + columnSubQuadrate);
                 figure.setElement(1, 2 + rowSubQuadrate, 1 + columnSubQuadrate);
-                subFigure = new SubMatr(3, 3).rowCoord(rowSubQuadrate).columnCoord(columnSubQuadrate);
+                subFigure = new SubMatr(3, 2).rowCoord(rowSubQuadrate).columnCoord(columnSubQuadrate);
                 break;
             }
             // ***
@@ -106,7 +106,7 @@ public class TemplateOfFigure {
                 figure.setElement(1, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
                 figure.setElement(1, 0 + rowSubQuadrate, 2 + columnSubQuadrate);
                 figure.setElement(1, 1 + rowSubQuadrate, 1 + columnSubQuadrate);
-                subFigure = new SubMatr(3, 3).rowCoord(rowSubQuadrate).columnCoord(columnSubQuadrate);
+                subFigure = new SubMatr(2, 3).rowCoord(rowSubQuadrate).columnCoord(columnSubQuadrate);
                 break;
             }
             // **
@@ -125,7 +125,7 @@ public class TemplateOfFigure {
                 figure.setElement(1, 0 + rowSubQuadrate, 0 + columnSubQuadrate);
                 figure.setElement(1, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
                 figure.setElement(1, 0 + rowSubQuadrate, 2 + columnSubQuadrate);
-                subFigure = new SubMatr(4, 4).rowCoord(rowSubQuadrate).columnCoord(columnSubQuadrate);
+                subFigure = new SubMatr(1, 4).rowCoord(rowSubQuadrate).columnCoord(columnSubQuadrate);
                 break;
             }
         }

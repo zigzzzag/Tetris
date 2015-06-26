@@ -47,23 +47,30 @@ public class SubMatr extends Matr {
     }
 
     public void transposeMatrCounterClockWise() {
-        byte[][] result = new byte[rowCount][columnCount];
+        byte[][] result = new byte[columnCount][rowCount];
         for (int row = 0; row < rowCount; row++) {
             for (int column = 0; column < columnCount; column++) {
                 result[columnCount - column - 1][row] = matr[row][column];
             }
         }
+        updateSize(columnCount, rowCount);
         this.matr = result;
     }
 
     public void transposeMatrClockWise() {
-        byte[][] result = new byte[rowCount][columnCount];
+        byte[][] result = new byte[columnCount][rowCount];
         for (int row = 0; row < rowCount; row++) {
             for (int column = 0; column < columnCount; column++) {
                 result[column][rowCount - row - 1] = matr[row][column];
             }
         }
+        updateSize(columnCount, rowCount);
         this.matr = result;
+    }
+
+    private void updateSize(int newRowCount, int newColumnCount) {
+        setRowCount(newRowCount);
+        setColumnCount(newColumnCount);
     }
 
     public int getRowCoord() {
