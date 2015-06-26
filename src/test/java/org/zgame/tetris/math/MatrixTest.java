@@ -3,7 +3,7 @@ package org.zgame.tetris.math;
 import junit.framework.TestCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.zgame.utils.MatrixUtils;
+import org.zgame.tetris.component.matr.SubMatr;
 
 import java.util.Arrays;
 
@@ -26,14 +26,16 @@ public class MatrixTest extends TestCase {
                 {1, 4, 7}
         };
 
-        byte[][] transponseMatr = MatrixUtils.transposeMatrixCounterClockWise(matr, 3, 3);
+        SubMatr subMatr = new SubMatr(3, 3).rowCoord(0).columnCoord(0);
+        subMatr.setMatr(matr);
+        subMatr.transposeMatrCounterClockWise();
 
-        if (Arrays.deepEquals(transponseMatr, matrExpected)) {
+        if (Arrays.deepEquals(subMatr.getMatr(), matrExpected)) {
             log.debug("testTransposeMatrixCounterClockWise is passed!");
             assertTrue(true);
         } else {
             log.error("testTransposeMatrixCounterClockWise is not passed");
-            log.debug("transponseMatr: {}", Arrays.deepToString(transponseMatr));
+            log.debug("transponseMatr: {}", Arrays.deepToString(subMatr.getMatr()));
             log.debug("matrExpected:   {}", Arrays.deepToString(matrExpected));
             assertTrue(false);
         }
@@ -51,14 +53,16 @@ public class MatrixTest extends TestCase {
                 {9, 6, 3}
         };
 
-        byte[][] transponseMatr = MatrixUtils.transposeMatrixClockWise(matr, 3, 3);
+        SubMatr subMatr = new SubMatr(3, 3).rowCoord(0).columnCoord(0);
+        subMatr.setMatr(matr);
+        subMatr.transposeMatrClockWise();
 
-        if (Arrays.deepEquals(transponseMatr, matrExpected)) {
+        if (Arrays.deepEquals(subMatr.getMatr(), matrExpected)) {
             log.debug("testTransposeMatrixClockWise is passed!");
             assertTrue(true);
         } else {
             log.error("testTransposeMatrixClockWise is not passed");
-            log.debug("transponseMatr: {}", Arrays.deepToString(transponseMatr));
+            log.debug("transponseMatr: {}", Arrays.deepToString(subMatr.getMatr()));
             log.debug("matrExpected:   {}", Arrays.deepToString(matrExpected));
             assertTrue(false);
         }
