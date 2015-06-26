@@ -24,10 +24,6 @@ public class TemplateOfFigure {
     private static final Logger log = LoggerFactory.getLogger(TemplateOfFigure.class);
     private Matr figure;
     private SubMatr subFigure;
-
-    //каждую фигуру(кроме палки) можно впихнуть в квадрат 3х3(SubQuadrate)
-//    private int rowSubQuadrate;
-//    private int columnSubQuadrate;
     private FigureType typeOfFigure;
     private byte colorByte;
     private ComeDownTime comeDownTime;
@@ -416,6 +412,7 @@ public class TemplateOfFigure {
 
     public TemplateOfFigure clone() {
         TemplateOfFigure tofClone = new TemplateOfFigure(typeOfFigure, subFigure.getRowCoord(), subFigure.getColumnCoord());
+        tofClone.rotationAngleInt(this.rotationAngle.getAngle());
         return tofClone;
     }
 
