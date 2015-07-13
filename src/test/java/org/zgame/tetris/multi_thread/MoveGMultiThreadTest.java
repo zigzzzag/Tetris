@@ -1,6 +1,7 @@
 package org.zgame.tetris.multi_thread;
 
 import junit.framework.TestCase;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zgame.tetris.component.FigureType;
@@ -20,6 +21,7 @@ public class MoveGMultiThreadTest extends TestCase {
 
     private static final Logger log = LoggerFactory.getLogger(MoveGMultiThreadTest.class);
 
+    @Test
     public void testMoveGMultiThreadTest_00() throws InterruptedException {
         int rowCount = 20;
         int columnCount = 100000;

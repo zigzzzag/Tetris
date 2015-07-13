@@ -16,6 +16,9 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author user
@@ -30,6 +33,8 @@ public class TemplateOfFigure {
     private ComeDownTime comeDownTime;
     private FigureState state = FigureState.NORMAL;
     private RotationAngle rotationAngle = new RotationAngle(0);
+    private Lock lock = new ReentrantLock(false);
+    private long lockTimeout = 2000;
 
     public TemplateOfFigure(int rowCount, int columnCount) {
         this.figure = new Matr(rowCount, columnCount);
@@ -222,8 +227,17 @@ public class TemplateOfFigure {
     }
 
     public void moveDown(RootGlass rootGlass) {
-        if (isDownAvailable(rootGlass)) {
-            moveDownForce();
+        try {
+            lock.tryLock(lockTimeout, TimeUnit.MILLISECONDS);
+            try {
+                if (isDownAvailable(rootGlass)) {
+                    moveDownForce();
+                }
+            } finally {
+                lock.unlock();
+            }
+        } catch (InterruptedException e) {
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -277,11 +291,17 @@ public class TemplateOfFigure {
     }
 
     public void moveLeft(RootGlass rootGlass) {
-        if (isLeftAvailable(rootGlass)) {
-            moveLeftForce();
-            log.debug("typeOfFigure: {} is left Available", typeOfFigure);
-        } else {
-            log.debug("typeOfFigure: {} is not left Available", typeOfFigure);
+        try {
+            lock.tryLock(lockTimeout, TimeUnit.MILLISECONDS);
+            try {
+                if (isLeftAvailable(rootGlass)) {
+                    moveLeftForce();
+                }
+            } finally {
+                lock.unlock();
+            }
+        } catch (InterruptedException e) {
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -322,8 +342,17 @@ public class TemplateOfFigure {
     }
 
     public void moveRight(RootGlass rootGlass) {
-        if (isRightAvailable(rootGlass)) {
-            moveRightForce();
+        try {
+            lock.tryLock(lockTimeout, TimeUnit.MILLISECONDS);
+            try {
+                if (isRightAvailable(rootGlass)) {
+                    moveRightForce();
+                }
+            } finally {
+                lock.unlock();
+            }
+        } catch (InterruptedException e) {
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -348,10 +377,19 @@ public class TemplateOfFigure {
     }
 
     public void rotate(RootGlass rootGlass) {
-        leftBeforeRotate(rootGlass);
-        if (isRotateAvailable(rootGlass)) {
-            rotateForce();
-            rotationAngle.rotate();
+        try {
+            lock.tryLock(lockTimeout, TimeUnit.MILLISECONDS);
+            try {
+                leftBeforeRotate(rootGlass);
+                if (isRotateAvailable(rootGlass)) {
+                    rotateForce();
+                    rotationAngle.rotate();
+                }
+            } finally {
+                lock.unlock();
+            }
+        } catch (InterruptedException e) {
+            log.error(e.getMessage(), e);
         }
     }
 
