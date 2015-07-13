@@ -31,30 +31,22 @@ public class TemplateOfFigure {
     private FigureState state = FigureState.NORMAL;
     private RotationAngle rotationAngle = new RotationAngle(0);
 
-    public TemplateOfFigure rotationAngleInt(int angle) {
-        this.rotationAngle.setAngle(angle);
-        for (int rotateCount = 0; rotateCount < rotationAngle.getCountRotate(); rotateCount++) {
-            rotateForce();
-        }
-        return this;
-    }
-
-    public TemplateOfFigure() {
-        this.figure = new Matr(Constants.matrY, Constants.matrX);
+    public TemplateOfFigure(int rowCount, int columnCount) {
+        this.figure = new Matr(rowCount, columnCount);
         this.comeDownTime = new TestComeDownTime();
     }
 
-    public TemplateOfFigure(int figureTypeInt) {
-        this(figureTypeInt, (byte) 0, (byte) 4);
+    public TemplateOfFigure(FigureType figureType) {
+        this(figureType, Constants.MATR_ROW, Constants.MATR_COLUMN, 0, 4);
     }
 
     public TemplateOfFigure(FigureType figureType, int rowSubQuadrate, int columnSubQuadrate) {
-        this(figureType.getValue(), rowSubQuadrate, columnSubQuadrate);
+        this(figureType, Constants.MATR_ROW, Constants.MATR_COLUMN, rowSubQuadrate, columnSubQuadrate);
     }
 
-    public TemplateOfFigure(int figureTypeInt, int rowSubQuadrate, int columnSubQuadrate) {
-        this();
-        this.typeOfFigure = FigureType.getTypeByIntVal(figureTypeInt);
+    public TemplateOfFigure(FigureType figureType, int rowCount, int columnCount, int rowSubQuadrate, int columnSubQuadrate) {
+        this(rowCount, columnCount);
+        this.typeOfFigure = figureType;
 
         clear();
         switch (typeOfFigure) {
@@ -132,9 +124,22 @@ public class TemplateOfFigure {
         }
     }
 
+    public TemplateOfFigure rotationAngleInt(int angle) {
+        this.rotationAngle.setAngle(angle);
+        for (int rotateCount = 0; rotateCount < rotationAngle.getCountRotate(); rotateCount++) {
+            rotateForce();
+        }
+        return this;
+    }
+
+    public TemplateOfFigure figure(Matr figure) {
+        this.figure = figure;
+        return this;
+    }
+
     public void paintFigure(Graphics2D g2d) {
-        for (int row = 0; row < Constants.matrY; row++) {
-            for (int column = 0; column < Constants.matrX; column++) {
+        for (int row = 0; row < Constants.MATR_ROW; row++) {
+            for (int column = 0; column < Constants.MATR_COLUMN; column++) {
                 if (figure.getElement(row, column) != 0) {
                     FigurePaint.gradientFigure(g2d, FigurePaint.lightColor(figure.getElement(row, column)),
                             FigurePaint.darkColor(figure.getElement(row, column)), FigurePaint.converFromIndexColumn(column), FigurePaint.converFromIndexRow(row));
@@ -144,21 +149,21 @@ public class TemplateOfFigure {
     }
 
     public void paintFigureShadow(Graphics2D g2d) {
-        for (int row = 0; row < Constants.matrY; row++) {
-            for (int column = 0; column < Constants.matrX; column++) {
+        for (int row = 0; row < Constants.MATR_ROW; row++) {
+            for (int column = 0; column < Constants.MATR_COLUMN; column++) {
                 if (figure.getElement(row, column) != 0) {
                     g2d.setColor(Constants.alphaShadow);
-                    g2d.fillRect(FigurePaint.converFromIndexColumn(column), FigurePaint.converFromIndexRow(row), Constants.quadrateSize, Constants.quadrateSize);
+                    g2d.fillRect(FigurePaint.converFromIndexColumn(column), FigurePaint.converFromIndexRow(row), Constants.QUADRATE_SIZE, Constants.QUADRATE_SIZE);
                     g2d.setColor(Color.black);
-                    g2d.drawRect(FigurePaint.converFromIndexColumn(column), FigurePaint.converFromIndexRow(row), Constants.quadrateSize, Constants.quadrateSize);
+                    g2d.drawRect(FigurePaint.converFromIndexColumn(column), FigurePaint.converFromIndexRow(row), Constants.QUADRATE_SIZE, Constants.QUADRATE_SIZE);
                 }
             }
         }
     }
 
     public void paintFigureNext(Graphics2D g2d) {
-        for (int row = 0; row < Constants.matrY; row++) {
-            for (int column = 0; column < Constants.matrX; column++) {
+        for (int row = 0; row < Constants.MATR_ROW; row++) {
+            for (int column = 0; column < Constants.MATR_COLUMN; column++) {
                 if (figure.getElement(row, column) != 0) {
                     FigurePaint.gradientFigure(g2d, FigurePaint.lightColor(figure.getElement(row, column)),
                             FigurePaint.darkColor(figure.getElement(row, column)), FigurePaint.converFromIndexColumn(column) - 300, FigurePaint.converFromIndexRow(row));
@@ -185,14 +190,15 @@ public class TemplateOfFigure {
     }
 
     public boolean isDownAvailable(RootGlass rootGlass) {
-        byte maxRow = getMaxRow();
+        int maxRow = getMaxRow();
         if (maxRow >= rootGlass.getRowCount() - 1) {
             log.debug("TOF: '{}' is not DOWN available, because maxRow >= rootGlass.getRowCount() - 1; maxRow = {}, rootGlass.getColumnCount() = {}",
                     typeOfFigure, maxRow, rootGlass.getColumnCount());
             return false;
         }
 
-        TemplateOfFigure tof_down = new TemplateOfFigure(typeOfFigure, subFigure.getRowCoord() + 1, subFigure.getColumnCoord());
+        TemplateOfFigure tof_down = new TemplateOfFigure(typeOfFigure, figure.getRowCount(), figure.getColumnCount(),
+                subFigure.getRowCoord() + 1, subFigure.getColumnCoord());
 
         if (rootGlass.hasIntersectionWithFigure(tof_down)) {
             log.debug("TOF: '{}' is not DOWN available, because rootGlass.hasIntersectionWithFigure(tof_down)",
@@ -222,8 +228,8 @@ public class TemplateOfFigure {
     }
 
     public void up() {
-        for (int i = 0; i < Constants.matrY; i++) {
-            for (int j = 0; j < Constants.matrX; j++) {
+        for (int i = 0; i < Constants.MATR_ROW; i++) {
+            for (int j = 0; j < Constants.MATR_COLUMN; j++) {
                 if (figure.getMatr()[i][j] != 0) {
                     figure.getMatr()[i - 1][j] = figure.getMatr()[i][j];
                     figure.getMatr()[i][j] = 0;
@@ -233,7 +239,8 @@ public class TemplateOfFigure {
     }
 
     private boolean isLeftAvailable(RootGlass rootGlass) {
-        byte minColumn = getMinColumn();
+        int minColumn = getMinColumn();
+
         if (minColumn <= 0) {
             log.debug("TOF: '{}' is not LEFT available, because minColumn <= 0; minColumn = {}, rootGlass.getColumnCount() = {}",
                     typeOfFigure, minColumn, rootGlass.getColumnCount());
@@ -247,6 +254,7 @@ public class TemplateOfFigure {
                     typeOfFigure);
             return false;
         }
+
         return true;
     }
 
@@ -271,11 +279,14 @@ public class TemplateOfFigure {
     public void moveLeft(RootGlass rootGlass) {
         if (isLeftAvailable(rootGlass)) {
             moveLeftForce();
+            log.debug("typeOfFigure: {} is left Available", typeOfFigure);
+        } else {
+            log.debug("typeOfFigure: {} is not left Available", typeOfFigure);
         }
     }
 
     private boolean isRightAvailable(RootGlass rootGlass) {
-        byte maxColumn = getMaxColumn();
+        int maxColumn = getMaxColumn();
         if (maxColumn >= rootGlass.getColumnCount() - 1) {
             log.debug("TOF: '{}' is not RIGHT available, because maxColumn > rootGlass.getColumnCount() - 1; maxColumn = {}, rootGlass.getColumnCount() = {}",
                     typeOfFigure, maxColumn, rootGlass.getColumnCount());
@@ -307,7 +318,7 @@ public class TemplateOfFigure {
             return;
         }
         subFigure.incrementColumn();
-        log.debug("move right force TOF: '{}'", this);
+        log.debug("TOF: '{}' move RIGHT force", typeOfFigure);
     }
 
     public void moveRight(RootGlass rootGlass) {
@@ -317,7 +328,8 @@ public class TemplateOfFigure {
     }
 
     private boolean isRotateAvailable(RootGlass rootGlass) {
-        TemplateOfFigure tof_rotate = new TemplateOfFigure(typeOfFigure, subFigure.getRowCoord(), subFigure.getColumnCoord()).rotationAngleInt(90);
+        TemplateOfFigure tof_rotate = new TemplateOfFigure(typeOfFigure, figure.getRowCount(), figure.getColumnCount(),
+                subFigure.getRowCoord(), subFigure.getColumnCoord()).rotationAngleInt(90);
         if (rootGlass.hasIntersectionWithFigure(tof_rotate)) {
             log.debug("TOF: '{}' is not ROTATE available, because rootGlass.hasIntersectionWithFigure(tof_rotate)",
                     typeOfFigure);
@@ -330,7 +342,7 @@ public class TemplateOfFigure {
      * Метод для движа влево, если фигура плотничком в правом краю и ее длина больше ширины
      */
     private void leftBeforeRotate(RootGlass rootGlass) {
-        if (subFigure.getRowCount() > figure.getColumnCount() -  subFigure.getColumnCoord()) {
+        if (subFigure.getRowCount() > figure.getColumnCount() - subFigure.getColumnCoord()) {
             moveLeftForce();
         }
     }
@@ -356,7 +368,7 @@ public class TemplateOfFigure {
         return comeDownTime.getComeDownTime(totalPoints);
     }
 
-    private boolean isEmptyRow(byte rowNum) {
+    private boolean isEmptyRow(int rowNum) {
         for (int column = 0; column < figure.getColumnCount(); column++) {
             if (figure.getMatr()[rowNum][column] != 0) {
                 return false;
@@ -365,7 +377,7 @@ public class TemplateOfFigure {
         return true;
     }
 
-    private boolean isEmptyColumn(byte columnNum) {
+    private boolean isEmptyColumn(int columnNum) {
         for (int row = 0; row < figure.getRowCount(); row++) {
             if (figure.getMatr()[row][columnNum] != 0) {
                 return false;
@@ -374,8 +386,8 @@ public class TemplateOfFigure {
         return true;
     }
 
-    private byte getMinRow() {
-        for (byte row = 0; row < figure.getRowCount(); row++) {
+    private int getMinRow() {
+        for (int row = 0; row < figure.getRowCount(); row++) {
             if (!isEmptyRow(row)) {
                 return row;
             }
@@ -384,8 +396,8 @@ public class TemplateOfFigure {
         return -1;
     }
 
-    private byte getMinColumn() {
-        for (byte column = 0; column < figure.getColumnCount(); column++) {
+    private int getMinColumn() {
+        for (int column = 0; column < figure.getColumnCount(); column++) {
             if (!isEmptyColumn(column)) {
                 return column;
             }
@@ -394,8 +406,8 @@ public class TemplateOfFigure {
         return -1;
     }
 
-    private byte getMaxRow() {
-        for (byte row = (byte) (figure.getRowCount() - 1); row >= 0; row--) {
+    private int getMaxRow() {
+        for (int row = figure.getRowCount() - 1; row >= 0; row--) {
             if (!isEmptyRow(row)) {
                 return row;
             }
@@ -404,8 +416,8 @@ public class TemplateOfFigure {
         return -1;
     }
 
-    private byte getMaxColumn() {
-        for (byte column = (byte) (figure.getColumnCount() - 1); column >= 0; column--) {
+    private int getMaxColumn() {
+        for (int column = figure.getColumnCount() - 1; column >= 0; column--) {
             if (!isEmptyColumn(column)) {
                 return column;
             }
@@ -415,7 +427,9 @@ public class TemplateOfFigure {
     }
 
     public TemplateOfFigure clone() {
-        TemplateOfFigure tofClone = new TemplateOfFigure(typeOfFigure, subFigure.getRowCoord(), subFigure.getColumnCoord());
+        TemplateOfFigure tofClone = new TemplateOfFigure(typeOfFigure, figure.getRowCount(), figure.getColumnCount(),
+                subFigure.getRowCoord(), subFigure.getColumnCoord());
+
         tofClone.rotationAngleInt(this.rotationAngle.getAngle());
         return tofClone;
     }

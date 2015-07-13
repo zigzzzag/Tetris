@@ -118,10 +118,10 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
         gr2d.drawString("FPS_LAST_SECOND: " + fpsLastSecondSave, 180, 240);
 
         gr2d.setColor(Constants.alphaBlack3);
-        gr2d.fillRoundRect(Constants.indentLeft - 10, Constants.indentUp - 10, Constants.quadrateSize * 10 + 20, Constants.quadrateSize * 20 + 20, 10, 10);
+        gr2d.fillRoundRect(Constants.INDENT_LEFT - 10, Constants.INDENT_UP - 10, Constants.QUADRATE_SIZE * 10 + 20, Constants.QUADRATE_SIZE * 20 + 20, 10, 10);
 
         gr2d.setColor(Color.BLACK);
-        gr2d.drawRect(Constants.indentLeft, Constants.indentUp, Constants.quadrateSize * 10, Constants.quadrateSize * 20);
+        gr2d.drawRect(Constants.INDENT_LEFT, Constants.INDENT_UP, Constants.QUADRATE_SIZE * 10, Constants.QUADRATE_SIZE * 20);
 
         gameContext.paint(gr2d);
 

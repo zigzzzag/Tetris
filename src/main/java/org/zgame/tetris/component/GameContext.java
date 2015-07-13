@@ -29,20 +29,20 @@ public class GameContext implements Runnable {
         rootGlass = new RootGlass();
 //        figureShadow = new TemplateOfFigure();
 
-        currentFigure = new TemplateOfFigure(5);//new Random().nextInt(7) + 1
-        nextFigure = new TemplateOfFigure(5);//new Random().nextInt(7) + 1
+        currentFigure = new TemplateOfFigure(FigureType.getTypeByIntVal(5));//new Random().nextInt(7) + 1
+        nextFigure = new TemplateOfFigure(FigureType.getTypeByIntVal(5));//new Random().nextInt(7) + 1
     }
 
     @Override
     public void run() {
         while (!gameOver) {
             if (!currentFigure.isDownAvailable(rootGlass)) {
-                for (int row = 0; row < Constants.matrY; row++) {
-                    for (int column = 0; column < Constants.matrX; column++) {
+                for (int row = 0; row < Constants.MATR_ROW; row++) {
+                    for (int column = 0; column < Constants.MATR_COLUMN; column++) {
                         if (rootGlass.getFilledGlass()[row][column] == 0) {
                             break;
                         }
-                        if (column == Constants.matrX - 1) {
+                        if (column == Constants.MATR_COLUMN - 1) {
                             rootGlass.deleteFullLine(row);
 //                            for (int t = 0; t < 10; t++) {
 //                                particles.add(new ParticleEffect(FigurePaint.converFromIndexColumn(t), FigurePaint.converFromIndexRow(row)));
@@ -62,8 +62,8 @@ public class GameContext implements Runnable {
             } else {
                 currentFigure.moveDown(rootGlass);
             }
-//            for (int row = 0; row < Constants.matrY; row++) {
-//                System.arraycopy(currentFigure.getFigure()[row], 0, figureShadow.getFigure()[row], 0, Constants.matrX);
+//            for (int row = 0; row < Constants.MATR_ROW; row++) {
+//                System.arraycopy(currentFigure.getFigure()[row], 0, figureShadow.getFigure()[row], 0, Constants.MATR_COLUMN);
 //            }
 
 //            while (!figureShadow.isDownBarrier(rootGlass)) {
@@ -93,14 +93,14 @@ public class GameContext implements Runnable {
     }
 
     public void nextStep() {
-        for (int row = 0; row < Constants.matrY; row++) {
-            for (int column = 0; column < Constants.matrX; column++) {
+        for (int row = 0; row < Constants.MATR_ROW; row++) {
+            for (int column = 0; column < Constants.MATR_COLUMN; column++) {
                 rootGlass.getFilledGlass()[row][column] += currentFigure.getFigure().getMatr()[row][column];
             }
         }
 
         currentFigure = nextFigure;
-        nextFigure = new TemplateOfFigure(new Random().nextInt(7) + 1);
+        nextFigure = new TemplateOfFigure(FigureType.getTypeByIntVal(new Random().nextInt(7) + 1));
 //        int rotateRandom = new Random().nextInt(4);
 //        for (int i = 0; i < rotateRandom; i++) {
 //            nextFigure.rotate(rootGlass);
@@ -128,14 +128,14 @@ public class GameContext implements Runnable {
     }
 
     public void gameReset() {
-        for (int row = 0; row < Constants.matrY; row++) {
-            for (int column = 0; column < Constants.matrX; column++) {
+        for (int row = 0; row < Constants.MATR_ROW; row++) {
+            for (int column = 0; column < Constants.MATR_COLUMN; column++) {
                 rootGlass.getFilledGlass()[row][column] = 0;
             }
         }
 //        pointsAll = 0;
         gameOver = true;
-        currentFigure = new TemplateOfFigure(new Random().nextInt(6) + 1);
+        currentFigure = new TemplateOfFigure(FigureType.getTypeByIntVal(new Random().nextInt(6) + 1));
     }
 
     public int getDeleteLinePoints(int points) {

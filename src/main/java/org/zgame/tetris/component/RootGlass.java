@@ -13,8 +13,8 @@ import java.util.Arrays;
 public class RootGlass {
 
     private static final Logger log = LoggerFactory.getLogger(RootGlass.class);
-    private byte rowCount = Constants.matrY;
-    private byte columnCount = Constants.matrX;
+    private int rowCount = Constants.MATR_ROW;
+    private int columnCount = Constants.MATR_COLUMN;
     private byte[][] filledGlass;
 
     public RootGlass() {
@@ -22,7 +22,8 @@ public class RootGlass {
     }
 
     public RootGlass(byte[][] filledGlass) {
-        this();
+        this.rowCount = filledGlass.length;
+        this.columnCount = filledGlass[0].length;
         this.filledGlass = filledGlass;
     }
 
@@ -39,7 +40,7 @@ public class RootGlass {
 
     public void deleteFullLine(int lineNumber) {
         for (int row = lineNumber - 1; row >= 0; row--) {
-            for (int column = 0; column < Constants.matrX; column++) {
+            for (int column = 0; column < Constants.MATR_COLUMN; column++) {
                 filledGlass[row + 1][column] = filledGlass[row][column];
                 filledGlass[row][column] = 0;
             }
@@ -48,7 +49,7 @@ public class RootGlass {
 
     public Boolean verifyGameOver() {
         boolean over = false;
-        for (int j = 2; j < Constants.matrX - 2; j++) {
+        for (int j = 2; j < Constants.MATR_COLUMN - 2; j++) {
             if (filledGlass[0][j] != 0) {
                 over = true;
             }
@@ -58,8 +59,8 @@ public class RootGlass {
     }
 
     public boolean hasIntersectionWithFigure(TemplateOfFigure tof) {
-        for (byte row = 0; row < rowCount; row++) {
-            for (byte column = 0; column < columnCount; column++) {
+        for (int row = 0; row < rowCount; row++) {
+            for (int column = 0; column < columnCount; column++) {
                 if (tof.getFigure().getMatr()[row][column] != 0 && filledGlass[row][column] != 0) {
                     log.trace("RootGlass has intersection with TOF {}: (row, column) -> ({},{})", tof.getTypeOfFigure(), row, column);
                     return true;
@@ -82,19 +83,19 @@ public class RootGlass {
         this.filledGlass = filledGlass;
     }
 
-    public byte getRowCount() {
+    public int getRowCount() {
         return rowCount;
     }
 
-    public void setRowCount(byte rowCount) {
+    public void setRowCount(int rowCount) {
         this.rowCount = rowCount;
     }
 
-    public byte getColumnCount() {
+    public int getColumnCount() {
         return columnCount;
     }
 
-    public void setColumnCount(byte columnCount) {
+    public void setColumnCount(int columnCount) {
         this.columnCount = columnCount;
     }
 }

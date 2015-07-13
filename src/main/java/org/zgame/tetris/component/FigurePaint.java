@@ -84,10 +84,10 @@ public class FigurePaint {
     }
 
     public static int converFromIndexColumn(int column) {
-        return column * Constants.quadrateSize + Constants.indentLeft;
+        return column * Constants.QUADRATE_SIZE + Constants.INDENT_LEFT;
     }
 
     public static int converFromIndexRow(int row) {
-        return row * Constants.quadrateSize + Constants.indentUp;
+        return row * Constants.QUADRATE_SIZE + Constants.INDENT_UP;
     }
 }

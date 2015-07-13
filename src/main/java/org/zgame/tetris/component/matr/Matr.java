@@ -50,6 +50,31 @@ public class Matr {
         }
     }
 
+    private boolean isEmptyRow(int rowNum) {
+        for (int column = 0; column < columnCount; column++) {
+            if (matr[rowNum][column] != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public String toNotZeroString() {
+        StringBuilder sb = new StringBuilder();
+        for (int row = 0; row < rowCount; row++) {
+            if (!isEmptyRow(row)) {
+                sb.append("row ").append(row).append(":").append("[");
+                for (int column = 0; column < columnCount; column++) {
+                    if (matr[row][column] != 0) {
+                        sb.append(matr[row][column]).append("(").append(column).append(")");
+                    }
+                }
+                sb.append("]  |  ");
+            }
+        }
+        return sb.toString();
+    }
+
     public byte[][] getMatr() {
         return matr;
     }
