@@ -176,14 +176,6 @@ public class TemplateOfFigure {
         this.figure.setAllNotNullElements(colorByte);
     }
 
-    public Matr getFigure() {
-        return figure;
-    }
-
-    public void setFigure(Matr figure) {
-        this.figure = figure;
-    }
-
     private void clear() {
         this.figure.clear();
     }
@@ -200,6 +192,53 @@ public class TemplateOfFigure {
         return false;
     }
 
+    public boolean isUpAvailable(RootGlass rootGlass) {
+        int minRow = getMinRow();
+        if (minRow > 0) {
+            byte[][] matrUp = MatrUtils.getUpMatr(figure.getMatr());
+            if (!rootGlass.hasIntersectionWithMatr(matrUp)) {
+                return true;
+            }
+        }
+        log.debug("TOF: '{}' is not UP available", typeOfFigure);
+        return false;
+    }
+
+    private boolean isLeftAvailable(RootGlass rootGlass) {
+        int minColumn = getMinColumn();
+        if (minColumn > 0) {
+            byte[][] matrLeft = MatrUtils.getLeftMatr(figure.getMatr());
+            if (!rootGlass.hasIntersectionWithMatr(matrLeft)) {
+                return true;
+            }
+        }
+        log.debug("TOF: '{}' is not LEFT available", typeOfFigure);
+        return false;
+    }
+
+    private boolean isRightAvailable(RootGlass rootGlass) {
+        int maxColumn = getMaxColumn();
+        if (maxColumn < rootGlass.getColumnCount() - 1) {
+            byte[][] matrRight = MatrUtils.getRightMatr(figure.getMatr());
+            if (!rootGlass.hasIntersectionWithMatr(matrRight)) {
+                return true;
+            }
+        }
+        log.debug("TOF: '{}' is not RIGHT available", typeOfFigure);
+        return false;
+    }
+
+    private boolean isRotateAvailable(RootGlass rootGlass) {
+        TemplateOfFigure tof_rotate = new TemplateOfFigure(typeOfFigure, figure.getRowCount(), figure.getColumnCount(),
+                subFigure.getRowCoord(), subFigure.getColumnCoord()).rotationAngleInt(90);
+        if (rootGlass.hasIntersectionWithMatr(tof_rotate.getFigure().getMatr())) {
+            log.debug("TOF: '{}' is not ROTATE available, because rootGlass.hasIntersectionWithFigure(tof_rotate)",
+                    typeOfFigure);
+            return false;
+        }
+        return true;
+    }
+
     private void moveDownForce() {
         byte[][] matr = figure.getMatr();
         for (int row = figure.getRowCount() - 1; row >= 0; row--) {
@@ -214,17 +253,6 @@ public class TemplateOfFigure {
         log.debug("TOF: '{}' move DOWN force", typeOfFigure);
     }
 
-    public void moveDown(RootGlass rootGlass) {
-        lock.lock();
-        try {
-            if (isDownAvailable(rootGlass)) {
-                moveDownForce();
-            }
-        } finally {
-            lock.unlock();
-        }
-    }
-
     private void moveUpForce() {
         byte[][] matr = figure.getMatr();
         for (int row = 0; row < figure.getRowCount(); row++) {
@@ -237,41 +265,6 @@ public class TemplateOfFigure {
         }
         subFigure.decrementRow();
         log.debug("TOF: '{}' move UP force", typeOfFigure);
-    }
-
-    public boolean isUpAvailable(RootGlass rootGlass) {
-        int minRow = getMinRow();
-        if (minRow > 0) {
-            byte[][] matrUp = MatrUtils.getUpMatr(figure.getMatr());
-            if (!rootGlass.hasIntersectionWithMatr(matrUp)) {
-                return true;
-            }
-        }
-        log.debug("TOF: '{}' is not UP available", typeOfFigure);
-        return false;
-    }
-
-    public void moveUp(RootGlass rootGlass) {
-        lock.lock();
-        try {
-            if (isUpAvailable(rootGlass)) {
-                moveUpForce();
-            }
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    private boolean isLeftAvailable(RootGlass rootGlass) {
-        int minColumn = getMinColumn();
-        if (minColumn > 0) {
-            byte[][] matrLeft = MatrUtils.getLeftMatr(figure.getMatr());
-            if (!rootGlass.hasIntersectionWithMatr(matrLeft)) {
-                return true;
-            }
-        }
-        log.debug("TOF: '{}' is not LEFT available", typeOfFigure);
-        return false;
     }
 
     private void moveLeftForce() {
@@ -292,29 +285,6 @@ public class TemplateOfFigure {
         log.debug("TOF: '{}' move LEFT force", typeOfFigure);
     }
 
-    public void moveLeft(RootGlass rootGlass) {
-        lock.lock();
-        try {
-            if (isLeftAvailable(rootGlass)) {
-                moveLeftForce();
-            }
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    private boolean isRightAvailable(RootGlass rootGlass) {
-        int maxColumn = getMaxColumn();
-        if (maxColumn < rootGlass.getColumnCount() - 1) {
-            byte[][] matrRight = MatrUtils.getRightMatr(figure.getMatr());
-            if (!rootGlass.hasIntersectionWithMatr(matrRight)) {
-                return true;
-            }
-        }
-        log.debug("TOF: '{}' is not RIGHT available", typeOfFigure);
-        return false;
-    }
-
     private void moveRightForce() {
         try {
             for (int row = 0; row < figure.getRowCount(); row++) {
@@ -333,6 +303,45 @@ public class TemplateOfFigure {
         log.debug("TOF: '{}' move RIGHT force", typeOfFigure);
     }
 
+    private void rotateForce() {
+        subFigure.update(figure);
+        subFigure.transposeMatrClockWise();
+        figure.copySubMatr(subFigure);
+    }
+
+    public void moveDown(RootGlass rootGlass) {
+        lock.lock();
+        try {
+            if (isDownAvailable(rootGlass)) {
+                moveDownForce();
+            }
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public void moveUp(RootGlass rootGlass) {
+        lock.lock();
+        try {
+            if (isUpAvailable(rootGlass)) {
+                moveUpForce();
+            }
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public void moveLeft(RootGlass rootGlass) {
+        lock.lock();
+        try {
+            if (isLeftAvailable(rootGlass)) {
+                moveLeftForce();
+            }
+        } finally {
+            lock.unlock();
+        }
+    }
+
     public void moveRight(RootGlass rootGlass) {
         lock.lock();
         try {
@@ -341,26 +350,6 @@ public class TemplateOfFigure {
             }
         } finally {
             lock.unlock();
-        }
-    }
-
-    private boolean isRotateAvailable(RootGlass rootGlass) {
-        TemplateOfFigure tof_rotate = new TemplateOfFigure(typeOfFigure, figure.getRowCount(), figure.getColumnCount(),
-                subFigure.getRowCoord(), subFigure.getColumnCoord()).rotationAngleInt(90);
-        if (rootGlass.hasIntersectionWithMatr(tof_rotate.getFigure().getMatr())) {
-            log.debug("TOF: '{}' is not ROTATE available, because rootGlass.hasIntersectionWithFigure(tof_rotate)",
-                    typeOfFigure);
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * Метод для движа влево, если фигура плотничком в правом краю и ее длина больше ширины
-     */
-    private void leftBeforeRotate(RootGlass rootGlass) {
-        if (subFigure.getRowCount() > figure.getColumnCount() - subFigure.getColumnCoord()) {
-            moveLeftForce();
         }
     }
 
@@ -373,10 +362,13 @@ public class TemplateOfFigure {
         }
     }
 
-    private void rotateForce() {
-        subFigure.update(figure);
-        subFigure.transposeMatrClockWise();
-        figure.copySubMatr(subFigure);
+    /**
+     * Метод для движа влево, если фигура плотничком в правом краю и ее длина больше ширины
+     */
+    private void leftBeforeRotate(RootGlass rootGlass) {
+        if (subFigure.getRowCount() > figure.getColumnCount() - subFigure.getColumnCoord()) {
+            moveLeftForce();
+        }
     }
 
     public long getComeDownTime(int totalPoints) {
@@ -487,5 +479,13 @@ public class TemplateOfFigure {
 
     public void setSubFigure(SubMatr subFigure) {
         this.subFigure = subFigure;
+    }
+
+    public Matr getFigure() {
+        return figure;
+    }
+
+    public void setFigure(Matr figure) {
+        this.figure = figure;
     }
 }
