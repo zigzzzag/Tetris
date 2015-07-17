@@ -58,11 +58,11 @@ public class RootGlass {
         return false;
     }
 
-    public boolean hasIntersectionWithFigure(TemplateOfFigure tof) {
+    public boolean hasIntersectionWithMatr(byte[][] matr) {
         for (int row = 0; row < rowCount; row++) {
             for (int column = 0; column < columnCount; column++) {
-                if (tof.getFigure().getMatr()[row][column] != 0 && filledGlass[row][column] != 0) {
-                    log.trace("RootGlass has intersection with TOF {}: (row, column) -> ({},{})", tof.getTypeOfFigure(), row, column);
+                if (matr[row][column] != 0 && filledGlass[row][column] != 0) {
+                    log.trace("RootGlass has intersection with matr: (row, column) -> ({},{})", row, column);
                     return true;
                 }
             }

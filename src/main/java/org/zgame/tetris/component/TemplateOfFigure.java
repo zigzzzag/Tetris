@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.zgame.tetris.component.comedowntime.ComeDownTime;
 import org.zgame.tetris.component.comedowntime.TestComeDownTime;
 import org.zgame.tetris.component.matr.Matr;
+import org.zgame.tetris.component.matr.MatrUtils;
 import org.zgame.tetris.component.matr.SubMatr;
 import org.zgame.utils.Constants;
 
@@ -190,10 +191,9 @@ public class TemplateOfFigure {
     public boolean isDownAvailable(RootGlass rootGlass) {
         int maxRow = getMaxRow();
         if (maxRow < rootGlass.getRowCount() - 1) {
-            TemplateOfFigure tof_down = new TemplateOfFigure(typeOfFigure, figure.getRowCount(), figure.getColumnCount(),
-                    subFigure.getRowCoord() + 1, subFigure.getColumnCoord());
+            byte[][] matrDown = MatrUtils.getDownMatr(figure.getMatr());
 
-            if (!rootGlass.hasIntersectionWithFigure(tof_down)) {
+            if (!rootGlass.hasIntersectionWithMatr(matrDown)) {
                 return true;
             }
         }
@@ -246,7 +246,7 @@ public class TemplateOfFigure {
             TemplateOfFigure tof_down = new TemplateOfFigure(typeOfFigure, figure.getRowCount(), figure.getColumnCount(),
                     subFigure.getRowCoord() - 1, subFigure.getColumnCoord());
 
-            if (!rootGlass.hasIntersectionWithFigure(tof_down)) {
+            if (!rootGlass.hasIntersectionWithMatr(tof_down.getFigure().getMatr())) {
                 return true;
             }
         }
@@ -276,7 +276,7 @@ public class TemplateOfFigure {
 
         TemplateOfFigure tofLeft = this.clone();
         tofLeft.moveLeftForce();
-        if (rootGlass.hasIntersectionWithFigure(tofLeft)) {
+        if (rootGlass.hasIntersectionWithMatr(tofLeft.getFigure().getMatr())) {
             log.debug("TOF: '{}' is not LEFT available, because rootGlass.hasIntersectionWithFigure(tofLeft)",
                     typeOfFigure);
             return false;
@@ -324,7 +324,7 @@ public class TemplateOfFigure {
 
         TemplateOfFigure tof_right = this.clone();
         tof_right.moveRightForce();
-        if (rootGlass.hasIntersectionWithFigure(tof_right)) {
+        if (rootGlass.hasIntersectionWithMatr(tof_right.getFigure().getMatr())) {
             log.debug("TOF: '{}' is not RIGHT available, because rootGlass.hasIntersectionWithFigure(tof_right)",
                     typeOfFigure);
             return false;
@@ -364,7 +364,7 @@ public class TemplateOfFigure {
     private boolean isRotateAvailable(RootGlass rootGlass) {
         TemplateOfFigure tof_rotate = new TemplateOfFigure(typeOfFigure, figure.getRowCount(), figure.getColumnCount(),
                 subFigure.getRowCoord(), subFigure.getColumnCoord()).rotationAngleInt(90);
-        if (rootGlass.hasIntersectionWithFigure(tof_rotate)) {
+        if (rootGlass.hasIntersectionWithMatr(tof_rotate.getFigure().getMatr())) {
             log.debug("TOF: '{}' is not ROTATE available, because rootGlass.hasIntersectionWithFigure(tof_rotate)",
                     typeOfFigure);
             return false;
