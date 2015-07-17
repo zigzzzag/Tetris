@@ -52,6 +52,10 @@ public class RunnableForMove implements Runnable {
                 tof.moveDown(rootGlass);
                 break;
             }
+            case UP: {
+                tof.moveUp(rootGlass);
+                break;
+            }
             default: {
                 log.warn("moveType not defined!");
             }

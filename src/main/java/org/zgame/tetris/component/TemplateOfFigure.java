@@ -497,4 +497,12 @@ public class TemplateOfFigure {
     public void setState(FigureState state) {
         this.state = state;
     }
+
+    public SubMatr getSubFigure() {
+        return subFigure;
+    }
+
+    public void setSubFigure(SubMatr subFigure) {
+        this.subFigure = subFigure;
+    }
 }
