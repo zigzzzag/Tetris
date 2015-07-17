@@ -28,4 +28,52 @@ public class MatrUtils {
 
         return downMatr;
     }
+
+    public static byte[][] getUpMatr(byte[][] sourceMatr) {
+        byte[][] upMatr = new byte[sourceMatr.length][sourceMatr[0].length];
+
+        copyMatr(sourceMatr, upMatr);
+
+        for (int row = 0; row < sourceMatr.length; row++) {
+            for (int column = 0; column < sourceMatr[0].length; column++) {
+                if (sourceMatr[row][column] != 0) {
+                    upMatr[row - 1][column] = sourceMatr[row][column];
+                }
+            }
+        }
+
+        return upMatr;
+    }
+
+    public static byte[][] getLeftMatr(byte[][] sourceMatr) {
+        byte[][] leftMatr = new byte[sourceMatr.length][sourceMatr[0].length];
+
+        copyMatr(sourceMatr, leftMatr);
+
+        for (int row = 0; row < sourceMatr.length; row++) {
+            for (int column = 0; column < sourceMatr[0].length; column++) {
+                if (sourceMatr[row][column] != 0) {
+                    leftMatr[row][column - 1] = sourceMatr[row][column];
+                }
+            }
+        }
+
+        return leftMatr;
+    }
+
+    public static byte[][] getRightMatr(byte[][] sourceMatr) {
+        byte[][] leftMatr = new byte[sourceMatr.length][sourceMatr[0].length];
+
+        copyMatr(sourceMatr, leftMatr);
+
+        for (int row = 0; row < sourceMatr.length; row++) {
+            for (int column = 0; column < sourceMatr[0].length; column++) {
+                if (sourceMatr[row][column] != 0) {
+                    leftMatr[row][column + 1] = sourceMatr[row][column];
+                }
+            }
+        }
+
+        return leftMatr;
+    }
 }

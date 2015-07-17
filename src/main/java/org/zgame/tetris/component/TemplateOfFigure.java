@@ -192,7 +192,6 @@ public class TemplateOfFigure {
         int maxRow = getMaxRow();
         if (maxRow < rootGlass.getRowCount() - 1) {
             byte[][] matrDown = MatrUtils.getDownMatr(figure.getMatr());
-
             if (!rootGlass.hasIntersectionWithMatr(matrDown)) {
                 return true;
             }
@@ -243,10 +242,8 @@ public class TemplateOfFigure {
     public boolean isUpAvailable(RootGlass rootGlass) {
         int minRow = getMinRow();
         if (minRow > 0) {
-            TemplateOfFigure tof_down = new TemplateOfFigure(typeOfFigure, figure.getRowCount(), figure.getColumnCount(),
-                    subFigure.getRowCoord() - 1, subFigure.getColumnCoord());
-
-            if (!rootGlass.hasIntersectionWithMatr(tof_down.getFigure().getMatr())) {
+            byte[][] matrUp = MatrUtils.getUpMatr(figure.getMatr());
+            if (!rootGlass.hasIntersectionWithMatr(matrUp)) {
                 return true;
             }
         }
@@ -267,22 +264,14 @@ public class TemplateOfFigure {
 
     private boolean isLeftAvailable(RootGlass rootGlass) {
         int minColumn = getMinColumn();
-
-        if (minColumn <= 0) {
-            log.debug("TOF: '{}' is not LEFT available, because minColumn <= 0; minColumn = {}, rootGlass.getColumnCount() = {}",
-                    typeOfFigure, minColumn, rootGlass.getColumnCount());
-            return false;
+        if (minColumn > 0) {
+            byte[][] matrLeft = MatrUtils.getLeftMatr(figure.getMatr());
+            if (!rootGlass.hasIntersectionWithMatr(matrLeft)) {
+                return true;
+            }
         }
-
-        TemplateOfFigure tofLeft = this.clone();
-        tofLeft.moveLeftForce();
-        if (rootGlass.hasIntersectionWithMatr(tofLeft.getFigure().getMatr())) {
-            log.debug("TOF: '{}' is not LEFT available, because rootGlass.hasIntersectionWithFigure(tofLeft)",
-                    typeOfFigure);
-            return false;
-        }
-
-        return true;
+        log.debug("TOF: '{}' is not LEFT available", typeOfFigure);
+        return false;
     }
 
     private void moveLeftForce() {
@@ -316,20 +305,14 @@ public class TemplateOfFigure {
 
     private boolean isRightAvailable(RootGlass rootGlass) {
         int maxColumn = getMaxColumn();
-        if (maxColumn >= rootGlass.getColumnCount() - 1) {
-            log.debug("TOF: '{}' is not RIGHT available, because maxColumn > rootGlass.getColumnCount() - 1; maxColumn = {}, rootGlass.getColumnCount() = {}",
-                    typeOfFigure, maxColumn, rootGlass.getColumnCount());
-            return false;
+        if (maxColumn < rootGlass.getColumnCount() - 1) {
+            byte[][] matrRight = MatrUtils.getRightMatr(figure.getMatr());
+            if (!rootGlass.hasIntersectionWithMatr(matrRight)) {
+                return true;
+            }
         }
-
-        TemplateOfFigure tof_right = this.clone();
-        tof_right.moveRightForce();
-        if (rootGlass.hasIntersectionWithMatr(tof_right.getFigure().getMatr())) {
-            log.debug("TOF: '{}' is not RIGHT available, because rootGlass.hasIntersectionWithFigure(tof_right)",
-                    typeOfFigure);
-            return false;
-        }
-        return true;
+        log.debug("TOF: '{}' is not RIGHT available", typeOfFigure);
+        return false;
     }
 
     private void moveRightForce() {

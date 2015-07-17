@@ -39,7 +39,7 @@ public class MoveGMultiThreadTest extends TestCase {
         ExecutorService ex = Executors.newFixedThreadPool(100);
         CountDownLatch latch = new CountDownLatch(1);
 
-        for (int i = 0; i < columnCount / 2 - tof.getSubFigure().getColumnCoord(); i++) {
+        for (int i = 0; i < columnCount / 2 - tof.getSubFigure().getColumnCount(); i++) {
             ex.submit(new RunnableForMove(tof, rootGlass, Move.LEFT).latch(latch));
             if (i != 0) {
                 ex.submit(new RunnableForMove(tof, rootGlass, Move.RIGHT).latch(latch));
