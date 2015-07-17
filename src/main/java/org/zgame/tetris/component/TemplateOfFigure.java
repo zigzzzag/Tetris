@@ -135,11 +135,6 @@ public class TemplateOfFigure {
         return this;
     }
 
-    public TemplateOfFigure figure(Matr figure) {
-        this.figure = figure;
-        return this;
-    }
-
     public void paintFigure(Graphics2D g2d) {
         for (int row = 0; row < Constants.MATR_ROW; row++) {
             for (int column = 0; column < Constants.MATR_COLUMN; column++) {
@@ -194,29 +189,25 @@ public class TemplateOfFigure {
 
     public boolean isDownAvailable(RootGlass rootGlass) {
         int maxRow = getMaxRow();
-        if (maxRow >= rootGlass.getRowCount() - 1) {
-            log.debug("TOF: '{}' is not DOWN available, because maxRow >= rootGlass.getRowCount() - 1; maxRow = {}, rootGlass.getColumnCount() = {}",
-                    typeOfFigure, maxRow, rootGlass.getColumnCount());
-            return false;
-        }
+        if (maxRow < rootGlass.getRowCount() - 1) {
+            TemplateOfFigure tof_down = new TemplateOfFigure(typeOfFigure, figure.getRowCount(), figure.getColumnCount(),
+                    subFigure.getRowCoord() + 1, subFigure.getColumnCoord());
 
-        TemplateOfFigure tof_down = new TemplateOfFigure(typeOfFigure, figure.getRowCount(), figure.getColumnCount(),
-                subFigure.getRowCoord() + 1, subFigure.getColumnCoord());
-
-        if (rootGlass.hasIntersectionWithFigure(tof_down)) {
-            log.debug("TOF: '{}' is not DOWN available, because rootGlass.hasIntersectionWithFigure(tof_down)",
-                    typeOfFigure);
-            return false;
+            if (!rootGlass.hasIntersectionWithFigure(tof_down)) {
+                return true;
+            }
         }
-        return true;
+        log.debug("TOF: '{}' is not DOWN available", typeOfFigure);
+        return false;
     }
 
     private void moveDownForce() {
+        byte[][] matr = figure.getMatr();
         for (int row = figure.getRowCount() - 1; row >= 0; row--) {
             for (int column = 0; column < figure.getColumnCount(); column++) {
-                if (figure.getMatr()[row][column] != 0) {
-                    figure.getMatr()[row + 1][column] = figure.getMatr()[row][column];
-                    figure.getMatr()[row][column] = 0;
+                if (matr[row][column] != 0) {
+                    matr[row + 1][column] = matr[row][column];
+                    matr[row][column] = 0;
                 }
             }
         }
@@ -235,14 +226,42 @@ public class TemplateOfFigure {
         }
     }
 
-    public void up() {
-        for (int i = 0; i < Constants.MATR_ROW; i++) {
-            for (int j = 0; j < Constants.MATR_COLUMN; j++) {
-                if (figure.getMatr()[i][j] != 0) {
-                    figure.getMatr()[i - 1][j] = figure.getMatr()[i][j];
-                    figure.getMatr()[i][j] = 0;
+    private void moveUpForce() {
+        byte[][] matr = figure.getMatr();
+        for (int row = 0; row < figure.getRowCount(); row++) {
+            for (int column = 0; column < figure.getColumnCount(); column++) {
+                if (matr[row][column] != 0) {
+                    matr[row - 1][column] = matr[row][column];
+                    matr[row][column] = 0;
                 }
             }
+        }
+        subFigure.decrementRow();
+        log.debug("TOF: '{}' move UP force", typeOfFigure);
+    }
+
+    public boolean isUpAvailable(RootGlass rootGlass) {
+        int minRow = getMinRow();
+        if (minRow > 0) {
+            TemplateOfFigure tof_down = new TemplateOfFigure(typeOfFigure, figure.getRowCount(), figure.getColumnCount(),
+                    subFigure.getRowCoord() - 1, subFigure.getColumnCoord());
+
+            if (!rootGlass.hasIntersectionWithFigure(tof_down)) {
+                return true;
+            }
+        }
+        log.debug("TOF: '{}' is not UP available", typeOfFigure);
+        return false;
+    }
+
+    public void moveUp(RootGlass rootGlass) {
+        lock.lock();
+        try {
+            if (isUpAvailable(rootGlass)) {
+                moveUpForce();
+            }
+        } finally {
+            lock.unlock();
         }
     }
 
