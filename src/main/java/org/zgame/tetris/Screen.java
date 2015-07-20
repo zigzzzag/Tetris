@@ -29,9 +29,8 @@ import java.lang.reflect.InvocationTargetException;
 public class Screen extends JFrame implements KeyListener {
 
     private static final Logger log = LoggerFactory.getLogger(Screen.class);
-    private GraphicsDevice gd = null;
+    private GraphicsDevice defaultGraphicsDevice = null;
     private StageInterface currentStage = null;
-    private BufferStrategy bufferStrategy;
 
     public Screen() {
         super("Tetris");
@@ -40,14 +39,17 @@ public class Screen extends JFrame implements KeyListener {
 
     public void initScreen() {
         GraphicsEnvironment gEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        gd = gEnvironment.getDefaultScreenDevice();
+        defaultGraphicsDevice = gEnvironment.getDefaultScreenDevice();
+
         setUndecorated(true);
+        defaultGraphicsDevice.setFullScreenWindow(this);
 
-        gd.setFullScreenWindow(this);
+        this.createBufferStrategy(2);
 
-        setDisplayMode(1024, 768, 32);
 
-        setBufferStrategy();
+//        setDisplayMode(1024, 768, 32);
+
+//        setBufferStrategy();
 
         addMouseListener(new MouseAdapter() {
             @Override
@@ -61,7 +63,7 @@ public class Screen extends JFrame implements KeyListener {
 
     public void setDisplayMode(int width, int height, int bpp) {
         DisplayMode dm = new DisplayMode(width, height, bpp, DisplayMode.REFRESH_RATE_UNKNOWN);
-        gd.setDisplayMode(dm);
+        defaultGraphicsDevice.setDisplayMode(dm);
         try {
             Thread.sleep(1000);
         } catch (InterruptedException ex) {
@@ -77,7 +79,7 @@ public class Screen extends JFrame implements KeyListener {
 
     public void update() {
         if (image == null) {
-            image = gd.getDefaultConfiguration().createCompatibleVolatileImage(1024, 768, 1);
+            image = defaultGraphicsDevice.getDefaultConfiguration().createCompatibleVolatileImage(1024, 768, 1);
             image.setAccelerationPriority(1);
         }
 
@@ -90,38 +92,15 @@ public class Screen extends JFrame implements KeyListener {
             currentStage.render(g);
         }
 
-        Graphics2D gScr = (Graphics2D) bufferStrategy.getDrawGraphics();
+        Graphics2D gScr = (Graphics2D) getBufferStrategy().getDrawGraphics();
         gScr.drawImage(image, 0, 0, null);
         gScr.dispose();
 
-        if (!bufferStrategy.contentsLost()) {
-            bufferStrategy.show();
+        if (!getBufferStrategy().contentsLost()) {
+            getBufferStrategy().show();
         } else {
             Toolkit.getDefaultToolkit().sync();
         }
-    }
-
-    private void setBufferStrategy() {
-        try {
-            EventQueue.invokeAndWait(new Runnable() {
-                @Override
-                public void run() {
-                    createBufferStrategy(3);
-                }
-            });
-        } catch (InterruptedException e) {
-            log.error("Error while creating buffer strategy", e);
-            System.exit(0);
-        } catch (InvocationTargetException e) {
-            log.error("Error while creating buffer strategy", e);
-            System.exit(0);
-        }
-        try { // sleep to give time for buffer strategy to be done
-            Thread.sleep(500); // 0.5 sec
-        } catch (InterruptedException ex) {
-            log.error(ex.getMessage(), ex);
-        }
-        bufferStrategy = getBufferStrategy();
     }
 
     @Override
