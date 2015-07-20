@@ -4,13 +4,14 @@
  */
 package org.zgame.tetris;
 
-import org.zgame.stage.InputNameFrame;
-import org.zgame.stage.WelcomeStage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.zgame.stage.InputNameFrame;
+import org.zgame.stage.WelcomeStage;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -21,8 +22,6 @@ public class Main {
 
     private static final Logger log = LoggerFactory.getLogger(Main.class);
     private static Screen scr;
-    private static boolean start;
-    private static boolean startFirst = true;
     private static String name;
     private static URL tetrisscore;
 
@@ -34,11 +33,7 @@ public class Main {
         return name;
     }
 
-    public static void setStart(boolean start) {
-        Main.start = start;
-    }
-
-    public static Screen getInstance() {
+    public static Screen getScreen() {
         return scr;
     }
 
@@ -86,33 +81,23 @@ public class Main {
 
         try {
             tetrisscore = new URL("http://tetrisscore2.appspot.com/");
+            InputStreamReader isr = new InputStreamReader(tetrisscore.openStream(), "UTF-8");
             try {
-                InputStreamReader isr = new InputStreamReader(tetrisscore.openStream(), "UTF-8");
                 log.info(convertStreamToString(isr));
-            } catch (IOException ex) {
-                log.error(ex.getMessage(), ex);
+            } finally {
+                isr.close();
             }
         } catch (MalformedURLException ex) {
             log.error(ex.getMessage(), ex);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        while (true) {
-            if (start) {
-                if (startFirst) {
-                    scr = new Screen();
-                    scr.initScreen();
-                    scr.setCurrentStage(new WelcomeStage());
-                    startFirst = false;
-                }
-                scr.update();
-            } else {
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException ex) {
-                    log.error(ex.getMessage(), ex);
-                }
-            }
-        }
+        scr = new Screen();
+        scr.initScreen(new WelcomeStage());
+        scr.updateLoop();
     }
 
     private static String convertStreamToString(java.io.InputStreamReader is) {

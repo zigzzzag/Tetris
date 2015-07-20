@@ -37,12 +37,14 @@ public class GameContext implements Runnable {
     public void run() {
         while (!gameOver) {
             if (!currentFigure.isDownAvailable(rootGlass)) {
-                for (int row = 0; row < Constants.MATR_ROW; row++) {
-                    for (int column = 0; column < Constants.MATR_COLUMN; column++) {
+                for (int row = 0; row < rootGlass.getRowCount(); row++) {
+                    for (int column = 0; column < rootGlass.getColumnCount(); column++) {
                         if (rootGlass.getFilledGlass()[row][column] == 0) {
                             break;
                         }
-                        if (column == Constants.MATR_COLUMN - 1) {
+                        //последняя не нулевая, значит вся линия запол
+                        if (column == rootGlass.getColumnCount() - 1) {
+                            System.out.println("step0");
                             rootGlass.deleteFullLine(row);
 //                            for (int t = 0; t < 10; t++) {
 //                                particles.add(new ParticleEffect(FigurePaint.converFromIndexColumn(t), FigurePaint.converFromIndexRow(row)));
@@ -89,7 +91,7 @@ public class GameContext implements Runnable {
 
         GameOverStage gos = new GameOverStage(this);
 //        gos.setReturnStage(this);
-        Main.getInstance().setCurrentStage(gos);
+        Main.getScreen().setCurrentStage(gos);
     }
 
     public void nextStep() {

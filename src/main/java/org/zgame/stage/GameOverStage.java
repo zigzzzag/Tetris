@@ -31,18 +31,18 @@ public class GameOverStage implements StageInterface, GComponentClickAction {
     int widthBorder = 10;
     int w = 600;
     int h = 300;
-    int sw = Main.getInstance().getWidth();
-    int sh = Main.getInstance().getHeight();
+    int sw = Main.getScreen().getWidth();
+    int sh = Main.getScreen().getHeight();
     private StageInterface returnStage;
-    private BufferedImage preImage = new BufferedImage(Main.getInstance().getWidth(), Main.getInstance().getHeight(), BufferedImage.TYPE_INT_ARGB);
+    private BufferedImage preImage = new BufferedImage(Main.getScreen().getWidth(), Main.getScreen().getHeight(), BufferedImage.TYPE_INT_ARGB);
     private GameContext gameContext;
 
     public GameOverStage(GameContext gameContext) {
         this.gameContext = gameContext;
 
         root = new RootComponent();
-        root.setWidth(Main.getInstance().getWidth());
-        root.setHeight(Main.getInstance().getHeight());
+        root.setWidth(Main.getScreen().getWidth());
+        root.setHeight(Main.getScreen().getHeight());
 
         okButton = new ImageButton("OK", "green_button.png", "OK");
         okButton.setAction((GComponentClickAction) this);
@@ -60,10 +60,10 @@ public class GameOverStage implements StageInterface, GComponentClickAction {
             returnStage.render((Graphics2D) preImage.getGraphics());
             gr2d.drawImage(preImage, null, 0, 0);
             gr2d.setColor(Constants.alphaBlack);
-            gr2d.fillRect(0, 0, Main.getInstance().getWidth(), Main.getInstance().getHeight());
+            gr2d.fillRect(0, 0, Main.getScreen().getWidth(), Main.getScreen().getHeight());
         } else {
             gr2d.setColor(Color.red);
-            gr2d.fillRect(0, 0, Main.getInstance().getWidth(), Main.getInstance().getHeight());
+            gr2d.fillRect(0, 0, Main.getScreen().getWidth(), Main.getScreen().getHeight());
         }
 
         gr2d.setColor(Constants.alphaBlack2);
@@ -83,7 +83,7 @@ public class GameOverStage implements StageInterface, GComponentClickAction {
     public boolean actionClick(GComponent target, ScreenClickEvent event) {
         final String action = target.getComponentName();
         if ("OK".equals(action)) {
-            Main.getInstance().setCurrentStage(new WelcomeStage());
+            Main.getScreen().setCurrentStage(new WelcomeStage());
             TetrisStage ts = (TetrisStage)returnStage;
             gameContext.gameReset();
 //            TetrisStage.gameReset();

@@ -20,9 +20,7 @@ import org.zgame.tetris.component.GameContext;
 import org.zgame.utils.Constants;
 import org.zgame.utils.ParticleEffect;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
@@ -45,8 +43,8 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
 
     public TetrisStage(GameContext gameContext) {
         root = new RootComponent();
-        root.setWidth(Main.getInstance().getWidth());
-        root.setHeight(Main.getInstance().getHeight());
+        root.setWidth(Main.getScreen().getWidth());
+        root.setHeight(Main.getScreen().getHeight());
 
         Thread t = new Thread(gameContext);
         t.start();
@@ -54,7 +52,7 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
         this.gameContext = gameContext;
 
         closeButton = new ImageButton("CLOSE", "blueButton.png", "ВЫХОД");
-        closeButton.setComponentPosX(Main.getInstance().getWidth() - closeButton.getWidth() - 20);
+        closeButton.setComponentPosX(Main.getScreen().getWidth() - closeButton.getWidth() - 20);
         closeButton.setComponentPosY(20);
         root.appendChildElement(closeButton);
         closeButton.setAction((GComponentClickAction) this);
@@ -82,40 +80,16 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
     }
 
     private List<ParticleEffect> particles = new ArrayList<ParticleEffect>();
-    private int start = 0;
-
-    private long timeNow;
-    private long timeLast;
-    private long fullTimeLast = System.currentTimeMillis();
-    private long frameAll;
-    private long fpsMiddle;
-    private long fpsLastSecond;
-    private long fpsLastSecondSave;
 
     @Override
     public void render(Graphics2D gr2d) {
-        timeLast = timeNow;
-        timeNow += System.currentTimeMillis() - fullTimeLast;
-        fullTimeLast = System.currentTimeMillis();
-
-        frameAll++;
-        fpsMiddle = frameAll * 1000 / (timeNow == 0 ? 1 : timeNow);
-
-        fpsLastSecond++;
-
-        timeTCC.setText("Время: " + timeNow);
+//        timeTCC.setText("Время: " + Main.getScreen().getFpsData().);
         root.render(gr2d);
 
         gr2d.setFont(Font.decode("Arial-norm-14"));
 
         gr2d.setColor(Color.ORANGE);
-        gr2d.drawString("FPS_MIDDLE: " + fpsMiddle, 180, 220);
-
-        if (timeLast % 1000 > timeNow % 1000) {
-            fpsLastSecondSave = fpsLastSecond;
-            fpsLastSecond = 0;
-        }
-        gr2d.drawString("FPS_LAST_SECOND: " + fpsLastSecondSave, 180, 240);
+        gr2d.drawString("FPS: " + Main.getScreen().getFpsData().getFPS(), 180, 220);
 
         gr2d.setColor(Constants.alphaBlack3);
         gr2d.fillRoundRect(Constants.INDENT_LEFT - 10, Constants.INDENT_UP - 10, Constants.QUADRATE_SIZE * 10 + 20, Constants.QUADRATE_SIZE * 20 + 20, 10, 10);
@@ -125,15 +99,15 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
 
         gameContext.paint(gr2d);
 
-        if (start < 0) {
-            start = 0;
-            particles.clear();
-        } else {
-            start--;
-            for (ParticleEffect p : particles) {
-                p.render(gr2d);
-            }
-        }
+//        if (start < 0) {
+//            start = 0;
+//            particles.clear();
+//        } else {
+//            start--;
+//            for (ParticleEffect p : particles) {
+//                p.render(gr2d);
+//            }
+//        }
     }
 
     @Override
@@ -146,7 +120,7 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
         final String action = target.getComponentName();
         if ("CLOSE".equals(action)) {
             gameContext.gameReset();
-            Main.getInstance().setCurrentStage(new WelcomeStage());
+            Main.getScreen().setCurrentStage(new WelcomeStage());
         }
 
         if ("PAUSE".equals(action)) {

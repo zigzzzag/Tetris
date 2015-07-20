@@ -182,7 +182,7 @@ public class AudioPlay implements Runnable {
 	    AudioPlay.getInstance().setAudioText("kick");
 	    AudioPlay.getInstance().setAudioText("kick");
 	    AudioPlay.getInstance().setAudioText("kick");
-//            AudioPlay.getInstance().setAudioText("client 222 window 310");
+//            AudioPlay.getScreen().setAudioText("client 222 window 310");
 	} catch (Exception e) {
 	    log.error(e.getMessage(), e);
 	}

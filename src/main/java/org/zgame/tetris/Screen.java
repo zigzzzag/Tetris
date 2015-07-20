@@ -6,22 +6,15 @@ package org.zgame.tetris;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.zgame.utils.FPSData;
 
-import javax.swing.JFrame;
-import java.awt.DisplayMode;
-import java.awt.EventQueue;
-import java.awt.Graphics2D;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.RenderingHints;
-import java.awt.Toolkit;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferStrategy;
 import java.awt.image.VolatileImage;
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * @author user
@@ -29,27 +22,26 @@ import java.lang.reflect.InvocationTargetException;
 public class Screen extends JFrame implements KeyListener {
 
     private static final Logger log = LoggerFactory.getLogger(Screen.class);
-    private GraphicsDevice defaultGraphicsDevice = null;
-    private StageInterface currentStage = null;
+    private GraphicsDevice defaultGraphicsDevice;
+    private StageInterface currentStage;
+    private VolatileImage image;
+    private FPSData fpsData;
 
     public Screen() {
         super("Tetris");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        fpsData = new FPSData();
     }
 
-    public void initScreen() {
+    public void initScreen(StageInterface cg) {
+        this.currentStage = cg;
         GraphicsEnvironment gEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
         defaultGraphicsDevice = gEnvironment.getDefaultScreenDevice();
 
         setUndecorated(true);
         defaultGraphicsDevice.setFullScreenWindow(this);
 
-        this.createBufferStrategy(2);
-
-
-//        setDisplayMode(1024, 768, 32);
-
-//        setBufferStrategy();
+        createBufferStrategy(2);
 
         addMouseListener(new MouseAdapter() {
             @Override
@@ -59,48 +51,61 @@ public class Screen extends JFrame implements KeyListener {
                 }
             }
         });
+
+        this.image = defaultGraphicsDevice.getDefaultConfiguration().createCompatibleVolatileImage(defaultGraphicsDevice.getDisplayMode().getWidth(),
+                defaultGraphicsDevice.getDisplayMode().getHeight());
     }
 
-    public void setDisplayMode(int width, int height, int bpp) {
-        DisplayMode dm = new DisplayMode(width, height, bpp, DisplayMode.REFRESH_RATE_UNKNOWN);
-        defaultGraphicsDevice.setDisplayMode(dm);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException ex) {
-            log.error(ex.getMessage(), ex);
+    public void updateLoop() {
+        // For max accuracy, resetting the time since last update so
+        // animations and sprite positions remain in their standard first
+        // position
+        fpsData.resetTimeOfLastUpdate();
+        // Just loop and loop forever, update state and then draw.
+        while (true) {
+            long nanoTimeAtStartOfUpdate = System.nanoTime();
+
+            fpsData.updateData();
+            try {
+                Graphics2D g = image.createGraphics();
+                g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_SPEED);
+                g.clearRect(0, 0, getWidth(), getHeight());
+                if (currentStage != null) {
+                    currentStage.render(g);
+                }
+                g.dispose();
+
+                Graphics graphics = getBufferStrategy().getDrawGraphics();
+                graphics.drawImage(image, 0, 0, null);
+                graphics.dispose();
+                if (!getBufferStrategy().contentsLost()) {
+                    getBufferStrategy().show();
+                } else {
+                    Toolkit.getDefaultToolkit().sync();
+                }
+            }
+            // This catch is to allow the application to not stop
+            // working when the application encounters the possible bug:
+            // http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6933331
+            // One work around to not encounter this is to Disable d3d
+            // using -Dsun.java2d.d3d=false
+            // Not sure why the bug is said to "... has no consequences
+            // other than a stack trace dump in a console (no hang... ",
+            // as people are generally not going to catch an
+            // IllegalStateException...
+            // You can try to see if you can get the exception to print
+            // by resizing the window rapidly on the primary or secondary,
+            // or dragging the window off and on the primary monitor.
+            // This of course assumes you are using d3d
+            catch (IllegalStateException e) {
+                e.printStackTrace();
+            }
+
+            fpsData.waitUntilNextUpdate(nanoTimeAtStartOfUpdate);
         }
-    }
 
-    public void setCurrentStage(StageInterface currentStage) {
-        this.currentStage = currentStage;
-    }
 
-    private VolatileImage image = null;
-
-    public void update() {
-        if (image == null) {
-            image = defaultGraphicsDevice.getDefaultConfiguration().createCompatibleVolatileImage(1024, 768, 1);
-            image.setAccelerationPriority(1);
-        }
-
-        Graphics2D g = (Graphics2D) image.getGraphics();
-
-//        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_SPEED);
-        g.clearRect(0, 0, getWidth(), getHeight());
-        if (currentStage != null) {
-            currentStage.render(g);
-        }
-
-        Graphics2D gScr = (Graphics2D) getBufferStrategy().getDrawGraphics();
-        gScr.drawImage(image, 0, 0, null);
-        gScr.dispose();
-
-        if (!getBufferStrategy().contentsLost()) {
-            getBufferStrategy().show();
-        } else {
-            Toolkit.getDefaultToolkit().sync();
-        }
     }
 
     @Override
@@ -116,5 +121,13 @@ public class Screen extends JFrame implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         log.info("keyReleased {}", e);
+    }
+
+    public void setCurrentStage(StageInterface currentStage) {
+        this.currentStage = currentStage;
+    }
+
+    public FPSData getFpsData() {
+        return fpsData;
     }
 }

@@ -30,8 +30,8 @@ public class RecordsStage implements StageInterface, GComponentClickAction {
 
     public RecordsStage() {
         root = new RootComponent();
-        root.setWidth(Main.getInstance().getWidth());
-        root.setHeight(Main.getInstance().getHeight());
+        root.setWidth(Main.getScreen().getWidth());
+        root.setHeight(Main.getScreen().getHeight());
 
         label = new TextCenterComponent("LABEL", "BEST RESULTS", "Arial-bold-48",
                 Color.BLACK, root.getWidth() / 2, 50);
@@ -92,7 +92,7 @@ public class RecordsStage implements StageInterface, GComponentClickAction {
     public boolean actionClick(GComponent target, ScreenClickEvent event) {
         final String action = target.getComponentName();
         if ("CLOSE".equals(action)) {
-            Main.getInstance().setCurrentStage(new WelcomeStage());
+            Main.getScreen().setCurrentStage(new WelcomeStage());
         }
         return true;
     }

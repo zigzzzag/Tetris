@@ -54,7 +54,6 @@ public class InputNameFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (nv.verify(inputName)) {
-                    Main.setStart(true);
                     Main.setName(inputName.getText());
                     frame.dispose();
                 }

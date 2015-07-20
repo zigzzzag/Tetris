@@ -36,8 +36,8 @@ public class WelcomeStage implements StageInterface, GComponentClickAction {
 
     public WelcomeStage() {
         root = new RootComponent();
-        root.setWidth(Main.getInstance().getWidth());
-        root.setHeight(Main.getInstance().getHeight());
+        root.setWidth(Main.getScreen().getWidth());
+        root.setHeight(Main.getScreen().getHeight());
 
         label = new TextCenterComponent("LABEL", "Welcome to the Tetris", "Arial-bold-48", Color.white, root.getWidth() / 2, 50);
         root.appendChildElement(label);
@@ -68,7 +68,7 @@ public class WelcomeStage implements StageInterface, GComponentClickAction {
 
         GameContext gameContext = new GameContext();
         tetrisStage = new TetrisStage(gameContext);
-        Main.getInstance().addKeyListener(tetrisStage);
+        Main.getScreen().addKeyListener(tetrisStage);
     }
 
     @Override
@@ -87,15 +87,15 @@ public class WelcomeStage implements StageInterface, GComponentClickAction {
 
         if ("NEW_GAME".equals(action)) {
 //            tetrisStage.setGameOver(false);
-            Main.getInstance().setCurrentStage(tetrisStage);
+            Main.getScreen().setCurrentStage(tetrisStage);
         }
 
         if ("RECORDS".equals(action)) {
-            Main.getInstance().setCurrentStage(new RecordsStage());
+            Main.getScreen().setCurrentStage(new RecordsStage());
         }
 
         if ("EXIT_GAME".equals(action)) {
-            Main.getInstance().dispatchEvent(new WindowEvent(Main.getInstance(), WindowEvent.WINDOW_CLOSING));
+            Main.getScreen().dispatchEvent(new WindowEvent(Main.getScreen(), WindowEvent.WINDOW_CLOSING));
         }
         return true;
     }
