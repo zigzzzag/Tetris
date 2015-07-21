@@ -38,8 +38,10 @@ public class Screen extends JFrame implements KeyListener {
         GraphicsEnvironment gEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
         defaultGraphicsDevice = gEnvironment.getDefaultScreenDevice();
 
+        setExtendedState(Frame.MAXIMIZED_BOTH);
         setUndecorated(true);
-        defaultGraphicsDevice.setFullScreenWindow(this);
+        setIgnoreRepaint(true);
+        setVisible(true);
 
         createBufferStrategy(2);
 
@@ -52,7 +54,8 @@ public class Screen extends JFrame implements KeyListener {
             }
         });
 
-        this.image = defaultGraphicsDevice.getDefaultConfiguration().createCompatibleVolatileImage(defaultGraphicsDevice.getDisplayMode().getWidth(),
+        this.image = defaultGraphicsDevice.getDefaultConfiguration().createCompatibleVolatileImage(
+                defaultGraphicsDevice.getDisplayMode().getWidth(),
                 defaultGraphicsDevice.getDisplayMode().getHeight());
     }
 
