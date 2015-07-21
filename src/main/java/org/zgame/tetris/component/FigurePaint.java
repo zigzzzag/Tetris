@@ -13,14 +13,13 @@ import java.awt.Graphics2D;
 public class FigurePaint {
 
     public static void gradientFigure(Graphics2D gr2d, Color color1, Color color2, int x, int y) {
-        int cnt = 30;
-        GradientPaint gp = new GradientPaint(x, y, color1, x + cnt, y + cnt, color2, false);
+        GradientPaint gp = new GradientPaint(x, y, color1, x + Constants.QUADRATE_SIZE, y + Constants.QUADRATE_SIZE, color2, false);
         gr2d.setPaint(gp);
-        gr2d.fillRect(x, y, cnt, cnt);
+        gr2d.fillRect(x, y, Constants.QUADRATE_SIZE, Constants.QUADRATE_SIZE);
 
-        gp = new GradientPaint(x + 2, y + 2, color2, x + cnt - 2, y + cnt - 2, color1, false);
+        gp = new GradientPaint(x + 2, y + 2, color2, x + Constants.QUADRATE_SIZE - 2, y + Constants.QUADRATE_SIZE - 2, color1, false);
         gr2d.setPaint(gp);
-        gr2d.fillRect(x + 2, y + 2, cnt - 4, cnt - 4);
+        gr2d.fillRect(x + 2, y + 2, Constants.QUADRATE_SIZE - 4, Constants.QUADRATE_SIZE - 4);
     }
 
     public static Color darkColor(int index) {

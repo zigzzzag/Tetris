@@ -6,6 +6,7 @@ package org.zgame.components;
 
 import org.zgame.tetris.GComponent;
 import org.zgame.tetris.GComponentClickAction;
+import org.zgame.tetris.Main;
 import org.zgame.tetris.ScreenClickEvent;
 import org.zgame.utils.ImageCache;
 
@@ -22,7 +23,7 @@ public class RootComponent extends GComponent implements GComponentClickAction {
 
     public RootComponent() {
         super("ROOT");
-//        background = ImageCache.getInstance().getImage("xxx.gif");
+        background = BackgroundImage.getBackgroundImage(Main.getScreen().getWidth(), Main.getScreen().getHeight());
     }
 
     @Override
@@ -32,6 +33,6 @@ public class RootComponent extends GComponent implements GComponentClickAction {
 
     @Override
     protected void renderComponentOffset(int offsetX, int offsetY, Graphics2D gr) {
-//        gr.drawImage(background, 0, 0, null);
+        gr.drawImage(background, 0, 0, null);
     }
 }

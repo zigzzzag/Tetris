@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zgame.stage.InputNameFrame;
 import org.zgame.stage.WelcomeStage;
+import org.zgame.utils.Constants;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -97,6 +98,7 @@ public class Main {
 
         scr = new Screen();
         scr.initScreen();
+        Constants.QUADRATE_SIZE = scr.getHeight() / 25;
         scr.setCurrentStage(new WelcomeStage());
         scr.updateLoop();
     }
