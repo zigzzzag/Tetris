@@ -22,7 +22,7 @@ public class RootComponent extends GComponent implements GComponentClickAction {
 
     public RootComponent() {
         super("ROOT");
-        background = ImageCache.getInstance().getImage("background.gif");
+//        background = ImageCache.getInstance().getImage("xxx.gif");
     }
 
     @Override
@@ -32,6 +32,6 @@ public class RootComponent extends GComponent implements GComponentClickAction {
 
     @Override
     protected void renderComponentOffset(int offsetX, int offsetY, Graphics2D gr) {
-        gr.drawImage(background, 0, 0, null);
+//        gr.drawImage(background, 0, 0, null);
     }
 }

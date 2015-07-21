@@ -18,7 +18,7 @@ import java.util.List;
 public abstract class GComponent {
 
     private static final Logger log = LoggerFactory.getLogger(GComponent.class);
-    private List<GComponent> childElements = new LinkedList<GComponent>();
+    private List<GComponent> childElements = new LinkedList<>();
     private GComponent parent = null;
     protected String componentName = "";
     protected int width = 0;

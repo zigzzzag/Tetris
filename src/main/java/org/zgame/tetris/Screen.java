@@ -33,8 +33,7 @@ public class Screen extends JFrame implements KeyListener {
         fpsData = new FPSData();
     }
 
-    public void initScreen(StageInterface cg) {
-        this.currentStage = cg;
+    public void initScreen() {
         GraphicsEnvironment gEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
         defaultGraphicsDevice = gEnvironment.getDefaultScreenDevice();
 

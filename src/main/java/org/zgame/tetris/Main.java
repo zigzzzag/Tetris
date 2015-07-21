@@ -96,7 +96,8 @@ public class Main {
         }
 
         scr = new Screen();
-        scr.initScreen(new WelcomeStage());
+        scr.initScreen();
+        scr.setCurrentStage(new WelcomeStage());
         scr.updateLoop();
     }
 
