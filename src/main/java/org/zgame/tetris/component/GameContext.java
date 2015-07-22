@@ -25,7 +25,9 @@ public class GameContext implements Runnable {
     private int pointsNow;
     private int pointsAll;
 
-    public GameContext() {
+    public static GameContext INSTANCE = new GameContext();
+
+    private GameContext() {
         rootGlass = new RootGlass();
 //        figureShadow = new TemplateOfFigure();
 
@@ -37,29 +39,7 @@ public class GameContext implements Runnable {
     public void run() {
         while (!gameOver) {
             if (!currentFigure.isDownAvailable(rootGlass)) {
-                for (int row = 0; row < rootGlass.getRowCount(); row++) {
-                    for (int column = 0; column < rootGlass.getColumnCount(); column++) {
-                        if (rootGlass.getFilledGlass()[row][column] == 0) {
-                            break;
-                        }
-                        //последняя не нулевая, значит вся линия запол
-                        if (column == rootGlass.getColumnCount() - 1) {
-                            rootGlass.deleteFullLine(row);
-//                            for (int t = 0; t < 10; t++) {
-//                                particles.add(new ParticleEffect(FigurePaint.converFromIndexColumn(t), FigurePaint.converFromIndexRow(row)));
-//                            }
-//                            start = ParticleEffect.TIME;
-                            pointsNow++;
-                        }
-                    }
-                }
-                if (pointsNow != 0) {
-                    pointsAll += getDeleteLinePoints(pointsNow);
-//                    countTCC.setText("Счет: " + pointsAll);
-                }
-                if (!gameOver) {
-                    nextStep();
-                }
+
             } else {
                 currentFigure.moveDown(rootGlass);
             }
@@ -93,12 +73,38 @@ public class GameContext implements Runnable {
         Main.getScreen().setCurrentStage(gos);
     }
 
+    //TODO refactor
     public void nextStep() {
         for (int row = 0; row < Constants.MATR_ROW; row++) {
             for (int column = 0; column < Constants.MATR_COLUMN; column++) {
                 rootGlass.getFilledGlass()[row][column] += currentFigure.getFigure().getMatr()[row][column];
             }
         }
+
+
+
+        for (int row = 0; row < rootGlass.getRowCount(); row++) {
+            for (int column = 0; column < rootGlass.getColumnCount(); column++) {
+                if (rootGlass.getFilledGlass()[row][column] == 0) {
+                    break;
+                }
+                //последняя не нулевая, значит вся линия запол
+                if (column == rootGlass.getColumnCount() - 1) {
+                    rootGlass.deleteFullLine(row);
+//                            for (int t = 0; t < 10; t++) {
+//                                particles.add(new ParticleEffect(FigurePaint.converFromIndexColumn(t), FigurePaint.converFromIndexRow(row)));
+//                            }
+//                            start = ParticleEffect.TIME;
+                    pointsNow++;
+                }
+            }
+        }
+        if (pointsNow != 0) {
+            pointsAll += getDeleteLinePoints(pointsNow);
+//                    countTCC.setText("Счет: " + pointsAll);
+        }
+
+
 
         currentFigure = nextFigure;
         nextFigure = new TemplateOfFigure(FigureType.getTypeByIntVal(new Random().nextInt(7) + 1));

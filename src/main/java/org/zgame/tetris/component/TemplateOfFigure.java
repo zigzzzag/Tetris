@@ -190,6 +190,7 @@ public class TemplateOfFigure {
             }
         }
         log.debug("TOF: '{}' is not DOWN available", typeOfFigure);
+        GameContext.INSTANCE.nextStep();
         return false;
     }
 

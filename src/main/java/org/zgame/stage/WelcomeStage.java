@@ -66,8 +66,7 @@ public class WelcomeStage implements StageInterface, GComponentClickAction {
         root.appendChildElement(exitGame);
         exitGame.setAction((GComponentClickAction) this);
 
-        GameContext gameContext = new GameContext();
-        tetrisStage = new TetrisStage(gameContext);
+        tetrisStage = new TetrisStage(GameContext.INSTANCE);
         Main.getScreen().addKeyListener(tetrisStage);
     }
 
