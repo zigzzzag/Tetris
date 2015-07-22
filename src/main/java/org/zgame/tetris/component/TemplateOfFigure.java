@@ -229,10 +229,11 @@ public class TemplateOfFigure {
     }
 
     private boolean isRotateAvailable(RootGlass rootGlass) {
-        TemplateOfFigure tof_rotate = new TemplateOfFigure(typeOfFigure, figure.getRowCount(), figure.getColumnCount(),
-                subFigure.getRowCoord(), subFigure.getColumnCoord()).rotationAngleInt(90);
-        if (rootGlass.hasIntersectionWithMatr(tof_rotate.getFigure().getMatr())) {
-            log.debug("TOF: '{}' is not ROTATE available, because rootGlass.hasIntersectionWithFigure(tof_rotate)",
+        TemplateOfFigure tofRotate = this.clone();
+        tofRotate.leftBeforeRotate();
+        tofRotate.rotationAngleInt(90);
+        if (rootGlass.hasIntersectionWithMatr(tofRotate.getFigure().getMatr())) {
+            log.debug("TOF: '{}' is not ROTATE available, because rootGlass.hasIntersectionWithFigure(tofRotate)",
                     typeOfFigure);
             return false;
         }
@@ -355,19 +356,26 @@ public class TemplateOfFigure {
 
     public void rotate(RootGlass rootGlass) {
         lock.lock();
-        leftBeforeRotate(rootGlass);
-        if (isRotateAvailable(rootGlass)) {
-            rotateForce();
-            rotationAngle.rotate();
+        try {
+            if (isRotateAvailable(rootGlass)) {
+                leftBeforeRotate();
+                rotateForce();
+                rotationAngle.rotate();
+            }
+        } finally {
+            lock.unlock();
         }
     }
 
     /**
      * Метод для движа влево, если фигура плотничком в правом краю и ее длина больше ширины
      */
-    private void leftBeforeRotate(RootGlass rootGlass) {
-        if (subFigure.getRowCount() > figure.getColumnCount() - subFigure.getColumnCoord()) {
-            moveLeftForce();
+    private void leftBeforeRotate() {
+        int countLeftMove = subFigure.getRowCount() - (figure.getColumnCount() - subFigure.getColumnCoord());
+        if (countLeftMove > 0) {
+            for (int i = 0; i < countLeftMove; i++) {
+                moveLeftForce();
+            }
         }
     }
 
@@ -437,8 +445,10 @@ public class TemplateOfFigure {
     }
 
     public TemplateOfFigure clone() {
-        TemplateOfFigure tofClone = new TemplateOfFigure(typeOfFigure, figure.getRowCount(), figure.getColumnCount(),
-                subFigure.getRowCoord(), subFigure.getColumnCoord());
+        TemplateOfFigure tofClone = new TemplateOfFigure(figure.getRowCount(), figure.getColumnCount());
+        tofClone.setFigure(figure.clone());
+        tofClone.setSubFigure((SubMatr) subFigure.clone());
+        tofClone.setTypeOfFigure(typeOfFigure);
 
         tofClone.rotationAngleInt(this.rotationAngle.getAngle());
         return tofClone;

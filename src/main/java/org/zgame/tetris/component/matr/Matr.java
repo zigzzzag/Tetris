@@ -75,6 +75,16 @@ public class Matr {
         return sb.toString();
     }
 
+    public Matr clone() {
+        Matr matrClone = new Matr(rowCount, columnCount);
+        for (int row = 0; row < rowCount; row++) {
+            for (int column = 0; column < columnCount; column++) {
+                matrClone.setElement(getElement(row, column), row, column);
+            }
+        }
+        return matrClone;
+    }
+
     public byte[][] getMatr() {
         return matr;
     }
