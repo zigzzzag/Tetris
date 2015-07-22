@@ -7,6 +7,7 @@ package org.zgame.tetris.component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zgame.tetris.component.comedowntime.ComeDownTime;
+import org.zgame.tetris.component.comedowntime.ComeDownTimeImpl;
 import org.zgame.tetris.component.comedowntime.TestComeDownTime;
 import org.zgame.tetris.component.matr.Matr;
 import org.zgame.tetris.component.matr.MatrUtils;
@@ -37,7 +38,7 @@ public class TemplateOfFigure {
 
     public TemplateOfFigure(int rowCount, int columnCount) {
         this.figure = new Matr(rowCount, columnCount);
-        this.comeDownTime = new TestComeDownTime();
+        this.comeDownTime = new ComeDownTimeImpl();
     }
 
     public TemplateOfFigure(FigureType figureType) {

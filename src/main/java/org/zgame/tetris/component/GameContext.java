@@ -44,7 +44,6 @@ public class GameContext implements Runnable {
                         }
                         //последняя не нулевая, значит вся линия запол
                         if (column == rootGlass.getColumnCount() - 1) {
-                            System.out.println("step0");
                             rootGlass.deleteFullLine(row);
 //                            for (int t = 0; t < 10; t++) {
 //                                particles.add(new ParticleEffect(FigurePaint.converFromIndexColumn(t), FigurePaint.converFromIndexRow(row)));
@@ -119,7 +118,6 @@ public class GameContext implements Runnable {
                 log.error(e.getMessage(), e);
             }
         }
-        nextStep();
     }
 
     public void paint(Graphics2D gr2d) {

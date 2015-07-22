@@ -10,6 +10,6 @@ public class ComeDownTimeImpl implements ComeDownTime {
 //        if (1000 - totalPoints / 50 > 200) {
 //            return 1000 - totalPoints / 50;
 //        }
-        return 2000l;
+        return 2000;
     }
 }
