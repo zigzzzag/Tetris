@@ -73,6 +73,18 @@ public class SubMatr extends Matr {
         setColumnCount(newColumnCount);
     }
 
+    public SubMatr clone() {
+        SubMatr subMatrClone = new SubMatr(rowCount, columnCount);
+        subMatrClone.setRowCoord(rowCoord);
+        subMatrClone.setColumnCoord(columnCoord);
+        for (int row = 0; row < rowCount; row++) {
+            for (int column = 0; column < columnCount; column++) {
+                subMatrClone.setElement(getElement(row, column), row, column);
+            }
+        }
+        return subMatrClone;
+    }
+
     public int getRowCoord() {
         return rowCoord;
     }

@@ -447,10 +447,9 @@ public class TemplateOfFigure {
     public TemplateOfFigure clone() {
         TemplateOfFigure tofClone = new TemplateOfFigure(figure.getRowCount(), figure.getColumnCount());
         tofClone.setFigure(figure.clone());
-        tofClone.setSubFigure((SubMatr) subFigure.clone());
+        tofClone.setSubFigure(subFigure.clone());
         tofClone.setTypeOfFigure(typeOfFigure);
-
-        tofClone.rotationAngleInt(this.rotationAngle.getAngle());
+        tofClone.setRotationAngle(rotationAngle.clone());
         return tofClone;
     }
 
@@ -497,5 +496,9 @@ public class TemplateOfFigure {
 
     public void setFigure(Matr figure) {
         this.figure = figure;
+    }
+
+    public void setRotationAngle(RotationAngle rotationAngle) {
+        this.rotationAngle = rotationAngle;
     }
 }
