@@ -38,11 +38,7 @@ public class GameContext implements Runnable {
     @Override
     public void run() {
         while (!gameOver) {
-            if (!currentFigure.isDownAvailable(rootGlass)) {
-
-            } else {
-                currentFigure.moveDown(rootGlass);
-            }
+            currentFigure.moveDown(rootGlass);
 //            for (int row = 0; row < Constants.MATR_ROW; row++) {
 //                System.arraycopy(currentFigure.getFigure()[row], 0, figureShadow.getFigure()[row], 0, Constants.MATR_COLUMN);
 //            }
@@ -82,13 +78,12 @@ public class GameContext implements Runnable {
         }
 
 
-
         for (int row = 0; row < rootGlass.getRowCount(); row++) {
             for (int column = 0; column < rootGlass.getColumnCount(); column++) {
                 if (rootGlass.getFilledGlass()[row][column] == 0) {
                     break;
                 }
-                //последняя не нулевая, значит вся линия запол
+                //последняя не нулевая, значит вся линия заполнена
                 if (column == rootGlass.getColumnCount() - 1) {
                     rootGlass.deleteFullLine(row);
 //                            for (int t = 0; t < 10; t++) {
@@ -103,7 +98,6 @@ public class GameContext implements Runnable {
             pointsAll += getDeleteLinePoints(pointsNow);
 //                    countTCC.setText("Счет: " + pointsAll);
         }
-
 
 
         currentFigure = nextFigure;

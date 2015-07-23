@@ -6,5 +6,5 @@ package org.zgame.tetris.component;
 public enum FigureState {
 
     FALL,
-    NORMAL;
+    NORMAL
 }
