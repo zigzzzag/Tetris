@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zgame.tetris.component.comedowntime.ComeDownTime;
 import org.zgame.tetris.component.comedowntime.ComeDownTimeImpl;
-import org.zgame.tetris.component.comedowntime.TestComeDownTime;
 import org.zgame.tetris.component.matr.Matr;
 import org.zgame.tetris.component.matr.MatrUtils;
 import org.zgame.tetris.component.matr.SubMatr;
@@ -230,10 +229,14 @@ public class TemplateOfFigure {
         return false;
     }
 
+    private void correctPositionBeforeRotate() {
+        leftBeforeRotate();
+        upBeforeRotate();
+    }
+
     private boolean isRotateAvailable(RootGlass rootGlass) {
         TemplateOfFigure tofRotate = this.clone();
-        tofRotate.leftBeforeRotate();
-        tofRotate.upBeforeRotate();
+        tofRotate.correctPositionBeforeRotate();
         tofRotate.rotationAngleInt(90);
         if (rootGlass.hasIntersectionWithMatr(tofRotate.getFigure().getMatr())) {
             log.debug("TOF: '{}' is not ROTATE available, because rootGlass.hasIntersectionWithFigure(tofRotate)",
@@ -361,8 +364,7 @@ public class TemplateOfFigure {
         lock.lock();
         try {
             if (isRotateAvailable(rootGlass)) {
-                leftBeforeRotate();
-                upBeforeRotate();
+                correctPositionBeforeRotate();
                 rotateForce();
                 rotationAngle.rotate();
             }
