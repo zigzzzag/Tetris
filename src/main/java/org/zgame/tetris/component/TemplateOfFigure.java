@@ -233,6 +233,7 @@ public class TemplateOfFigure {
     private boolean isRotateAvailable(RootGlass rootGlass) {
         TemplateOfFigure tofRotate = this.clone();
         tofRotate.leftBeforeRotate();
+        tofRotate.upBeforeRotate();
         tofRotate.rotationAngleInt(90);
         if (rootGlass.hasIntersectionWithMatr(tofRotate.getFigure().getMatr())) {
             log.debug("TOF: '{}' is not ROTATE available, because rootGlass.hasIntersectionWithFigure(tofRotate)",
@@ -361,6 +362,7 @@ public class TemplateOfFigure {
         try {
             if (isRotateAvailable(rootGlass)) {
                 leftBeforeRotate();
+                upBeforeRotate();
                 rotateForce();
                 rotationAngle.rotate();
             }
@@ -377,6 +379,18 @@ public class TemplateOfFigure {
         if (countLeftMove > 0) {
             for (int i = 0; i < countLeftMove; i++) {
                 moveLeftForce();
+            }
+        }
+    }
+
+    /**
+     * Метод для движа вверх, если фигура плотничком внизу и ее ширина больше длины
+     */
+    private void upBeforeRotate() {
+        int countUpMove = subFigure.getColumnCount() - (figure.getRowCount() - subFigure.getRowCoord());
+        if (countUpMove > 0) {
+            for (int i = 0; i < countUpMove; i++) {
+                moveUpForce();
             }
         }
     }
