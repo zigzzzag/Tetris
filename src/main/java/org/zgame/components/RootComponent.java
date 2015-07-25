@@ -4,17 +4,16 @@
  */
 package org.zgame.components;
 
+import org.zgame.components.background.BlackBrickBackground;
 import org.zgame.tetris.GComponent;
 import org.zgame.tetris.GComponentClickAction;
 import org.zgame.tetris.Main;
 import org.zgame.tetris.ScreenClickEvent;
-import org.zgame.utils.ImageCache;
 
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
- *
  * @author user
  */
 public class RootComponent extends GComponent implements GComponentClickAction {
@@ -23,7 +22,7 @@ public class RootComponent extends GComponent implements GComponentClickAction {
 
     public RootComponent() {
         super("ROOT");
-        background = BackgroundImage.getBackgroundImage(Main.getScreen().getWidth(), Main.getScreen().getHeight());
+        background = new BlackBrickBackground().getBackground(Main.getScreen().getWidth(), Main.getScreen().getHeight());
     }
 
     @Override

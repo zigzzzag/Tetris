@@ -39,7 +39,6 @@ public class RootGlass {
     }
 
     public void deleteFullLine(int lineNumber) {
-        System.out.println("step1");
         for (int row = lineNumber - 1; row >= 0; row--) {
             for (int column = 0; column < Constants.MATR_COLUMN; column++) {
                 filledGlass[row + 1][column] = filledGlass[row][column];
