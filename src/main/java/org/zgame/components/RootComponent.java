@@ -4,7 +4,7 @@
  */
 package org.zgame.components;
 
-import org.zgame.components.background.BlackBrickBackground;
+import org.zgame.components.background.RedBrickBackground;
 import org.zgame.tetris.GComponent;
 import org.zgame.tetris.GComponentClickAction;
 import org.zgame.tetris.Main;
@@ -22,7 +22,7 @@ public class RootComponent extends GComponent implements GComponentClickAction {
 
     public RootComponent() {
         super("ROOT");
-        background = new BlackBrickBackground().getBackground(Main.getScreen().getWidth(), Main.getScreen().getHeight());
+        background = new RedBrickBackground().getBackground(Main.getScreen().getWidth(), Main.getScreen().getHeight());
     }
 
     @Override

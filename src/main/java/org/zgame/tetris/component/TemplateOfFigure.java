@@ -13,8 +13,7 @@ import org.zgame.tetris.component.matr.MatrUtils;
 import org.zgame.tetris.component.matr.SubMatr;
 import org.zgame.utils.Constants;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.locks.Lock;
@@ -52,25 +51,27 @@ public class TemplateOfFigure {
         this(rowCount, columnCount);
         this.typeOfFigure = figureType;
 
+        int randomColorInt = new Random().nextInt(8) + 1;
+
         clear();
         switch (typeOfFigure) {
             //  **
             // **
             case S: {
-                figure.setElement(1, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
-                figure.setElement(1, 0 + rowSubQuadrate, 2 + columnSubQuadrate);
-                figure.setElement(1, 1 + rowSubQuadrate, 1 + columnSubQuadrate);
-                figure.setElement(1, 1 + rowSubQuadrate, 0 + columnSubQuadrate);
+                figure.setElement(randomColorInt, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
+                figure.setElement(randomColorInt, 0 + rowSubQuadrate, 2 + columnSubQuadrate);
+                figure.setElement(randomColorInt, 1 + rowSubQuadrate, 1 + columnSubQuadrate);
+                figure.setElement(randomColorInt, 1 + rowSubQuadrate, 0 + columnSubQuadrate);
                 subFigure = new SubMatr(2, 3).rowCoord(rowSubQuadrate).columnCoord(columnSubQuadrate);
                 break;
             }
             // **
             //  **
             case S_R: {
-                figure.setElement(1, 0 + rowSubQuadrate, 0 + columnSubQuadrate);
-                figure.setElement(1, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
-                figure.setElement(1, 1 + rowSubQuadrate, 1 + columnSubQuadrate);
-                figure.setElement(1, 1 + rowSubQuadrate, 2 + columnSubQuadrate);
+                figure.setElement(randomColorInt, 0 + rowSubQuadrate, 0 + columnSubQuadrate);
+                figure.setElement(randomColorInt, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
+                figure.setElement(randomColorInt, 1 + rowSubQuadrate, 1 + columnSubQuadrate);
+                figure.setElement(randomColorInt, 1 + rowSubQuadrate, 2 + columnSubQuadrate);
                 subFigure = new SubMatr(2, 3).rowCoord(rowSubQuadrate).columnCoord(columnSubQuadrate);
                 break;
             }
@@ -78,10 +79,10 @@ public class TemplateOfFigure {
             // *
             // *
             case G: {
-                figure.setElement(1, 0 + rowSubQuadrate, 0 + columnSubQuadrate);
-                figure.setElement(1, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
-                figure.setElement(1, 1 + rowSubQuadrate, 0 + columnSubQuadrate);
-                figure.setElement(1, 2 + rowSubQuadrate, 0 + columnSubQuadrate);
+                figure.setElement(randomColorInt, 0 + rowSubQuadrate, 0 + columnSubQuadrate);
+                figure.setElement(randomColorInt, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
+                figure.setElement(randomColorInt, 1 + rowSubQuadrate, 0 + columnSubQuadrate);
+                figure.setElement(randomColorInt, 2 + rowSubQuadrate, 0 + columnSubQuadrate);
                 subFigure = new SubMatr(3, 2).rowCoord(rowSubQuadrate).columnCoord(columnSubQuadrate);
                 break;
             }
@@ -89,39 +90,39 @@ public class TemplateOfFigure {
             //  *
             //  *
             case G_R: {
-                figure.setElement(1, 0 + rowSubQuadrate, 0 + columnSubQuadrate);
-                figure.setElement(1, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
-                figure.setElement(1, 1 + rowSubQuadrate, 1 + columnSubQuadrate);
-                figure.setElement(1, 2 + rowSubQuadrate, 1 + columnSubQuadrate);
+                figure.setElement(randomColorInt, 0 + rowSubQuadrate, 0 + columnSubQuadrate);
+                figure.setElement(randomColorInt, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
+                figure.setElement(randomColorInt, 1 + rowSubQuadrate, 1 + columnSubQuadrate);
+                figure.setElement(randomColorInt, 2 + rowSubQuadrate, 1 + columnSubQuadrate);
                 subFigure = new SubMatr(3, 2).rowCoord(rowSubQuadrate).columnCoord(columnSubQuadrate);
                 break;
             }
             // ***
             //  *
             case T: {
-                figure.setElement(1, 0 + rowSubQuadrate, 0 + columnSubQuadrate);
-                figure.setElement(1, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
-                figure.setElement(1, 0 + rowSubQuadrate, 2 + columnSubQuadrate);
-                figure.setElement(1, 1 + rowSubQuadrate, 1 + columnSubQuadrate);
+                figure.setElement(randomColorInt, 0 + rowSubQuadrate, 0 + columnSubQuadrate);
+                figure.setElement(randomColorInt, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
+                figure.setElement(randomColorInt, 0 + rowSubQuadrate, 2 + columnSubQuadrate);
+                figure.setElement(randomColorInt, 1 + rowSubQuadrate, 1 + columnSubQuadrate);
                 subFigure = new SubMatr(2, 3).rowCoord(rowSubQuadrate).columnCoord(columnSubQuadrate);
                 break;
             }
             // **
             // **
             case QUADRATE: {
-                figure.setElement(1, 0 + rowSubQuadrate, 0 + columnSubQuadrate);
-                figure.setElement(1, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
-                figure.setElement(1, 1 + rowSubQuadrate, 0 + columnSubQuadrate);
-                figure.setElement(1, 1 + rowSubQuadrate, 1 + columnSubQuadrate);
+                figure.setElement(randomColorInt, 0 + rowSubQuadrate, 0 + columnSubQuadrate);
+                figure.setElement(randomColorInt, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
+                figure.setElement(randomColorInt, 1 + rowSubQuadrate, 0 + columnSubQuadrate);
+                figure.setElement(randomColorInt, 1 + rowSubQuadrate, 1 + columnSubQuadrate);
                 subFigure = new SubMatr(2, 2).rowCoord(rowSubQuadrate).columnCoord(columnSubQuadrate);
                 break;
             }
             //  ****
             case STICK: {
-                figure.setElement(1, 0 + rowSubQuadrate, 0 + columnSubQuadrate);
-                figure.setElement(1, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
-                figure.setElement(1, 0 + rowSubQuadrate, 2 + columnSubQuadrate);
-                figure.setElement(1, 0 + rowSubQuadrate, 3 + columnSubQuadrate);
+                figure.setElement(randomColorInt, 0 + rowSubQuadrate, 0 + columnSubQuadrate);
+                figure.setElement(randomColorInt, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
+                figure.setElement(randomColorInt, 0 + rowSubQuadrate, 2 + columnSubQuadrate);
+                figure.setElement(randomColorInt, 0 + rowSubQuadrate, 3 + columnSubQuadrate);
                 subFigure = new SubMatr(1, 4).rowCoord(rowSubQuadrate).columnCoord(columnSubQuadrate);
                 break;
             }

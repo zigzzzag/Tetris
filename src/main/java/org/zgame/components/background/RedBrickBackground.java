@@ -11,13 +11,12 @@ import java.util.Random;
 /**
  * Created by mnikiforov on 26.07.2015.
  */
-public class BlackBrickBackground implements Background {
-
-    private static final int BRICK_WIDTH = 83;
-    private static final int BRICK_HEIGHT = 42;
+public class RedBrickBackground implements Background  {
+    private static final int BRICK_WIDTH = 160;
+    private static final int BRICK_HEIGHT = 41;
     private static final int BRICKS_COUNT = 12;
     private static final int CEMENT_SIZE = 1;
-    private static final String BRICK_IMAGE_NAME = "BlackBricks.png";
+    private static final String BRICK_IMAGE_NAME = "RedBricks.png";
 
     private List<BufferedImage> parseBricksImage() {
         List<BufferedImage> result = new ArrayList<>();
@@ -58,7 +57,7 @@ public class BlackBrickBackground implements Background {
     }
 
     public static void main(String[] args) {
-        Background background = new BlackBrickBackground();
+        Background background = new RedBrickBackground();
         int[] size = BackgroundImageTest.getSize();
         BackgroundImageTest.backgroundTest(background.getBackground(size[0], size[1]));
     }

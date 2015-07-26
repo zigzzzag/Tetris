@@ -2,9 +2,7 @@ package org.zgame.tetris.component;
 
 import org.zgame.utils.Constants;
 
-import java.awt.Color;
-import java.awt.GradientPaint;
-import java.awt.Graphics2D;
+import java.awt.*;
 
 
 /**
@@ -70,7 +68,7 @@ public class FigurePaint {
                 return new Color(255, 255, 0);//yellow
             }
             case 6: {
-                return Color.gray;
+                return new Color(42, 42, 42);
             }
             case 7: {
                 return new Color(255, 165, 0);//orange
@@ -78,8 +76,9 @@ public class FigurePaint {
             case 8: {
                 return new Color(0, 255, 0);//lime
             }
+            default:
+                return new Color(0, 0, 0);
         }
-        return new Color(0, 0, 0);
     }
 
     public static int converFromIndexColumn(int column) {
