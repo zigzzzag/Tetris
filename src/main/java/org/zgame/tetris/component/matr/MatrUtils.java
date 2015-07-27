@@ -5,7 +5,7 @@ package org.zgame.tetris.component.matr;
  */
 public class MatrUtils {
 
-    private static void copyMatr(byte[][] sourceMatr, byte[][] copiedMatr) {
+    public static void copyMatr(byte[][] sourceMatr, byte[][] copiedMatr) {
         for (int row = 0; row < sourceMatr.length; row++) {
             for (int column = 0; column < sourceMatr[0].length; column++) {
                 copiedMatr[row][column] = sourceMatr[row][column];

@@ -38,20 +38,12 @@ public class GameContext implements Runnable {
     @Override
     public void run() {
         while (!gameOver) {
-            currentFigure.moveDown(rootGlass);
-//            for (int row = 0; row < Constants.MATR_ROW; row++) {
-//                System.arraycopy(currentFigure.getFigure()[row], 0, figureShadow.getFigure()[row], 0, Constants.MATR_COLUMN);
-//            }
-
-//            while (!figureShadow.isDownBarrier(rootGlass)) {
-//                figureShadow.down();
-//            }
-
             try {
                 Thread.sleep(currentFigure.getComeDownTime(pointsAll));
             } catch (InterruptedException e) {
                 log.error(e.getMessage(), e.getCause());
             }
+            currentFigure.moveDown(rootGlass);
         }
 
         gameOver = true;
@@ -122,8 +114,8 @@ public class GameContext implements Runnable {
 
     public void paint(Graphics2D gr2d) {
         rootGlass.paintRootGlass(gr2d);
+        currentFigure.paintFigureShadow(gr2d);
         currentFigure.paintFigure(gr2d);
-//        figureShadow.paintFigureShadow(gr2d);
         nextFigure.paintFigureNext(gr2d);
     }
 

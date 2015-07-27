@@ -13,9 +13,9 @@ import org.zgame.tetris.component.matr.MatrUtils;
 import org.zgame.tetris.component.matr.SubMatr;
 import org.zgame.utils.Constants;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.util.Arrays;
-import java.util.Random;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -26,6 +26,7 @@ public class TemplateOfFigure {
 
     private static final Logger log = LoggerFactory.getLogger(TemplateOfFigure.class);
     private Matr figure;
+    private Matr figureShadow;
     private SubMatr subFigure;
     private FigureType typeOfFigure;
     private byte colorByte;
@@ -51,7 +52,7 @@ public class TemplateOfFigure {
         this(rowCount, columnCount);
         this.typeOfFigure = figureType;
 
-        int randomColorInt = new Random().nextInt(8) + 1;
+        int randomColorInt = 1;//new Random().nextInt(8) + 1;
 
         clear();
         switch (typeOfFigure) {
@@ -127,6 +128,7 @@ public class TemplateOfFigure {
                 break;
             }
         }
+        figureShadow = figure.clone();
     }
 
     public TemplateOfFigure rotationAngleInt(int angle) {
@@ -138,8 +140,8 @@ public class TemplateOfFigure {
     }
 
     public void paintFigure(Graphics2D g2d) {
-        for (int row = 0; row < Constants.MATR_ROW; row++) {
-            for (int column = 0; column < Constants.MATR_COLUMN; column++) {
+        for (int row = 0; row < figure.getRowCount(); row++) {
+            for (int column = 0; column < figure.getColumnCount(); column++) {
                 if (figure.getElement(row, column) != 0) {
                     FigurePaint.gradientFigure(g2d, FigurePaint.lightColor(figure.getElement(row, column)),
                             FigurePaint.darkColor(figure.getElement(row, column)), FigurePaint.converFromIndexColumn(column), FigurePaint.converFromIndexRow(row));
@@ -149,9 +151,9 @@ public class TemplateOfFigure {
     }
 
     public void paintFigureShadow(Graphics2D g2d) {
-        for (int row = 0; row < Constants.MATR_ROW; row++) {
-            for (int column = 0; column < Constants.MATR_COLUMN; column++) {
-                if (figure.getElement(row, column) != 0) {
+        for (int row = 0; row < figureShadow.getRowCount(); row++) {
+            for (int column = 0; column < figureShadow.getColumnCount(); column++) {
+                if (figureShadow.getElement(row, column) != 0) {
                     g2d.setColor(Constants.alphaShadow);
                     g2d.fillRect(FigurePaint.converFromIndexColumn(column), FigurePaint.converFromIndexRow(row), Constants.QUADRATE_SIZE, Constants.QUADRATE_SIZE);
                     g2d.setColor(Color.black);
@@ -162,8 +164,8 @@ public class TemplateOfFigure {
     }
 
     public void paintFigureNext(Graphics2D g2d) {
-        for (int row = 0; row < Constants.MATR_ROW; row++) {
-            for (int column = 0; column < Constants.MATR_COLUMN; column++) {
+        for (int row = 0; row < figure.getRowCount(); row++) {
+            for (int column = 0; column < figure.getColumnCount(); column++) {
                 if (figure.getElement(row, column) != 0) {
                     FigurePaint.gradientFigure(g2d, FigurePaint.lightColor(figure.getElement(row, column)),
                             FigurePaint.darkColor(figure.getElement(row, column)), FigurePaint.converFromIndexColumn(column) - 300, FigurePaint.converFromIndexRow(row));
@@ -172,19 +174,18 @@ public class TemplateOfFigure {
         }
     }
 
-    public void paintRandomColor() {
-        this.colorByte = (byte) (new Random().nextInt(8) + 1);
-        this.figure.setAllNotNullElements(colorByte);
-    }
-
     private void clear() {
         this.figure.clear();
     }
 
     public boolean isDownAvailable(RootGlass rootGlass) {
+        return isDownAvailable(rootGlass, figure);
+    }
+
+    private boolean isDownAvailable(RootGlass rootGlass, Matr matr) {
         int maxRow = getMaxRow();
         if (maxRow < rootGlass.getRowCount() - 1) {
-            byte[][] matrDown = MatrUtils.getDownMatr(figure.getMatr());
+            byte[][] matrDown = MatrUtils.getDownMatr(matr.getMatr());
             if (!rootGlass.hasIntersectionWithMatr(matrDown)) {
                 return true;
             }
@@ -248,15 +249,7 @@ public class TemplateOfFigure {
     }
 
     private void moveDownForce() {
-        byte[][] matr = figure.getMatr();
-        for (int row = figure.getRowCount() - 1; row >= 0; row--) {
-            for (int column = 0; column < figure.getColumnCount(); column++) {
-                if (matr[row][column] != 0) {
-                    matr[row + 1][column] = matr[row][column];
-                    matr[row][column] = 0;
-                }
-            }
-        }
+        figure.down();
         subFigure.incrementRow();
         log.debug("TOF: '{}' move DOWN force", typeOfFigure);
     }
@@ -318,9 +311,13 @@ public class TemplateOfFigure {
     }
 
     public void moveDown(RootGlass rootGlass) {
+        moveDown(rootGlass, figure);
+    }
+
+    private void moveDown(RootGlass rootGlass, Matr matr) {
         lock.lock();
         try {
-            if (isDownAvailable(rootGlass)) {
+            if (isDownAvailable(rootGlass, matr)) {
                 moveDownForce();
             }
         } finally {
@@ -344,6 +341,7 @@ public class TemplateOfFigure {
         try {
             if (isLeftAvailable(rootGlass)) {
                 moveLeftForce();
+                updateFigureShadow(rootGlass);
             }
         } finally {
             lock.unlock();
@@ -355,6 +353,7 @@ public class TemplateOfFigure {
         try {
             if (isRightAvailable(rootGlass)) {
                 moveRightForce();
+                updateFigureShadow(rootGlass);
             }
         } finally {
             lock.unlock();
@@ -395,6 +394,13 @@ public class TemplateOfFigure {
             for (int i = 0; i < countUpMove; i++) {
                 moveUpForce();
             }
+        }
+    }
+
+    private void updateFigureShadow(RootGlass rootGlass) {
+        MatrUtils.copyMatr(figure.getMatr(), figureShadow.getMatr());
+        while (isDownAvailable(rootGlass, figureShadow)) {
+            figureShadow.down();
         }
     }
 
@@ -466,6 +472,7 @@ public class TemplateOfFigure {
     public TemplateOfFigure clone() {
         TemplateOfFigure tofClone = new TemplateOfFigure(figure.getRowCount(), figure.getColumnCount());
         tofClone.setFigure(figure.clone());
+        tofClone.setFigureShadow(figureShadow.clone());
         tofClone.setSubFigure(subFigure.clone());
         tofClone.setTypeOfFigure(typeOfFigure);
         tofClone.setRotationAngle(rotationAngle.clone());
@@ -519,5 +526,13 @@ public class TemplateOfFigure {
 
     public void setRotationAngle(RotationAngle rotationAngle) {
         this.rotationAngle = rotationAngle;
+    }
+
+    public Matr getFigureShadow() {
+        return figureShadow;
+    }
+
+    public void setFigureShadow(Matr figureShadow) {
+        this.figureShadow = figureShadow;
     }
 }

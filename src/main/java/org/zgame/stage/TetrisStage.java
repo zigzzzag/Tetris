@@ -55,19 +55,19 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
         closeButton.setComponentPosX(Main.getScreen().getWidth() - closeButton.getWidth() - 20);
         closeButton.setComponentPosY(20);
         root.appendChildElement(closeButton);
-        closeButton.setAction((GComponentClickAction) this);
+        closeButton.setAction(this);
 
         pauseButton = new ImageButton("PAUSE", "pauseButton.png", "");
         pauseButton.setComponentPosX(pauseButton.getWidth() + 20);
         pauseButton.setComponentPosY(20);
         root.appendChildElement(pauseButton);
-        pauseButton.setAction((GComponentClickAction) this);
+        pauseButton.setAction(this);
 
         playButton = new ImageButton("PLAY", "playButton.png", "");
         playButton.setComponentPosX(2 * pauseButton.getWidth() + 40);
         playButton.setComponentPosY(20);
         root.appendChildElement(playButton);
-        playButton.setAction((GComponentClickAction) this);
+        playButton.setAction(this);
 
         label = new TextCenterComponent("LABEL", "Tetris game", "Arial-bold-48", Color.BLACK, root.getWidth() / 2, 50);
         root.appendChildElement(label);
@@ -79,11 +79,10 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
         root.appendChildElement(countTCC);
     }
 
-    private List<ParticleEffect> particles = new ArrayList<ParticleEffect>();
+    private List<ParticleEffect> particles = new ArrayList<>();
 
     @Override
     public void render(Graphics2D gr2d) {
-//        timeTCC.setText("Время: " + Main.getScreen().getFpsData().);
         root.render(gr2d);
 
         gr2d.setFont(Font.decode("Arial-norm-14"));

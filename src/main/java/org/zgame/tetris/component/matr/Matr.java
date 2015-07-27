@@ -15,6 +15,17 @@ public class Matr {
         this.matr = new byte[rowCount][columnCount];
     }
 
+    public void down() {
+        for (int row = rowCount - 1; row >= 0; row--) {
+            for (int column = 0; column < columnCount; column++) {
+                if (matr[row][column] != 0) {
+                    matr[row + 1][column] = matr[row][column];
+                    matr[row][column] = 0;
+                }
+            }
+        }
+    }
+
     public byte getElement(int row, int column) {
         return this.matr[row][column];
     }

@@ -17,7 +17,7 @@ public final class Constants {
 
     public static Color alphaBlack = new Color(0, 0, 0, 0x80);
     public static Color alphaBlack2 = new Color(0, 0, 0, 0x99);
-    public static Color alphaBlack3 = new Color(0, 0, 0, 140);
+    public static Color alphaBlack3 = new Color(0, 0, 0, 108);
     public static Color alphaShadow = new Color(0, 0, 0, 140);
 
     public static byte[][] EMPTY_ROOT_GLASS_MATR = new byte[][]{
