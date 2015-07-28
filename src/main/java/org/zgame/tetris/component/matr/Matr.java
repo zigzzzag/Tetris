@@ -1,10 +1,16 @@
 package org.zgame.tetris.component.matr;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.zgame.tetris.component.GameContext;
+import org.zgame.tetris.component.RootGlass;
+
 /**
  * Created by SBT-Nikiforov-MO on 25.06.2015.
  */
 public class Matr {
 
+    private static final Logger log = LoggerFactory.getLogger(Matr.class);
     protected byte[][] matr;
     protected int rowCount;
     protected int columnCount;
@@ -13,6 +19,26 @@ public class Matr {
         this.rowCount = rowCount;
         this.columnCount = columnCount;
         this.matr = new byte[rowCount][columnCount];
+
+        for (int row = 0; row < rowCount; row++) {
+            for (int column = 0; column < columnCount; column++) {
+                matr[row][column] = 0;
+            }
+        }
+    }
+
+    public boolean isDownAvailable(RootGlass rootGlass) {
+        int maxRow = getMaxRow();
+        if (maxRow < rootGlass.getRowCount() - 1) {
+            byte[][] matrDown = MatrUtils.getDownMatr(matr);
+            if (!rootGlass.hasIntersectionWithMatr(matrDown)) {
+                return true;
+            }
+        }
+        //TODO message cause
+        log.debug("is not DOWN available: {}", toNotZeroString());
+        GameContext.INSTANCE.nextStep();
+        return false;
     }
 
     public void down() {
@@ -24,6 +50,16 @@ public class Matr {
                 }
             }
         }
+    }
+
+    public int getMaxRow() {
+        for (int row = rowCount - 1; row >= 0; row--) {
+            if (!isEmptyRow(row)) {
+                return row;
+            }
+        }
+        log.error("MIN rowSubQuadrate is -1 !!!");
+        return -1;
     }
 
     public byte getElement(int row, int column) {
@@ -94,6 +130,14 @@ public class Matr {
             }
         }
         return matrClone;
+    }
+
+    public void toShadowMatr(ShadowMatr shadowMatr) {
+        for (int row = 0; row < rowCount; row++) {
+            for (int column = 0; column < columnCount; column++) {
+                shadowMatr.setElement(getElement(row, column), row, column);
+            }
+        }
     }
 
     public byte[][] getMatr() {

@@ -10,6 +10,7 @@ import org.zgame.tetris.component.comedowntime.ComeDownTime;
 import org.zgame.tetris.component.comedowntime.ComeDownTimeImpl;
 import org.zgame.tetris.component.matr.Matr;
 import org.zgame.tetris.component.matr.MatrUtils;
+import org.zgame.tetris.component.matr.ShadowMatr;
 import org.zgame.tetris.component.matr.SubMatr;
 import org.zgame.utils.Constants;
 
@@ -26,7 +27,7 @@ public class TemplateOfFigure {
 
     private static final Logger log = LoggerFactory.getLogger(TemplateOfFigure.class);
     private Matr figure;
-    private Matr figureShadow;
+    private ShadowMatr figureShadow;
     private SubMatr subFigure;
     private FigureType typeOfFigure;
     private byte colorByte;
@@ -128,7 +129,9 @@ public class TemplateOfFigure {
                 break;
             }
         }
-        figureShadow = figure.clone();
+
+        figureShadow = new ShadowMatr(figure.getRowCount(), figure.getColumnCount());
+        figure.toShadowMatr(figureShadow);
     }
 
     public TemplateOfFigure rotationAngleInt(int angle) {
@@ -179,20 +182,7 @@ public class TemplateOfFigure {
     }
 
     public boolean isDownAvailable(RootGlass rootGlass) {
-        return isDownAvailable(rootGlass, figure);
-    }
-
-    private boolean isDownAvailable(RootGlass rootGlass, Matr matr) {
-        int maxRow = getMaxRow();
-        if (maxRow < rootGlass.getRowCount() - 1) {
-            byte[][] matrDown = MatrUtils.getDownMatr(matr.getMatr());
-            if (!rootGlass.hasIntersectionWithMatr(matrDown)) {
-                return true;
-            }
-        }
-        log.debug("TOF: '{}' is not DOWN available", typeOfFigure);
-        GameContext.INSTANCE.nextStep();
-        return false;
+        return figure.isDownAvailable(rootGlass);
     }
 
     public boolean isUpAvailable(RootGlass rootGlass) {
@@ -311,13 +301,9 @@ public class TemplateOfFigure {
     }
 
     public void moveDown(RootGlass rootGlass) {
-        moveDown(rootGlass, figure);
-    }
-
-    private void moveDown(RootGlass rootGlass, Matr matr) {
         lock.lock();
         try {
-            if (isDownAvailable(rootGlass, matr)) {
+            if (isDownAvailable(rootGlass)) {
                 moveDownForce();
             }
         } finally {
@@ -399,7 +385,7 @@ public class TemplateOfFigure {
 
     private void updateFigureShadow(RootGlass rootGlass) {
         MatrUtils.copyMatr(figure.getMatr(), figureShadow.getMatr());
-        while (isDownAvailable(rootGlass, figureShadow)) {
+        while (figureShadow.isDownAvailable(rootGlass)) {
             figureShadow.down();
         }
     }
@@ -446,16 +432,6 @@ public class TemplateOfFigure {
             }
         }
         log.error("MIN columnSubQuadrate is -1 !!!");
-        return -1;
-    }
-
-    private int getMaxRow() {
-        for (int row = figure.getRowCount() - 1; row >= 0; row--) {
-            if (!isEmptyRow(row)) {
-                return row;
-            }
-        }
-        log.error("MIN rowSubQuadrate is -1 !!!");
         return -1;
     }
 
@@ -528,11 +504,11 @@ public class TemplateOfFigure {
         this.rotationAngle = rotationAngle;
     }
 
-    public Matr getFigureShadow() {
+    public ShadowMatr getFigureShadow() {
         return figureShadow;
     }
 
-    public void setFigureShadow(Matr figureShadow) {
+    public void setFigureShadow(ShadowMatr figureShadow) {
         this.figureShadow = figureShadow;
     }
 }
