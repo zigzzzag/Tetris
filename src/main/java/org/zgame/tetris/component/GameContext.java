@@ -102,10 +102,10 @@ public class GameContext implements Runnable {
     }
 
     public void fallCurrentFigure() {
-        while (currentFigure.isDownAvailable(rootGlass)) {
+        while (currentFigure.getState().equals(FigureState.FALL) && currentFigure.isDownAvailable(rootGlass)) {
             currentFigure.moveDown(rootGlass);
             try {
-                Thread.sleep(20);
+                Thread.sleep(300);
             } catch (InterruptedException e) {
                 log.error(e.getMessage(), e);
             }

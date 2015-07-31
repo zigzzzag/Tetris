@@ -353,6 +353,7 @@ public class TemplateOfFigure {
                 correctPositionBeforeRotate();
                 rotateForce();
                 rotationAngle.rotate();
+                updateFigureShadow(rootGlass);
             }
         } finally {
             lock.unlock();
