@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zgame.stage.InputNameFrame;
 import org.zgame.stage.WelcomeStage;
+import org.zgame.tetris.component.GameContext;
 import org.zgame.utils.Constants;
 
 import java.io.IOException;
@@ -15,6 +16,9 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * @author user
@@ -95,6 +99,9 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService.submit(GameContext.INSTANCE);
 
         scr = new Screen();
         scr.initScreen();

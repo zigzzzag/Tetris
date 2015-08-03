@@ -39,7 +39,6 @@ public class Matr {
         }
         //TODO message cause
         log.debug("is not DOWN available: {}", toNotZeroString());
-        GameContext.INSTANCE.nextStep();
         return false;
     }
 

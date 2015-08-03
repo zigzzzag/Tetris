@@ -37,9 +37,10 @@ public class Screen extends JFrame implements KeyListener {
         GraphicsEnvironment gEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
         defaultGraphicsDevice = gEnvironment.getDefaultScreenDevice();
 
-        setExtendedState(Frame.MAXIMIZED_BOTH);
-        setUndecorated(true);
-        setIgnoreRepaint(true);
+        setSize(500,500);
+//        setExtendedState(Frame.MAXIMIZED_BOTH);
+//        setUndecorated(true);
+        setIgnoreRepaint(false);
         setVisible(true);
 
         createBufferStrategy(2);

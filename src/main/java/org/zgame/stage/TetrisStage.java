@@ -48,9 +48,6 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
         root.setWidth(Main.getScreen().getWidth());
         root.setHeight(Main.getScreen().getHeight());
 
-        Thread t = new Thread(gameContext);
-        t.start();
-
         this.gameContext = gameContext;
 
         closeButton = new ImageButton("CLOSE", "blueButton.png", "ВЫХОД");
@@ -158,7 +155,6 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
                 break;
             }
             case KeyEvent.VK_SPACE: {
-                //downing = true;
                 gameContext.getCurrentFigure().setState(FigureState.FALL);
                 gameContext.fallCurrentFigure();
                 break;

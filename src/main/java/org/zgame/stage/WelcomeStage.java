@@ -51,20 +51,20 @@ public class WelcomeStage implements StageInterface, GComponentClickAction {
         record = new ImageButton("RECORDS", "welcome_button.png", "RECORDS");
         record.setComponentPosX(root.getWidth() / 2 - record.getWidth() / 2);
         record.setComponentPosY(offset + record.getHeight());
-        record.setAction((GComponentClickAction) this);
+        record.setAction(this);
         root.appendChildElement(record);
 
         instructions = new ImageButton("INSTRUCTION", "welcome_button.png", "INSTRUCTION");
         instructions.setComponentPosX(root.getWidth() / 2 - instructions.getWidth() / 2);
         instructions.setComponentPosY(offset + instructions.getHeight() * 2);
         root.appendChildElement(instructions);
-        instructions.setAction((GComponentClickAction) this);
+        instructions.setAction(this);
 
         exitGame = new ImageButton("EXIT_GAME", "welcome_button.png", "EXIT");
         exitGame.setComponentPosX(root.getWidth() / 2 - exitGame.getWidth() / 2);
         exitGame.setComponentPosY(offset + instructions.getHeight() * 3);
         root.appendChildElement(exitGame);
-        exitGame.setAction((GComponentClickAction) this);
+        exitGame.setAction(this);
 
         tetrisStage = new TetrisStage(GameContext.INSTANCE);
         Main.getScreen().addKeyListener(tetrisStage);
