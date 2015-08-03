@@ -1,5 +1,7 @@
 package org.zgame.tetris.component;
 
+import java.util.Random;
+
 /**
  * Created by mnikiforov on 30.05.2015.
  */
@@ -27,6 +29,10 @@ public enum FigureType {
         }
 
         return null;
+    }
+
+    public static FigureType randomType() {
+        return getTypeByIntVal(new Random().nextInt(FigureType.values().length) + 1);
     }
 
     public int getValue() {

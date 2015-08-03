@@ -29,10 +29,11 @@ public class GameContext implements Runnable {
 
     private GameContext() {
         rootGlass = new RootGlass();
-//        figureShadow = new TemplateOfFigure();
 
-        currentFigure = new TemplateOfFigure(FigureType.getTypeByIntVal(new Random().nextInt(7) + 1));
-        nextFigure = new TemplateOfFigure(FigureType.getTypeByIntVal(new Random().nextInt(7) + 1));
+        currentFigure = new TemplateOfFigure(FigureType.randomType());
+        currentFigure.randomizeColor();
+        nextFigure = new TemplateOfFigure(FigureType.randomType());
+        nextFigure.randomizeColor();
     }
 
     @Override
@@ -43,7 +44,9 @@ public class GameContext implements Runnable {
             } catch (InterruptedException e) {
                 log.error(e.getMessage(), e.getCause());
             }
-            currentFigure.moveDown(rootGlass);
+            if (currentFigure.getState().equals(FigureState.NORMAL)) {
+                currentFigure.moveDown(rootGlass);
+            }
         }
 
         gameOver = true;
@@ -65,14 +68,14 @@ public class GameContext implements Runnable {
     public void nextStep() {
         for (int row = 0; row < Constants.MATR_ROW; row++) {
             for (int column = 0; column < Constants.MATR_COLUMN; column++) {
-                rootGlass.getFilledGlass()[row][column] += currentFigure.getFigure().getMatr()[row][column];
+                rootGlass.getFilledGlass().getMatr()[row][column] += currentFigure.getFigure().getMatr()[row][column];
             }
         }
 
 
         for (int row = 0; row < rootGlass.getRowCount(); row++) {
             for (int column = 0; column < rootGlass.getColumnCount(); column++) {
-                if (rootGlass.getFilledGlass()[row][column] == 0) {
+                if (rootGlass.getFilledGlass().getMatr()[row][column] == 0) {
                     break;
                 }
                 //последняя не нулевая, значит вся линия заполнена
@@ -94,6 +97,7 @@ public class GameContext implements Runnable {
 
         currentFigure = nextFigure;
         nextFigure = new TemplateOfFigure(FigureType.getTypeByIntVal(new Random().nextInt(7) + 1));
+        nextFigure.randomizeColor();
 //        int rotateRandom = new Random().nextInt(4);
 //        for (int i = 0; i < rotateRandom; i++) {
 //            nextFigure.rotate(rootGlass);
@@ -105,7 +109,7 @@ public class GameContext implements Runnable {
         while (currentFigure.getState().equals(FigureState.FALL) && currentFigure.isDownAvailable(rootGlass)) {
             currentFigure.moveDown(rootGlass);
             try {
-                Thread.sleep(300);
+                Thread.sleep(50);
             } catch (InterruptedException e) {
                 log.error(e.getMessage(), e);
             }
@@ -122,7 +126,7 @@ public class GameContext implements Runnable {
     public void gameReset() {
         for (int row = 0; row < Constants.MATR_ROW; row++) {
             for (int column = 0; column < Constants.MATR_COLUMN; column++) {
-                rootGlass.getFilledGlass()[row][column] = 0;
+                rootGlass.getFilledGlass().getMatr()[row][column] = 0;
             }
         }
 //        pointsAll = 0;

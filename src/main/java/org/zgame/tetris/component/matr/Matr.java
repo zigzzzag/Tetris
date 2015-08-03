@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zgame.tetris.component.GameContext;
 import org.zgame.tetris.component.RootGlass;
+import org.zgame.utils.Constants;
 
 /**
  * Created by SBT-Nikiforov-MO on 25.06.2015.
@@ -14,6 +15,7 @@ public class Matr {
     protected byte[][] matr;
     protected int rowCount;
     protected int columnCount;
+    private int quadrateSize;
 
     public Matr(int rowCount, int columnCount) {
         this.rowCount = rowCount;
@@ -138,6 +140,14 @@ public class Matr {
                 shadowMatr.setElement(getElement(row, column), row, column);
             }
         }
+    }
+
+    public static int converFromIndexColumn(int column) {
+        return column * Constants.QUADRATE_SIZE + Constants.INDENT_LEFT;
+    }
+
+    public static int converFromIndexRow(int row) {
+        return row * Constants.QUADRATE_SIZE + Constants.INDENT_UP;
     }
 
     public byte[][] getMatr() {

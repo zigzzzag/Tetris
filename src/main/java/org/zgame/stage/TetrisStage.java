@@ -20,7 +20,9 @@ import org.zgame.tetris.component.GameContext;
 import org.zgame.utils.Constants;
 import org.zgame.utils.ParticleEffect;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
@@ -87,14 +89,14 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
 
         gr2d.setFont(Font.decode("Arial-norm-14"));
 
-        gr2d.setColor(Color.ORANGE);
+        gr2d.setColor(Color.BLACK);
         gr2d.drawString("FPS: " + Main.getScreen().getFpsData().getFPS(), 180, 220);
 
         gr2d.setColor(Constants.alphaBlack3);
         gr2d.fillRoundRect(Constants.INDENT_LEFT - 10, Constants.INDENT_UP - 10, Constants.QUADRATE_SIZE * 10 + 20, Constants.QUADRATE_SIZE * 20 + 20, 10, 10);
 
         gr2d.setColor(Color.BLACK);
-        gr2d.drawRect(Constants.INDENT_LEFT, Constants.INDENT_UP, Constants.QUADRATE_SIZE * 10, Constants.QUADRATE_SIZE * 20);
+        gr2d.drawRoundRect(Constants.INDENT_LEFT, Constants.INDENT_UP, Constants.QUADRATE_SIZE * 10, Constants.QUADRATE_SIZE * 20, 10, 10);
 
         gameContext.paint(gr2d);
 

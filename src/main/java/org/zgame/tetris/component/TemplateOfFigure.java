@@ -17,6 +17,7 @@ import org.zgame.utils.Constants;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.Arrays;
+import java.util.Random;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -30,7 +31,6 @@ public class TemplateOfFigure {
     private ShadowMatr figureShadow;
     private SubMatr subFigure;
     private FigureType typeOfFigure;
-    private byte colorByte;
     private ComeDownTime comeDownTime;
     private FigureState state = FigureState.NORMAL;
     private RotationAngle rotationAngle = new RotationAngle(0);
@@ -53,27 +53,25 @@ public class TemplateOfFigure {
         this(rowCount, columnCount);
         this.typeOfFigure = figureType;
 
-        int randomColorInt = 1;//new Random().nextInt(8) + 1;
-
         clear();
         switch (typeOfFigure) {
             //  **
             // **
             case S: {
-                figure.setElement(randomColorInt, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
-                figure.setElement(randomColorInt, 0 + rowSubQuadrate, 2 + columnSubQuadrate);
-                figure.setElement(randomColorInt, 1 + rowSubQuadrate, 1 + columnSubQuadrate);
-                figure.setElement(randomColorInt, 1 + rowSubQuadrate, 0 + columnSubQuadrate);
+                figure.setElement(1, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
+                figure.setElement(1, 0 + rowSubQuadrate, 2 + columnSubQuadrate);
+                figure.setElement(1, 1 + rowSubQuadrate, 1 + columnSubQuadrate);
+                figure.setElement(1, 1 + rowSubQuadrate, 0 + columnSubQuadrate);
                 subFigure = new SubMatr(2, 3).rowCoord(rowSubQuadrate).columnCoord(columnSubQuadrate);
                 break;
             }
             // **
             //  **
             case S_R: {
-                figure.setElement(randomColorInt, 0 + rowSubQuadrate, 0 + columnSubQuadrate);
-                figure.setElement(randomColorInt, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
-                figure.setElement(randomColorInt, 1 + rowSubQuadrate, 1 + columnSubQuadrate);
-                figure.setElement(randomColorInt, 1 + rowSubQuadrate, 2 + columnSubQuadrate);
+                figure.setElement(1, 0 + rowSubQuadrate, 0 + columnSubQuadrate);
+                figure.setElement(1, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
+                figure.setElement(1, 1 + rowSubQuadrate, 1 + columnSubQuadrate);
+                figure.setElement(1, 1 + rowSubQuadrate, 2 + columnSubQuadrate);
                 subFigure = new SubMatr(2, 3).rowCoord(rowSubQuadrate).columnCoord(columnSubQuadrate);
                 break;
             }
@@ -81,10 +79,10 @@ public class TemplateOfFigure {
             // *
             // *
             case G: {
-                figure.setElement(randomColorInt, 0 + rowSubQuadrate, 0 + columnSubQuadrate);
-                figure.setElement(randomColorInt, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
-                figure.setElement(randomColorInt, 1 + rowSubQuadrate, 0 + columnSubQuadrate);
-                figure.setElement(randomColorInt, 2 + rowSubQuadrate, 0 + columnSubQuadrate);
+                figure.setElement(1, 0 + rowSubQuadrate, 0 + columnSubQuadrate);
+                figure.setElement(1, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
+                figure.setElement(1, 1 + rowSubQuadrate, 0 + columnSubQuadrate);
+                figure.setElement(1, 2 + rowSubQuadrate, 0 + columnSubQuadrate);
                 subFigure = new SubMatr(3, 2).rowCoord(rowSubQuadrate).columnCoord(columnSubQuadrate);
                 break;
             }
@@ -92,39 +90,39 @@ public class TemplateOfFigure {
             //  *
             //  *
             case G_R: {
-                figure.setElement(randomColorInt, 0 + rowSubQuadrate, 0 + columnSubQuadrate);
-                figure.setElement(randomColorInt, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
-                figure.setElement(randomColorInt, 1 + rowSubQuadrate, 1 + columnSubQuadrate);
-                figure.setElement(randomColorInt, 2 + rowSubQuadrate, 1 + columnSubQuadrate);
+                figure.setElement(1, 0 + rowSubQuadrate, 0 + columnSubQuadrate);
+                figure.setElement(1, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
+                figure.setElement(1, 1 + rowSubQuadrate, 1 + columnSubQuadrate);
+                figure.setElement(1, 2 + rowSubQuadrate, 1 + columnSubQuadrate);
                 subFigure = new SubMatr(3, 2).rowCoord(rowSubQuadrate).columnCoord(columnSubQuadrate);
                 break;
             }
             // ***
             //  *
             case T: {
-                figure.setElement(randomColorInt, 0 + rowSubQuadrate, 0 + columnSubQuadrate);
-                figure.setElement(randomColorInt, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
-                figure.setElement(randomColorInt, 0 + rowSubQuadrate, 2 + columnSubQuadrate);
-                figure.setElement(randomColorInt, 1 + rowSubQuadrate, 1 + columnSubQuadrate);
+                figure.setElement(1, 0 + rowSubQuadrate, 0 + columnSubQuadrate);
+                figure.setElement(1, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
+                figure.setElement(1, 0 + rowSubQuadrate, 2 + columnSubQuadrate);
+                figure.setElement(1, 1 + rowSubQuadrate, 1 + columnSubQuadrate);
                 subFigure = new SubMatr(2, 3).rowCoord(rowSubQuadrate).columnCoord(columnSubQuadrate);
                 break;
             }
             // **
             // **
             case QUADRATE: {
-                figure.setElement(randomColorInt, 0 + rowSubQuadrate, 0 + columnSubQuadrate);
-                figure.setElement(randomColorInt, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
-                figure.setElement(randomColorInt, 1 + rowSubQuadrate, 0 + columnSubQuadrate);
-                figure.setElement(randomColorInt, 1 + rowSubQuadrate, 1 + columnSubQuadrate);
+                figure.setElement(1, 0 + rowSubQuadrate, 0 + columnSubQuadrate);
+                figure.setElement(1, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
+                figure.setElement(1, 1 + rowSubQuadrate, 0 + columnSubQuadrate);
+                figure.setElement(1, 1 + rowSubQuadrate, 1 + columnSubQuadrate);
                 subFigure = new SubMatr(2, 2).rowCoord(rowSubQuadrate).columnCoord(columnSubQuadrate);
                 break;
             }
             //  ****
             case STICK: {
-                figure.setElement(randomColorInt, 0 + rowSubQuadrate, 0 + columnSubQuadrate);
-                figure.setElement(randomColorInt, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
-                figure.setElement(randomColorInt, 0 + rowSubQuadrate, 2 + columnSubQuadrate);
-                figure.setElement(randomColorInt, 0 + rowSubQuadrate, 3 + columnSubQuadrate);
+                figure.setElement(1, 0 + rowSubQuadrate, 0 + columnSubQuadrate);
+                figure.setElement(1, 0 + rowSubQuadrate, 1 + columnSubQuadrate);
+                figure.setElement(1, 0 + rowSubQuadrate, 2 + columnSubQuadrate);
+                figure.setElement(1, 0 + rowSubQuadrate, 3 + columnSubQuadrate);
                 subFigure = new SubMatr(1, 4).rowCoord(rowSubQuadrate).columnCoord(columnSubQuadrate);
                 break;
             }
@@ -146,8 +144,9 @@ public class TemplateOfFigure {
         for (int row = 0; row < figure.getRowCount(); row++) {
             for (int column = 0; column < figure.getColumnCount(); column++) {
                 if (figure.getElement(row, column) != 0) {
-                    FigurePaint.gradientFigure(g2d, FigurePaint.lightColor(figure.getElement(row, column)),
-                            FigurePaint.darkColor(figure.getElement(row, column)), FigurePaint.converFromIndexColumn(column), FigurePaint.converFromIndexRow(row));
+                    FigurePaint.gradientFigure(g2d,
+                            GradientColors.getLightColorByNum(figure.getElement(row, column)), GradientColors.getDarkColorByNum(figure.getElement(row, column)),
+                            Matr.converFromIndexColumn(column), Matr.converFromIndexRow(row));
                 }
             }
         }
@@ -158,9 +157,9 @@ public class TemplateOfFigure {
             for (int column = 0; column < figureShadow.getColumnCount(); column++) {
                 if (figureShadow.getElement(row, column) != 0) {
                     g2d.setColor(Constants.alphaShadow);
-                    g2d.fillRect(FigurePaint.converFromIndexColumn(column), FigurePaint.converFromIndexRow(row), Constants.QUADRATE_SIZE, Constants.QUADRATE_SIZE);
+                    g2d.fillRect(Matr.converFromIndexColumn(column), Matr.converFromIndexRow(row), Constants.QUADRATE_SIZE, Constants.QUADRATE_SIZE);
                     g2d.setColor(Color.black);
-                    g2d.drawRect(FigurePaint.converFromIndexColumn(column), FigurePaint.converFromIndexRow(row), Constants.QUADRATE_SIZE, Constants.QUADRATE_SIZE);
+                    g2d.drawRect(Matr.converFromIndexColumn(column), Matr.converFromIndexRow(row), Constants.QUADRATE_SIZE, Constants.QUADRATE_SIZE);
                 }
             }
         }
@@ -170,8 +169,9 @@ public class TemplateOfFigure {
         for (int row = 0; row < figure.getRowCount(); row++) {
             for (int column = 0; column < figure.getColumnCount(); column++) {
                 if (figure.getElement(row, column) != 0) {
-                    FigurePaint.gradientFigure(g2d, FigurePaint.lightColor(figure.getElement(row, column)),
-                            FigurePaint.darkColor(figure.getElement(row, column)), FigurePaint.converFromIndexColumn(column) - 300, FigurePaint.converFromIndexRow(row));
+                    FigurePaint.gradientFigure(g2d,
+                            GradientColors.getLightColorByNum(figure.getElement(row, column)), GradientColors.getDarkColorByNum(figure.getElement(row, column)),
+                            Matr.converFromIndexColumn(column) - 300, Matr.converFromIndexRow(row));
                 }
             }
         }
@@ -392,9 +392,6 @@ public class TemplateOfFigure {
     }
 
     public long getComeDownTime(int totalPoints) {
-        if (FigureState.FALL.equals(state)) {
-            return 20;
-        }
         return comeDownTime.getComeDownTime(totalPoints);
     }
 
@@ -456,17 +453,17 @@ public class TemplateOfFigure {
         return tofClone;
     }
 
+    private void setColorInt(int colorInt) {
+        this.figure.setAllNotNullElements((byte) colorInt);
+    }
+
+    public void randomizeColor() {
+        setColorInt(new Random().nextInt(GradientColors.GRADIENT_COLORS_COUNT) + 1);
+    }
+
     @Override
     public String toString() {
         return figure.hashCode() + " " + getTypeOfFigure().toString() + " " + hashCode() + ": " + Arrays.deepToString(figure.getMatr());
-    }
-
-    public byte getColorByte() {
-        return colorByte;
-    }
-
-    public void setColorByte(byte colorByte) {
-        this.colorByte = colorByte;
     }
 
     public FigureType getTypeOfFigure() {

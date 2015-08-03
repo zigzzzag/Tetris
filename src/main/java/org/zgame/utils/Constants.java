@@ -1,7 +1,5 @@
 package org.zgame.utils;
 
-import org.zgame.tetris.Main;
-
 import java.awt.Color;
 
 /**
