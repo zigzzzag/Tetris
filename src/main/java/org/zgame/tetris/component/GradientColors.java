@@ -57,6 +57,7 @@ public class GradientColors {
         Color result = COLOR_MAP_LIGHT.get(num);
         if (result == null) {
             log.error("Color is NULL!!! num: {}", num);
+            return Color.WHITE;
         }
         return result;
     }
@@ -65,6 +66,7 @@ public class GradientColors {
         Color result = COLOR_MAP_DARK.get(num);
         if (result == null) {
             log.error("Color is NULL!!! num: {}", num);
+            return Color.BLACK;
         }
         return result;
     }

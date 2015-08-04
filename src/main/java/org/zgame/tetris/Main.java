@@ -105,7 +105,7 @@ public class Main {
 
         scr = new Screen();
         scr.initScreen();
-        Constants.QUADRATE_SIZE = scr.getHeight() / 25;
+//         = scr.getHeight() / 25;
         Constants.INDENT_LEFT = (scr.getWidth() - Constants.QUADRATE_SIZE * Constants.MATR_COLUMN) / 2;
         Constants.INDENT_UP = 3 * Constants.QUADRATE_SIZE;
         scr.setCurrentStage(new WelcomeStage());

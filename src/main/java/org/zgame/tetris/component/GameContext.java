@@ -10,6 +10,8 @@ import org.zgame.utils.Record;
 import java.awt.Graphics2D;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by mnikiforov on 31.05.2015.
@@ -18,6 +20,7 @@ public class GameContext implements Runnable {
 
     private static final Logger log = LoggerFactory.getLogger(GameContext.class);
 
+    private ExecutorService executorService = Executors.newFixedThreadPool(4);
     private TemplateOfFigure currentFigure;
     private TemplateOfFigure nextFigure;
     private RootGlass rootGlass;
@@ -30,10 +33,8 @@ public class GameContext implements Runnable {
     private GameContext() {
         rootGlass = new RootGlass();
 
-        currentFigure = new TemplateOfFigure(FigureType.randomType());
-        currentFigure.randomizeColor();
-        nextFigure = new TemplateOfFigure(FigureType.randomType());
-        nextFigure.randomizeColor();
+        currentFigure = randomFigure();
+        nextFigure = randomFigure();
     }
 
     @Override
@@ -96,28 +97,25 @@ public class GameContext implements Runnable {
 
 
         currentFigure = nextFigure;
-        nextFigure = new TemplateOfFigure(FigureType.getTypeByIntVal(new Random().nextInt(7) + 1));
-        nextFigure.randomizeColor();
-//        int rotateRandom = new Random().nextInt(4);
-//        for (int i = 0; i < rotateRandom; i++) {
-//            nextFigure.rotate(rootGlass);
-//        }
+        nextFigure = randomFigure();
         pointsNow = 0;
     }
 
     public void fallCurrentFigure() {
-        int i = 0;
-        while (/*currentFigure.getState().equals(FigureState.FALL) && currentFigure.isDownAvailable(rootGlass)*/i<20) {
-            i++;
-            currentFigure.moveDown(rootGlass);
-            try {
-                Thread.sleep(200);
-            } catch (InterruptedException e) {
-                log.error(e.getMessage(), e);
+        executorService.submit(new Runnable() {
+            @Override
+            public void run() {
+                while (currentFigure.getState().equals(FigureState.FALL) && currentFigure.isDownAvailable(rootGlass)) {
+                    currentFigure.moveDown(rootGlass);
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        log.error(e.getMessage(), e);
+                    }
+                }
+                GameContext.INSTANCE.nextStep();
             }
-        }
-
-        GameContext.INSTANCE.nextStep();
+        });
     }
 
     public void paint(Graphics2D gr2d) {
@@ -135,7 +133,17 @@ public class GameContext implements Runnable {
         }
 //        pointsAll = 0;
         gameOver = true;
-        currentFigure = new TemplateOfFigure(FigureType.getTypeByIntVal(new Random().nextInt(6) + 1));
+        currentFigure = randomFigure();
+    }
+
+    private TemplateOfFigure randomFigure() {
+        TemplateOfFigure result = new TemplateOfFigure(FigureType.randomType());
+        result.randomizeColor();
+        int rotateRandom = new Random().nextInt(4);
+        for (int i = 0; i < rotateRandom; i++) {
+            result.rotate(rootGlass);
+        }
+        return result;
     }
 
     public int getDeleteLinePoints(int points) {
@@ -158,10 +166,6 @@ public class GameContext implements Runnable {
 
     public TemplateOfFigure getCurrentFigure() {
         return currentFigure;
-    }
-
-    public void setCurrentFigure(TemplateOfFigure currentFigure) {
-        this.currentFigure = currentFigure;
     }
 
     public RootGlass getRootGlass() {

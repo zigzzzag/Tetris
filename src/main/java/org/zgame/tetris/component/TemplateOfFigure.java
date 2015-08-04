@@ -30,6 +30,7 @@ public class TemplateOfFigure {
     private Matr figure;
     private ShadowMatr figureShadow;
     private SubMatr subFigure;
+    private int quadrateSize = Constants.QUADRATE_SIZE;
     private FigureType typeOfFigure;
     private ComeDownTime comeDownTime;
     private FigureState state = FigureState.NORMAL;
@@ -508,5 +509,13 @@ public class TemplateOfFigure {
 
     public void setFigureShadow(ShadowMatr figureShadow) {
         this.figureShadow = figureShadow;
+    }
+
+    public int getQuadrateSize() {
+        return quadrateSize;
+    }
+
+    public void setQuadrateSize(int quadrateSize) {
+        this.quadrateSize = quadrateSize;
     }
 }

@@ -9,7 +9,7 @@ public final class Constants {
 
     public static final int MATR_COLUMN = 10;
     public static final int MATR_ROW = 20;
-    public static int QUADRATE_SIZE = 10;
+    public static final int QUADRATE_SIZE = 10;
     public static int INDENT_UP = 100;
     public static int INDENT_LEFT = 500;
 
