@@ -17,12 +17,11 @@ import org.zgame.tetris.StageEvent;
 import org.zgame.tetris.StageInterface;
 import org.zgame.tetris.component.FigureState;
 import org.zgame.tetris.component.GameContext;
+import org.zgame.tetris.component.TemplateOfFigure;
 import org.zgame.utils.Constants;
 import org.zgame.utils.ParticleEffect;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
@@ -137,26 +136,38 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
 
     @Override
     public void keyPressed(KeyEvent e) {
+        TemplateOfFigure currentFigure = gameContext.getCurrentFigure();
         switch (e.getKeyCode()) {
             case KeyEvent.VK_RIGHT: {
-                gameContext.getCurrentFigure().moveRight(gameContext.getRootGlass());
+                if (currentFigure.getState().equals(FigureState.NORMAL)) {
+                    currentFigure.moveRight(gameContext.getRootGlass());
+                }
                 break;
             }
             case KeyEvent.VK_LEFT: {
-                gameContext.getCurrentFigure().moveLeft(gameContext.getRootGlass());
+                if (currentFigure.getState().equals(FigureState.NORMAL)) {
+                    currentFigure.moveLeft(gameContext.getRootGlass());
+                }
                 break;
             }
             case KeyEvent.VK_DOWN: {
-                gameContext.getCurrentFigure().moveDown(gameContext.getRootGlass());
+                if (currentFigure.getState().equals(FigureState.NORMAL)) {
+                    currentFigure.moveDown(gameContext.getRootGlass());
+                }
                 break;
             }
             case KeyEvent.VK_UP: {
-                gameContext.getCurrentFigure().rotate(gameContext.getRootGlass());
+                if (currentFigure.getState().equals(FigureState.NORMAL)) {
+                    currentFigure.rotate(gameContext.getRootGlass());
+                }
                 break;
             }
             case KeyEvent.VK_SPACE: {
-                gameContext.getCurrentFigure().setState(FigureState.FALL);
-                gameContext.fallCurrentFigure();
+                if (currentFigure.getState().equals(FigureState.NORMAL)) {
+                    currentFigure.setState(FigureState.FALL);
+                    //TODO refactor: fall in tof
+                    gameContext.fallCurrentFigure();
+                }
                 break;
             }
         }

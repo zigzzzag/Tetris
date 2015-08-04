@@ -20,7 +20,7 @@ public class GameContext implements Runnable {
 
     private static final Logger log = LoggerFactory.getLogger(GameContext.class);
 
-    private ExecutorService executorService = Executors.newFixedThreadPool(4);
+    private ExecutorService executorService = Executors.newFixedThreadPool(1);
     private TemplateOfFigure currentFigure;
     private TemplateOfFigure nextFigure;
     private RootGlass rootGlass;
@@ -66,7 +66,7 @@ public class GameContext implements Runnable {
     }
 
     //TODO refactor
-    public void nextStep() {
+    private void nextStep() {
         for (int row = 0; row < Constants.MATR_ROW; row++) {
             for (int column = 0; column < Constants.MATR_COLUMN; column++) {
                 rootGlass.getFilledGlass().getMatr()[row][column] += currentFigure.getFigure().getMatr()[row][column];
@@ -113,7 +113,7 @@ public class GameContext implements Runnable {
                         log.error(e.getMessage(), e);
                     }
                 }
-                GameContext.INSTANCE.nextStep();
+                nextStep();
             }
         });
     }
