@@ -4,22 +4,16 @@
  */
 package org.zgame.tetris;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.zgame.stage.InputNameFrame;
 import org.zgame.stage.WelcomeStage;
 import org.zgame.tetris.component.GameContext;
 import org.zgame.utils.Constants;
-
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * @author user
@@ -44,7 +38,6 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        System.out.println(Arrays.deepToString(args));
 //        List<Record> rec = new ArrayList<Record>();
 //        for (int i = 0; i < 10; i++) {
 //            Record r = new Record();
@@ -83,31 +76,24 @@ public class Main {
 //            log.info(key.getFIO() + "   " + key.getCount());
 //        }
 
-        InputNameFrame inputName = new InputNameFrame();
-        inputName.go();
+//        InputNameFrame inputName = new InputNameFrame();
+//        inputName.go();
 
         try {
             tetrisscore = new URL("http://tetrisscore2.appspot.com/");
-            InputStreamReader isr = new InputStreamReader(tetrisscore.openStream(), "UTF-8");
-            try {
+
+            try (InputStreamReader isr = new InputStreamReader(tetrisscore.openStream(), "UTF-8")) {
                 log.info(convertStreamToString(isr));
-            } finally {
-                isr.close();
             }
-        } catch (MalformedURLException ex) {
+        } catch (IOException  ex) {
             log.error(ex.getMessage(), ex);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        executorService.submit(GameContext.INSTANCE);
+        ExecutorService gameExecService = Executors.newSingleThreadExecutor();
+        gameExecService.submit(GameContext.INSTANCE);
 
         scr = new Screen();
         scr.initScreen();
-//         = scr.getHeight() / 25;
         Constants.INDENT_LEFT = (scr.getWidth() - Constants.QUADRATE_SIZE * Constants.MATR_COLUMN) / 2;
         Constants.INDENT_UP = 3 * Constants.QUADRATE_SIZE;
         scr.setCurrentStage(new WelcomeStage());
