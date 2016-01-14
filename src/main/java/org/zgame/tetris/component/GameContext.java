@@ -3,8 +3,11 @@ package org.zgame.tetris.component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zgame.stage.GameOverStage;
+import org.zgame.stage.TetrisStage;
 import org.zgame.tetris.Main;
+import org.zgame.tetris.component.matr.Matr;
 import org.zgame.utils.Constants;
+import org.zgame.utils.ParticleEffect;
 import org.zgame.utils.Record;
 
 import java.awt.Graphics2D;
@@ -82,10 +85,6 @@ public class GameContext implements Runnable {
                 //последняя не нулевая, значит вся линия заполнена
                 if (column == rootGlass.getColumnCount() - 1) {
                     rootGlass.deleteFullLine(row);
-//                            for (int t = 0; t < 10; t++) {
-//                                particles.add(new ParticleEffect(FigurePaint.converFromIndexColumn(t), FigurePaint.converFromIndexRow(row)));
-//                            }
-//                            start = ParticleEffect.TIME;
                     pointsNow++;
                 }
             }
@@ -114,6 +113,10 @@ public class GameContext implements Runnable {
                     }
                 }
                 nextStep();
+                for (int t = 0; t < 10; t++) {
+                    TetrisStage.particles.add(new ParticleEffect(Matr.converFromIndexColumn(t), Matr.converFromIndexColumn(t)));
+                }
+                TetrisStage.renderParticleEffects = ParticleEffect.TIME;
             }
         });
     }

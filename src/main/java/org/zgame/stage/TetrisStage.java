@@ -4,6 +4,13 @@
  */
 package org.zgame.stage;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zgame.components.ImageButton;
@@ -20,12 +27,6 @@ import org.zgame.tetris.component.GameContext;
 import org.zgame.tetris.component.TemplateOfFigure;
 import org.zgame.utils.Constants;
 import org.zgame.utils.ParticleEffect;
-
-import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author user
@@ -77,7 +78,8 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
         root.appendChildElement(countTCC);
     }
 
-    private List<ParticleEffect> particles = new ArrayList<>();
+    public static List<ParticleEffect> particles = new CopyOnWriteArrayList<>();
+    public static int renderParticleEffects = 0;
 
     @Override
     public void render(Graphics2D gr2d) {
@@ -96,15 +98,16 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
 
         gameContext.paint(gr2d);
 
-//        if (start < 0) {
-//            start = 0;
-//            particles.clear();
-//        } else {
-//            start--;
-//            for (ParticleEffect p : particles) {
-//                p.render(gr2d);
-//            }
-//        }
+        //TODO remove renderParticleEffects -> add listener or aop
+        if (renderParticleEffects < 0) {
+            renderParticleEffects = 0;
+            particles.clear();
+        } else {
+            renderParticleEffects--;
+            for (ParticleEffect p : particles) {
+                p.render(gr2d);
+            }
+        }
     }
 
     @Override
