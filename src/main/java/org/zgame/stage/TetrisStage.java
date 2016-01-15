@@ -25,6 +25,7 @@ import org.zgame.tetris.StageInterface;
 import org.zgame.tetris.component.FigureState;
 import org.zgame.tetris.component.GameContext;
 import org.zgame.tetris.component.TemplateOfFigure;
+import org.zgame.tetris.component.matr.Matr;
 import org.zgame.utils.Constants;
 import org.zgame.utils.ParticleEffect;
 
@@ -167,6 +168,13 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
                     currentFigure.setState(FigureState.FALL);
                     currentFigure.fallCurrentFigure();
                 }
+                break;
+            }
+            case KeyEvent.VK_F: {
+                for (int t = 0; t < 10; t++) {
+                    TetrisStage.particles.add(new ParticleEffect(Matr.converFromIndexColumn(t), Matr.converFromIndexColumn(t)));
+                }
+                TetrisStage.renderParticleEffects = ParticleEffect.TIME;
                 break;
             }
         }

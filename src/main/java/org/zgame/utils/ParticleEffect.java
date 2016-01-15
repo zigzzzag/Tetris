@@ -12,10 +12,9 @@ import java.awt.Graphics2D;
  */
 public class ParticleEffect {
 
-    private static final int PARTICLES = 25;
+    private static final int PARTICLES_COUNT = 25;
     public static final int TIME = 100;
-    private static final double MAX_SPEED = 10;
-    private int blink = 0;
+    private static final double MAX_SPEED = 6;
 
     class Line {
 
@@ -23,73 +22,60 @@ public class ParticleEffect {
         protected double y1;
         protected double x2;
         protected double y2;
-        protected double u;
-        protected double v;
+        protected double v_x;
+        protected double v_y;
         protected int ticks;
         protected int r;
         protected int g;
         protected int b;
 
-        public Line(int x1, int y1, double u, double v) {
+        public Line(int x1, int y1, double v_x, double v_y) {
             this.x1 = x1;
             this.y1 = y1;
             this.x2 = x1;
             this.y2 = y1;
-            this.u = u;
-            this.v = v;
-            this.r = (int) (Math.random() * 55) + 200;
-            this.g = (int) (Math.random() * 55) + 200;
-            this.b = (int) (Math.random() * 55) + 200;
+            this.v_x = v_x;
+            this.v_y = v_y;
+            this.r = (int) (Math.random() * 256);
+            this.g = (int) (Math.random() * 256);
+            this.b = (int) (Math.random() * 256);
             ticks = 0;
-            blink = (int) (Math.random() * TIME / 3);
         }
 
         public void tick() {
             x2 = x1;
             y2 = y1;
-            x1 += u;
-            y1 += v;
+            x1 += v_x;
+            y1 += v_y;
+
             ticks += 1;
-            if (v < MAX_SPEED) {
-                v += 0.2;
-            }
-//            v += (Math.random() - 0.5d) / 10d;
-//            u += (Math.random() - 0.5d) / 10d;
-            u = u * 0.99;
-            v = v * 0.99;
-            blink -= 1;
-            if (blink < 0) {
-                blink = TIME / 3;
-            }
-            //}
+
+            v_x = v_x * 0.99;
+
+            v_y += 0.2;
+            v_y = v_y * 0.99;
         }
     }
 
-    private Line[] particles = new Line[PARTICLES];
+    private Line[] particles = new Line[PARTICLES_COUNT];
 
     public ParticleEffect(int vx, int vy) {
-        for (int i = 0; i < PARTICLES; i++) {
-            particles[i] = new Line(vx + (int) (Math.random() * 15d), vy + (int) (Math.random() * 15d), MAX_SPEED - (Math.random() * (MAX_SPEED * 2d)), -Math.random() * MAX_SPEED);
+        for (int i = 0; i < PARTICLES_COUNT; i++) {
+            particles[i] = new Line(
+                    vx + (int) (Math.random() * Constants.QUADRATE_SIZE),
+                    vy + (int) (Math.random() * Constants.QUADRATE_SIZE),
+                    MAX_SPEED - (Math.random() * (MAX_SPEED * 2d)),
+                    -Math.random() * MAX_SPEED);
         }
     }
 
     public void render(Graphics2D g) {
-        for (int i = 0; i < PARTICLES; i++) {
-            particles[i].tick();
-            int alpha = 255 - (255 / TIME) * particles[i].ticks;
+        for (Line line : particles) {
+            line.tick();
+            int alpha = 255;//255 - (255 / TIME) * line.ticks;
 
-            //g.drawLine((int) particles[i].x1, (int) particles[i].y1, (int) particles[i].x2, (int) particles[i].y2);
-            //g.setColor(new Color(255, 255, 255, alpha < 0 ? 0 : alpha));
-            double v = particles[i].x1 - particles[i].x2;
-            double u = particles[i].y1 - particles[i].y2;
-            double b = Math.sqrt(u * u + v * v) * 100;
-            if (blink < 3) {
-                g.setColor(new Color(particles[i].r, particles[i].g, particles[i].b, alpha < 0 ? 0 : alpha));
-                g.fillOval((int) particles[i].x1, (int) particles[i].y1, 2, 2);
-            } else {
-                g.setColor(new Color(0, 0, 128, alpha < 0 ? 0 : alpha));
-                g.fillOval((int) particles[i].x1, (int) particles[i].y1, 2, 2);
-            }
+            g.setColor(new Color(line.r, line.g, line.b, alpha < 0 ? 0 : alpha));
+            g.fillOval((int) line.x1, (int) line.y1, 2, 2);
         }
     }
 }
