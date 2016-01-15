@@ -37,7 +37,7 @@ public class Screen extends JFrame implements KeyListener {
         GraphicsEnvironment gEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
         defaultGraphicsDevice = gEnvironment.getDefaultScreenDevice();
 
-        setSize(600,600);
+        setSize(300, 300);
 //        setExtendedState(Frame.MAXIMIZED_BOTH);
 //        setUndecorated(true);
         setIgnoreRepaint(false);
@@ -107,8 +107,6 @@ public class Screen extends JFrame implements KeyListener {
 
             fpsData.waitUntilNextUpdate(nanoTimeAtStartOfUpdate);
         }
-
-
     }
 
     @Override

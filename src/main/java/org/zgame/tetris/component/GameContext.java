@@ -23,7 +23,6 @@ public class GameContext implements Runnable {
 
     private static final Logger log = LoggerFactory.getLogger(GameContext.class);
 
-    private ExecutorService executorService = Executors.newFixedThreadPool(1);
     private TemplateOfFigure currentFigure;
     private TemplateOfFigure nextFigure;
     private RootGlass rootGlass;
@@ -63,13 +62,13 @@ public class GameContext implements Runnable {
         recordList.add(record);
         Record.setRecord(recordList);
 
-        GameOverStage gos = new GameOverStage(this);
+        GameOverStage gameOverStage = new GameOverStage(this);
 //        gos.setReturnStage(this);
-        Main.getScreen().setCurrentStage(gos);
+        Main.getScreen().setCurrentStage(gameOverStage);
     }
 
     //TODO refactor
-    private void nextStep() {
+    public void nextStep() {
         for (int row = 0; row < Constants.MATR_ROW; row++) {
             for (int column = 0; column < Constants.MATR_COLUMN; column++) {
                 rootGlass.getFilledGlass().getMatr()[row][column] += currentFigure.getFigure().getMatr()[row][column];
@@ -98,27 +97,6 @@ public class GameContext implements Runnable {
         currentFigure = nextFigure;
         nextFigure = randomFigure();
         pointsNow = 0;
-    }
-
-    public void fallCurrentFigure() {
-        executorService.submit(new Runnable() {
-            @Override
-            public void run() {
-                while (currentFigure.getState().equals(FigureState.FALL) && currentFigure.isDownAvailable(rootGlass)) {
-                    currentFigure.moveDown(rootGlass);
-                    try {
-                        Thread.sleep(200);
-                    } catch (InterruptedException e) {
-                        log.error(e.getMessage(), e);
-                    }
-                }
-                nextStep();
-                for (int t = 0; t < 10; t++) {
-                    TetrisStage.particles.add(new ParticleEffect(Matr.converFromIndexColumn(t), Matr.converFromIndexColumn(t)));
-                }
-                TetrisStage.renderParticleEffects = ParticleEffect.TIME;
-            }
-        });
     }
 
     public void paint(Graphics2D gr2d) {

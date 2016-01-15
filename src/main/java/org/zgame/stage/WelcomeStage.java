@@ -4,6 +4,9 @@
  */
 package org.zgame.stage;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.event.WindowEvent;
 import org.zgame.components.ImageButton;
 import org.zgame.components.RootComponent;
 import org.zgame.components.TextCenterComponent;
@@ -13,11 +16,6 @@ import org.zgame.tetris.Main;
 import org.zgame.tetris.ScreenClickEvent;
 import org.zgame.tetris.StageEvent;
 import org.zgame.tetris.StageInterface;
-import org.zgame.tetris.component.GameContext;
-
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.event.WindowEvent;
 
 /**
  *
@@ -66,7 +64,7 @@ public class WelcomeStage implements StageInterface, GComponentClickAction {
         root.appendChildElement(exitGame);
         exitGame.setAction(this);
 
-        tetrisStage = new TetrisStage(GameContext.INSTANCE);
+        tetrisStage = new TetrisStage();
         Main.getScreen().addKeyListener(tetrisStage);
     }
 

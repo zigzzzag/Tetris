@@ -41,14 +41,11 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
     private TextCenterComponent label;
     private TextCenterComponent timeTCC;
     private TextCenterComponent countTCC;
-    private GameContext gameContext;
 
-    public TetrisStage(GameContext gameContext) {
+    public TetrisStage() {
         root = new RootComponent();
         root.setWidth(Main.getScreen().getWidth());
         root.setHeight(Main.getScreen().getHeight());
-
-        this.gameContext = gameContext;
 
         closeButton = new ImageButton("CLOSE", "blueButton.png", "ВЫХОД");
         closeButton.setComponentPosX(Main.getScreen().getWidth() - closeButton.getWidth() - 20);
@@ -96,7 +93,7 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
         gr2d.setColor(Color.BLACK);
         gr2d.drawRoundRect(Constants.INDENT_LEFT, Constants.INDENT_UP, Constants.QUADRATE_SIZE * 10, Constants.QUADRATE_SIZE * 20, 10, 10);
 
-        gameContext.paint(gr2d);
+        GameContext.INSTANCE.paint(gr2d);
 
         //TODO remove renderParticleEffects -> add listener or aop
         if (renderParticleEffects < 0) {
@@ -119,7 +116,7 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
     public boolean actionClick(GComponent target, ScreenClickEvent event) {
         final String action = target.getComponentName();
         if ("CLOSE".equals(action)) {
-            gameContext.gameReset();
+            GameContext.INSTANCE.gameReset();
             Main.getScreen().setCurrentStage(new WelcomeStage());
         }
 
@@ -139,37 +136,36 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
 
     @Override
     public void keyPressed(KeyEvent e) {
-        TemplateOfFigure currentFigure = gameContext.getCurrentFigure();
+        TemplateOfFigure currentFigure = GameContext.INSTANCE.getCurrentFigure();
         switch (e.getKeyCode()) {
             case KeyEvent.VK_RIGHT: {
                 if (currentFigure.getState().equals(FigureState.NORMAL)) {
-                    currentFigure.moveRight(gameContext.getRootGlass());
+                    currentFigure.moveRight(GameContext.INSTANCE.getRootGlass());
                 }
                 break;
             }
             case KeyEvent.VK_LEFT: {
                 if (currentFigure.getState().equals(FigureState.NORMAL)) {
-                    currentFigure.moveLeft(gameContext.getRootGlass());
+                    currentFigure.moveLeft(GameContext.INSTANCE.getRootGlass());
                 }
                 break;
             }
             case KeyEvent.VK_DOWN: {
                 if (currentFigure.getState().equals(FigureState.NORMAL)) {
-                    currentFigure.moveDown(gameContext.getRootGlass());
+                    currentFigure.moveDown(GameContext.INSTANCE.getRootGlass());
                 }
                 break;
             }
             case KeyEvent.VK_UP: {
                 if (currentFigure.getState().equals(FigureState.NORMAL)) {
-                    currentFigure.rotate(gameContext.getRootGlass());
+                    currentFigure.rotate(GameContext.INSTANCE.getRootGlass());
                 }
                 break;
             }
             case KeyEvent.VK_SPACE: {
                 if (currentFigure.getState().equals(FigureState.NORMAL)) {
                     currentFigure.setState(FigureState.FALL);
-                    //TODO refactor: fall in tof
-                    gameContext.fallCurrentFigure();
+                    currentFigure.fallCurrentFigure();
                 }
                 break;
             }

@@ -4,8 +4,11 @@
  */
 package org.zgame.tetris.component;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.zgame.stage.TetrisStage;
 import org.zgame.tetris.component.comedowntime.ComeDownTime;
 import org.zgame.tetris.component.comedowntime.ComeDownTimeImpl;
 import org.zgame.tetris.component.matr.Matr;
@@ -20,6 +23,7 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import org.zgame.utils.ParticleEffect;
 
 /**
  * @author user
@@ -36,6 +40,7 @@ public class TemplateOfFigure {
     private FigureState state = FigureState.NORMAL;
     private RotationAngle rotationAngle = new RotationAngle(0);
     private Lock lock = new ReentrantLock(false);
+    private ExecutorService executorService = Executors.newFixedThreadPool(1);
 
     public TemplateOfFigure(int rowCount, int columnCount) {
         this.figure = new Matr(rowCount, columnCount);
@@ -452,6 +457,27 @@ public class TemplateOfFigure {
         tofClone.setTypeOfFigure(typeOfFigure);
         tofClone.setRotationAngle(rotationAngle.clone());
         return tofClone;
+    }
+
+    public void fallCurrentFigure() {
+        executorService.submit(new Runnable() {
+            @Override
+            public void run() {
+                while (state.equals(FigureState.FALL) && TemplateOfFigure.this.isDownAvailable(GameContext.INSTANCE.getRootGlass())) {
+                    TemplateOfFigure.this.moveDown(GameContext.INSTANCE.getRootGlass());
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        log.error(e.getMessage(), e);
+                    }
+                }
+                GameContext.INSTANCE.nextStep();
+                for (int t = 0; t < 10; t++) {
+                    TetrisStage.particles.add(new ParticleEffect(Matr.converFromIndexColumn(t), Matr.converFromIndexColumn(t)));
+                }
+                TetrisStage.renderParticleEffects = ParticleEffect.TIME;
+            }
+        });
     }
 
     private void setColorInt(int colorInt) {
