@@ -95,6 +95,7 @@ public class GameContext implements Runnable {
 
 
         currentFigure = nextFigure;
+        currentFigure.updateFigureShadow(rootGlass);
         nextFigure = randomFigure();
         pointsNow = 0;
     }
