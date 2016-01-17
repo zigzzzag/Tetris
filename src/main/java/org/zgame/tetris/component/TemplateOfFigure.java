@@ -390,7 +390,7 @@ public class TemplateOfFigure {
         }
     }
 
-    private void updateFigureShadow(RootGlass rootGlass) {
+    public void updateFigureShadow(RootGlass rootGlass) {
         MatrUtils.copyMatr(figure.getMatr(), figureShadow.getMatr());
         while (figureShadow.isDownAvailable(rootGlass)) {
             figureShadow.down();
