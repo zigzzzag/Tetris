@@ -1,12 +1,12 @@
 package org.zgame.tetris.component;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.zgame.tetris.component.matr.Matr;
-import org.zgame.utils.Constants;
-
 import java.awt.Graphics2D;
 import java.util.Arrays;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.zgame.components.effects.FireworkEffect;
+import org.zgame.tetris.component.matr.Matr;
+import org.zgame.utils.Constants;
 
 /**
  * Created by SBT-Nikiforov-MO on 28.05.2015.
@@ -17,9 +17,10 @@ public class RootGlass {
     private int rowCount = Constants.MATR_ROW;
     private int columnCount = Constants.MATR_COLUMN;
     private Matr filledGlass;
+    private FireworkEffect fireworkEffect = new FireworkEffect(10);
 
     public RootGlass() {
-        filledGlass = new Matr(rowCount,columnCount);
+        filledGlass = new Matr(rowCount, columnCount);
     }
 
     public RootGlass(byte[][] filledGlass) {
@@ -29,7 +30,7 @@ public class RootGlass {
         this.filledGlass.setMatr(filledGlass);
     }
 
-    public void paintRootGlass(Graphics2D g2d) {
+    public void render(Graphics2D g2d) {
         for (int row = 0; row < rowCount; row++) {
             for (int column = 0; column < columnCount; column++) {
                 if (filledGlass.getMatr()[row][column] != 0) {
@@ -39,6 +40,7 @@ public class RootGlass {
                 }
             }
         }
+        fireworkEffect.render(g2d);
     }
 
     public void deleteFullLine(int lineNumber) {
@@ -48,6 +50,8 @@ public class RootGlass {
                 filledGlass.getMatr()[row][column] = 0;
             }
         }
+
+        fireworkEffect.startEffect(lineNumber);
     }
 
     public Boolean verifyGameOver() {

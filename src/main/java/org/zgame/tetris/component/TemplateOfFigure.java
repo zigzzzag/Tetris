@@ -4,11 +4,16 @@
  */
 package org.zgame.tetris.component;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.util.Arrays;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.zgame.stage.TetrisStage;
 import org.zgame.tetris.component.comedowntime.ComeDownTime;
 import org.zgame.tetris.component.comedowntime.ComeDownTimeImpl;
 import org.zgame.tetris.component.matr.Matr;
@@ -16,14 +21,6 @@ import org.zgame.tetris.component.matr.MatrUtils;
 import org.zgame.tetris.component.matr.ShadowMatr;
 import org.zgame.tetris.component.matr.SubMatr;
 import org.zgame.utils.Constants;
-
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.util.Arrays;
-import java.util.Random;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-import org.zgame.utils.ParticleEffect;
 
 /**
  * @author user
@@ -466,16 +463,12 @@ public class TemplateOfFigure {
                 while (state.equals(FigureState.FALL) && TemplateOfFigure.this.isDownAvailable(GameContext.INSTANCE.getRootGlass())) {
                     TemplateOfFigure.this.moveDown(GameContext.INSTANCE.getRootGlass());
                     try {
-                        Thread.sleep(50);
+                        Thread.sleep(40);
                     } catch (InterruptedException e) {
                         log.error(e.getMessage(), e);
                     }
                 }
                 GameContext.INSTANCE.nextStep();
-                for (int t = 0; t < 10; t++) {
-                    TetrisStage.particles.add(new ParticleEffect(Matr.converFromIndexColumn(t), Matr.converFromIndexColumn(t)));
-                }
-                TetrisStage.renderParticleEffects = ParticleEffect.TIME;
             }
         });
     }

@@ -3,18 +3,13 @@ package org.zgame.tetris.component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zgame.stage.GameOverStage;
-import org.zgame.stage.TetrisStage;
 import org.zgame.tetris.Main;
-import org.zgame.tetris.component.matr.Matr;
 import org.zgame.utils.Constants;
-import org.zgame.utils.ParticleEffect;
 import org.zgame.utils.Record;
 
 import java.awt.Graphics2D;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * Created by mnikiforov on 31.05.2015.
@@ -101,7 +96,7 @@ public class GameContext implements Runnable {
     }
 
     public void paint(Graphics2D gr2d) {
-        rootGlass.paintRootGlass(gr2d);
+        rootGlass.render(gr2d);
         currentFigure.paintFigureShadow(gr2d);
         currentFigure.paintFigure(gr2d);
         nextFigure.paintFigureNext(gr2d);

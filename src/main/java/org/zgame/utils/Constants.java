@@ -41,4 +41,8 @@ public final class Constants {
            /*18*/{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
            /*19*/{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
     };
+
+    public static final int PARTICLE_COUNT_DEFAULT = 10;
+    public static final long PARTICLE_TIME_TO_SHOW_DEFAULT = 1000L;
+    public static final double PARTICLE_MAX_SPEED_DEFAULT = 6d;
 }

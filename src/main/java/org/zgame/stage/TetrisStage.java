@@ -9,13 +9,12 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zgame.components.ImageButton;
 import org.zgame.components.RootComponent;
 import org.zgame.components.TextCenterComponent;
+import org.zgame.components.effects.FireworkEffect;
 import org.zgame.tetris.GComponent;
 import org.zgame.tetris.GComponentClickAction;
 import org.zgame.tetris.Main;
@@ -25,9 +24,7 @@ import org.zgame.tetris.StageInterface;
 import org.zgame.tetris.component.FigureState;
 import org.zgame.tetris.component.GameContext;
 import org.zgame.tetris.component.TemplateOfFigure;
-import org.zgame.tetris.component.matr.Matr;
 import org.zgame.utils.Constants;
-import org.zgame.utils.ParticleEffect;
 
 /**
  * @author user
@@ -76,8 +73,7 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
         root.appendChildElement(countTCC);
     }
 
-    public static List<ParticleEffect> particles = new CopyOnWriteArrayList<>();
-    public static int renderParticleEffects = 0;
+    public static FireworkEffect fireworkEffect = new FireworkEffect(10);
 
     @Override
     public void render(Graphics2D gr2d) {
@@ -96,16 +92,7 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
 
         GameContext.INSTANCE.paint(gr2d);
 
-        //TODO remove renderParticleEffects -> add listener or aop
-        if (renderParticleEffects < 0) {
-            renderParticleEffects = 0;
-            particles.clear();
-        } else {
-            renderParticleEffects--;
-            for (ParticleEffect p : particles) {
-                p.render(gr2d);
-            }
-        }
+        fireworkEffect.render(gr2d);
     }
 
     @Override
@@ -171,10 +158,7 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
                 break;
             }
             case KeyEvent.VK_F: {
-                for (int t = 0; t < 10; t++) {
-                    TetrisStage.particles.add(new ParticleEffect(Matr.converFromIndexColumn(t), Matr.converFromIndexColumn(t)));
-                }
-                TetrisStage.renderParticleEffects = ParticleEffect.TIME;
+                fireworkEffect.startEffect(0);
                 break;
             }
         }
