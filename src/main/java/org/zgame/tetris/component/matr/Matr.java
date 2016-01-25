@@ -15,7 +15,6 @@ public class Matr {
     protected byte[][] matr;
     protected int rowCount;
     protected int columnCount;
-    private int quadrateSize;
 
     public Matr(int rowCount, int columnCount) {
         this.rowCount = rowCount;
@@ -141,11 +140,17 @@ public class Matr {
         }
     }
 
-    public static int converFromIndexColumn(int column) {
+    public static int convertFromIndexColumn(int column) {
+        if (column < 0 || column > Constants.MATR_COLUMN) {
+            throw new IndexOutOfBoundsException("column " + column + " must be between 1 and " + Constants.MATR_COLUMN);
+        }
         return column * Constants.QUADRATE_SIZE + Constants.INDENT_LEFT;
     }
 
-    public static int converFromIndexRow(int row) {
+    public static int convertFromIndexRow(int row) {
+        if (row < 0 || row > Constants.MATR_ROW) {
+            throw new IndexOutOfBoundsException("column " + row + " must be between 1 and " + Constants.MATR_ROW);
+        }
         return row * Constants.QUADRATE_SIZE + Constants.INDENT_UP;
     }
 

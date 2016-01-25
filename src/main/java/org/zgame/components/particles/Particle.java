@@ -8,21 +8,26 @@ import org.zgame.utils.Constants;
  */
 public abstract class Particle {
 
-    protected int particleCount = Constants.PARTICLE_COUNT_DEFAULT;
     protected double maxSpeed = Constants.PARTICLE_MAX_SPEED_DEFAULT;
 
-    public abstract void reset();
+    protected double xStart;
+    protected double yStart;
+    protected double x;
+    protected double y;
+    protected double v_x;
+    protected double v_y;
+    protected int ticks;
+    protected int r;
+    protected int g;
+    protected int b;
+
+    protected abstract void init(double x, double y);
 
     public abstract void render(Graphics2D g);
 
     public abstract void tick();
 
+    protected abstract double getVXRandom();
 
-    public int getParticleCount() {
-        return particleCount;
-    }
-
-    public double getMaxSpeed() {
-        return maxSpeed;
-    }
+    protected abstract double getVYRandom();
 }

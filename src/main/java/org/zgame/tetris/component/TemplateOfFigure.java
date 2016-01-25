@@ -28,6 +28,8 @@ import org.zgame.utils.Constants;
 public class TemplateOfFigure {
 
     private static final Logger log = LoggerFactory.getLogger(TemplateOfFigure.class);
+    private static final ExecutorService EXECUTOR_SERVICE = Executors.newFixedThreadPool(1);
+
     private Matr figure;
     private ShadowMatr figureShadow;
     private SubMatr subFigure;
@@ -37,7 +39,6 @@ public class TemplateOfFigure {
     private FigureState state = FigureState.NORMAL;
     private RotationAngle rotationAngle = new RotationAngle(0);
     private Lock lock = new ReentrantLock(false);
-    private ExecutorService executorService = Executors.newFixedThreadPool(1);
 
     public TemplateOfFigure(int rowCount, int columnCount) {
         this.figure = new Matr(rowCount, columnCount);
@@ -149,7 +150,7 @@ public class TemplateOfFigure {
                 if (figure.getElement(row, column) != 0) {
                     FigurePaint.gradientFigure(g2d,
                             GradientColors.getLightColorByNum(figure.getElement(row, column)), GradientColors.getDarkColorByNum(figure.getElement(row, column)),
-                            Matr.converFromIndexColumn(column), Matr.converFromIndexRow(row));
+                            Matr.convertFromIndexColumn(column), Matr.convertFromIndexRow(row));
                 }
             }
         }
@@ -160,9 +161,9 @@ public class TemplateOfFigure {
             for (int column = 0; column < figureShadow.getColumnCount(); column++) {
                 if (figureShadow.getElement(row, column) != 0) {
                     g2d.setColor(Constants.alphaShadow);
-                    g2d.fillRect(Matr.converFromIndexColumn(column), Matr.converFromIndexRow(row), Constants.QUADRATE_SIZE, Constants.QUADRATE_SIZE);
+                    g2d.fillRect(Matr.convertFromIndexColumn(column), Matr.convertFromIndexRow(row), Constants.QUADRATE_SIZE, Constants.QUADRATE_SIZE);
                     g2d.setColor(Color.black);
-                    g2d.drawRect(Matr.converFromIndexColumn(column), Matr.converFromIndexRow(row), Constants.QUADRATE_SIZE, Constants.QUADRATE_SIZE);
+                    g2d.drawRect(Matr.convertFromIndexColumn(column), Matr.convertFromIndexRow(row), Constants.QUADRATE_SIZE, Constants.QUADRATE_SIZE);
                 }
             }
         }
@@ -174,7 +175,7 @@ public class TemplateOfFigure {
                 if (figure.getElement(row, column) != 0) {
                     FigurePaint.gradientFigure(g2d,
                             GradientColors.getLightColorByNum(figure.getElement(row, column)), GradientColors.getDarkColorByNum(figure.getElement(row, column)),
-                            Matr.converFromIndexColumn(column) - 300, Matr.converFromIndexRow(row));
+                            Matr.convertFromIndexColumn(column) - 300, Matr.convertFromIndexRow(row));
                 }
             }
         }
@@ -416,8 +417,8 @@ public class TemplateOfFigure {
         return true;
     }
 
-    private int getMinRow() {
-        for (int row = 0; row < figure.getRowCount(); row++) {
+    public int getMaxRow() {
+        for (int row = figure.getRowCount() - 1; row >= 0; row--) {
             if (!isEmptyRow(row)) {
                 return row;
             }
@@ -426,7 +427,17 @@ public class TemplateOfFigure {
         return -1;
     }
 
-    private int getMinColumn() {
+    public int getMinRow() {
+        for (int row = 0; row < figure.getRowCount(); row++) {
+            if (!isEmptyRow(row)) {
+                return row;
+            }
+        }
+        log.error("MIN rowSubQuadrate is -1 !!!");
+        return -1;
+    }
+
+    public int getMinColumn() {
         for (int column = 0; column < figure.getColumnCount(); column++) {
             if (!isEmptyColumn(column)) {
                 return column;
@@ -436,7 +447,7 @@ public class TemplateOfFigure {
         return -1;
     }
 
-    private int getMaxColumn() {
+    public int getMaxColumn() {
         for (int column = figure.getColumnCount() - 1; column >= 0; column--) {
             if (!isEmptyColumn(column)) {
                 return column;
@@ -457,7 +468,7 @@ public class TemplateOfFigure {
     }
 
     public void fallCurrentFigure() {
-        executorService.submit(new Runnable() {
+        EXECUTOR_SERVICE.submit(new Runnable() {
             @Override
             public void run() {
                 while (state.equals(FigureState.FALL) && TemplateOfFigure.this.isDownAvailable(GameContext.INSTANCE.getRootGlass())) {

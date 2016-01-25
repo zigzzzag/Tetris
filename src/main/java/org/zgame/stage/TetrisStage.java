@@ -15,6 +15,7 @@ import org.zgame.components.ImageButton;
 import org.zgame.components.RootComponent;
 import org.zgame.components.TextCenterComponent;
 import org.zgame.components.effects.FireworkEffect;
+import org.zgame.components.effects.SmokeEffect;
 import org.zgame.tetris.GComponent;
 import org.zgame.tetris.GComponentClickAction;
 import org.zgame.tetris.Main;
@@ -73,7 +74,8 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
         root.appendChildElement(countTCC);
     }
 
-    public static FireworkEffect fireworkEffect = new FireworkEffect(10);
+    public static FireworkEffect fireworkEffect = new FireworkEffect(100, 0);
+    public static SmokeEffect smokeEffect = new SmokeEffect(50, 0);
 
     @Override
     public void render(Graphics2D gr2d) {
@@ -93,6 +95,7 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
         GameContext.INSTANCE.paint(gr2d);
 
         fireworkEffect.render(gr2d);
+        smokeEffect.render(gr2d);
     }
 
     @Override
@@ -158,7 +161,11 @@ public class TetrisStage implements StageInterface, GComponentClickAction, KeyLi
                 break;
             }
             case KeyEvent.VK_F: {
-                fireworkEffect.startEffect(0);
+                fireworkEffect.startEffect(0, 0, Constants.MATR_ROW - 1, Constants.MATR_COLUMN - 1);
+                break;
+            }
+            case KeyEvent.VK_S: {
+                smokeEffect.startEffect(5, 3, 5, 6);
                 break;
             }
         }

@@ -17,7 +17,7 @@ public class RootGlass {
     private int rowCount = Constants.MATR_ROW;
     private int columnCount = Constants.MATR_COLUMN;
     private Matr filledGlass;
-    private FireworkEffect fireworkEffect = new FireworkEffect(10);
+    private FireworkEffect fireworkEffect = new FireworkEffect(100);
 
     public RootGlass() {
         filledGlass = new Matr(rowCount, columnCount);
@@ -36,7 +36,7 @@ public class RootGlass {
                 if (filledGlass.getMatr()[row][column] != 0) {
                     FigurePaint.gradientFigure(g2d,
                             GradientColors.getLightColorByNum(filledGlass.getMatr()[row][column]), GradientColors.getDarkColorByNum(filledGlass.getMatr()[row][column]),
-                            Matr.converFromIndexColumn(column), Matr.converFromIndexRow(row));
+                            Matr.convertFromIndexColumn(column), Matr.convertFromIndexRow(row));
                 }
             }
         }
@@ -51,7 +51,7 @@ public class RootGlass {
             }
         }
 
-        fireworkEffect.startEffect(lineNumber);
+        fireworkEffect.startEffect(lineNumber, 0, lineNumber, Constants.MATR_COLUMN - 1);
     }
 
     public Boolean verifyGameOver() {

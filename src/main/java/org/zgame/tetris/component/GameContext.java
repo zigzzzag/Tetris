@@ -1,15 +1,15 @@
 package org.zgame.tetris.component;
 
+import java.awt.Graphics2D;
+import java.util.List;
+import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.zgame.components.effects.SmokeEffect;
 import org.zgame.stage.GameOverStage;
 import org.zgame.tetris.Main;
 import org.zgame.utils.Constants;
 import org.zgame.utils.Record;
-
-import java.awt.Graphics2D;
-import java.util.List;
-import java.util.Random;
 
 /**
  * Created by mnikiforov on 31.05.2015.
@@ -17,6 +17,7 @@ import java.util.Random;
 public class GameContext implements Runnable {
 
     private static final Logger log = LoggerFactory.getLogger(GameContext.class);
+    public static GameContext INSTANCE = new GameContext();
 
     private TemplateOfFigure currentFigure;
     private TemplateOfFigure nextFigure;
@@ -24,8 +25,7 @@ public class GameContext implements Runnable {
     private boolean gameOver = false;
     private int pointsNow;
     private int pointsAll;
-
-    public static GameContext INSTANCE = new GameContext();
+    private SmokeEffect smokeEffect = new SmokeEffect(20);
 
     private GameContext() {
         rootGlass = new RootGlass();
@@ -88,6 +88,9 @@ public class GameContext implements Runnable {
 //                    countTCC.setText("Счет: " + pointsAll);
         }
 
+        smokeEffect.startEffect(currentFigure.getMaxRow(), currentFigure.getMinColumn(),
+                currentFigure.getMaxRow(), currentFigure.getMaxColumn());
+        log.trace("currentFigure.getMaxRow() = " + currentFigure.getMaxRow());
 
         currentFigure = nextFigure;
         currentFigure.updateFigureShadow(rootGlass);
@@ -100,6 +103,8 @@ public class GameContext implements Runnable {
         currentFigure.paintFigureShadow(gr2d);
         currentFigure.paintFigure(gr2d);
         nextFigure.paintFigureNext(gr2d);
+
+        smokeEffect.render(gr2d);
     }
 
     public void gameReset() {
